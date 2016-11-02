@@ -1,4 +1,4 @@
-package com.jpushkarskaya.journey;
+package com.paranoidandroid.journey;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -17,7 +17,7 @@ public class LoginActivity extends AppCompatActivity {
         // Add fabric crash reporting
         Fabric.with(this, new Crashlytics());
 
-        
+
         setContentView(R.layout.activity_login);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

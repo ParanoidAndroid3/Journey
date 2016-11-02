@@ -1,4 +1,4 @@
-package com.jpushkarskaya.journey;
+package com.paranoidandroid.journey;
 
 import org.junit.Test;
 

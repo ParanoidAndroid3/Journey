@@ -1,4 +1,4 @@
-package com.jpushkarskaya.journey;
+package com.paranoidandroid.journey;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.jpushkarskaya.journey", appContext.getPackageName());
+        assertEquals("com.paranoidandroid.journey", appContext.getPackageName());
     }
 }
