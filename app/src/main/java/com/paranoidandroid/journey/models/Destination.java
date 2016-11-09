@@ -16,6 +16,13 @@ public class Destination extends ParseObject {
     public Destination() {
     }
 
+    public Destination(String cityName, String countryName,
+            double latitude, double longitude) {
+        setCityName(cityName);
+        setCountryName(countryName);
+        setGeoPoint(latitude, longitude);
+    }
+
     public void setCityName(String name) {
         put(KEY_CITY_NAME, name);
     }

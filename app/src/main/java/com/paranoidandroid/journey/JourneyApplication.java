@@ -3,7 +3,13 @@ package com.paranoidandroid.journey;
 import android.app.Application;
 
 import com.facebook.stetho.Stetho;
+import com.paranoidandroid.journey.models.Activity;
+import com.paranoidandroid.journey.models.Destination;
+import com.paranoidandroid.journey.models.Journey;
+import com.paranoidandroid.journey.models.Leg;
+import com.paranoidandroid.journey.models.User;
 import com.parse.Parse;
+import com.parse.ParseObject;
 import com.parse.interceptors.ParseLogInterceptor;
 import com.parse.interceptors.ParseStethoInterceptor;
 
@@ -21,6 +27,13 @@ public class JourneyApplication extends Application {
         super.onCreate();
 
         Stetho.initializeWithDefaults(this);
+
+        // Register models
+        ParseObject.registerSubclass(Activity.class);
+        ParseObject.registerSubclass(Destination.class);
+        ParseObject.registerSubclass(Journey.class);
+        ParseObject.registerSubclass(Leg.class);
+        ParseObject.registerSubclass(User.class);
 
         // Configure parse via a custom builder.
         Parse.initialize(new Parse.Configuration.Builder(this)
