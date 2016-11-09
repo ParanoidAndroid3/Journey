@@ -35,4 +35,9 @@ dependencies {
         transitive = true;
     }
     testCompile 'junit:junit:4.12'
+
+    // Parse -- online data storage
+    compile 'com.parse:parse-android:1.13.1'
+    compile 'com.parse:parseinterceptors:0.0.2' // for logging API calls to LogCat
+    compile 'com.parse.bolts:bolts-android:1.4.0'
 }
