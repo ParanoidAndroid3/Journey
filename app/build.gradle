@@ -38,8 +38,14 @@ dependencies {
 
     // Parse -- online data storage
     compile 'com.parse:parse-android:1.13.1'
+    compile 'com.parse:parseui-login-android:0.0.1'
+    compile 'com.parse:parseui-widget-android:0.0.1'
     compile 'com.parse:parseinterceptors:0.0.2' // for logging API calls to LogCat
     compile 'com.parse.bolts:bolts-android:1.4.0'
+
+    // Facebook Login
+    compile 'com.facebook.android:facebook-android-sdk:4.17.0'
+    compile 'com.parse:parsefacebookutils-v4-android:1.10.3@aar'
 
     compile 'com.facebook.stetho:stetho:1.4.1'
 }
