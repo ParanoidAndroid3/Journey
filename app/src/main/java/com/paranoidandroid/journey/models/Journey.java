@@ -2,6 +2,7 @@ package com.paranoidandroid.journey.models;
 
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
+import com.parse.ParseRelation;
 
 import java.util.List;
 
@@ -31,11 +32,17 @@ public class Journey extends ParseObject {
     }
 
     public void addCollaborator(User collaborator) {
-        add(KEY_COLLABORATORS, collaborator);
+        getCollaboratorsRelation().add(collaborator);
+        saveInBackground();
     }
 
-    public List<User> getCollaborators() {
-        return getList(KEY_COLLABORATORS);
+    public void removeCollaborator(User collaborator) {
+        getCollaboratorsRelation().remove(collaborator);
+        saveInBackground();
+    }
+
+    public ParseRelation<User> getCollaboratorsRelation() {
+        return getRelation(KEY_COLLABORATORS);
     }
 
     public void setTripType(String type) {
@@ -46,12 +53,18 @@ public class Journey extends ParseObject {
         return getString(KEY_TRIP_TYPE);
     }
 
-    public void addTag(String tag) {
-        add(KEY_TRIP_TAGS, tag);
+    public void addTag(Tag tag) {
+        getTagsRelation().add(tag);
+        saveInBackground();
     }
 
-    public List<String> getTags() {
-        return getList(KEY_TRIP_TAGS);
+    public void removeTag(Tag tag) {
+        getTagsRelation().remove(tag);
+        saveInBackground();
+    }
+
+    public ParseRelation<Tag> getTagsRelation() {
+        return getRelation(KEY_TRIP_TAGS);
     }
 
     public void addLeg(Leg leg) {
