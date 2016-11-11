@@ -2,6 +2,7 @@ package com.paranoidandroid.journey;
 
 import android.app.Application;
 
+import com.facebook.appevents.AppEventsLogger;
 import com.facebook.stetho.Stetho;
 import com.paranoidandroid.journey.models.Activity;
 import com.paranoidandroid.journey.models.Destination;
@@ -9,6 +10,7 @@ import com.paranoidandroid.journey.models.Journey;
 import com.paranoidandroid.journey.models.Leg;
 import com.paranoidandroid.journey.models.User;
 import com.parse.Parse;
+import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
 import com.parse.interceptors.ParseLogInterceptor;
 import com.parse.interceptors.ParseStethoInterceptor;
@@ -26,6 +28,7 @@ public class JourneyApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
+        // Stetho -- for viewing network request with Chrome browser.
         Stetho.initializeWithDefaults(this);
 
         // Register models
@@ -42,5 +45,10 @@ public class JourneyApplication extends Application {
                 .addNetworkInterceptor(new ParseLogInterceptor())
                 .addNetworkInterceptor(new ParseStethoInterceptor())
                 .server(PARSE_URL).build());
+
+        // Facebook SDK (via Parse)
+        ParseFacebookUtils.initialize(this);
+        // Track new installs and when users open this app.
+        AppEventsLogger.activateApp(this);
     }
 }
