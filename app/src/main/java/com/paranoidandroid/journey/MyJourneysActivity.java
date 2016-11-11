@@ -12,7 +12,8 @@ import android.view.View;
 
 import com.parse.ParseUser;
 
-public class MyJourneysActivity extends AppCompatActivity {
+public class MyJourneysActivity extends AppCompatActivity
+        implements LogoutConfirmationDialogFragment.OnLogoutListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,13 +42,20 @@ public class MyJourneysActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_logout:
-                logoutAndNavigateToLogin();
+                confirmLogout();
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void logoutAndNavigateToLogin() {
+    private void confirmLogout() {
+        LogoutConfirmationDialogFragment fragment =
+                LogoutConfirmationDialogFragment.newInstance();
+        fragment.show(getSupportFragmentManager(), "confirm_logout");
+    }
+
+    @Override
+    public void onLogout() {
         ParseUser.logOut();
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
