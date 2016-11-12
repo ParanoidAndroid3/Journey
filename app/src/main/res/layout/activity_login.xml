@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,6 +8,49 @@
     android:fitsSystemWindows="true"
     tools:context="com.paranoidandroid.journey.LoginActivity">
 
-    <include layout="@layout/content_login" />
+    <LinearLayout
+        android:id="@+id/rlAppCatchPhrase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/ivJourneyLogo"
+        android:orientation="vertical">
 
-</android.support.design.widget.CoordinatorLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/catch_phrase_intro"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textColor="?android:attr/textColorSecondary"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:gravity="end"
+            android:text="@string/app_name"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display3"
+            android:fontFamily="cursive"
+            android:textColor="?android:attr/textColorPrimary"/>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/ivJourneyLogo"
+        android:layout_centerInParent="true"
+        android:src="@drawable/ic_journey"
+        android:contentDescription="@string/app_name"
+        android:layout_width="@dimen/login_logo_width"
+        android:layout_height="@dimen/login_logo_height" />
+
+    <Button
+        android:id="@+id/login"
+        android:layout_below="@id/ivJourneyLogo"
+        android:layout_marginTop="40dp"
+        android:layout_centerHorizontal="true"
+        android:text="@string/com_facebook_loginview_log_in_button_long"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onFacebookLogin"
+        android:drawableStart="@drawable/com_facebook_button_icon"
+        style="@style/com_facebook_button" />
+</RelativeLayout>
