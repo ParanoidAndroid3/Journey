@@ -1,14 +1,23 @@
 package com.paranoidandroid.journey;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.util.Log;
+import android.view.View;
+
 import com.crashlytics.android.Crashlytics;
+import com.parse.LogInCallback;
+import com.parse.ParseException;
+import com.parse.ParseFacebookUtils;
+import com.parse.ParseUser;
+
+import java.util.Arrays;
+
 import io.fabric.sdk.android.Fabric;
 
 public class LoginActivity extends AppCompatActivity {
+    private static final String TAG = "LoginActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,26 +26,45 @@ public class LoginActivity extends AppCompatActivity {
         // Add fabric crash reporting
         Fabric.with(this, new Crashlytics());
 
-
         setContentView(R.layout.activity_login);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
+        if (ParseUser.getCurrentUser() != null) {
+            // We are already signed in. Continue as current user.
+            navigateToNextActivity();
+        }
+    }
+
+    public void onFacebookLogin(View view) {
+        final String[] permissions = { "email" };
+
+        ParseFacebookUtils.logInWithReadPermissionsInBackground(
+                this, Arrays.asList(permissions), new LogInCallback() {
+            @Override
+            public void done(ParseUser user, ParseException e) {
+                if (e != null) {
+                    // TODO: crashlytics log
+                    Log.e(TAG, "Failed to login: ", e);
+                } else if (user == null) {
+                    Log.i(TAG, "User cancelled Facebook Login.");
+                } else {
+                    Log.i(TAG, "Facebook user logged in.");
+                }
+            }
+        });
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_login, menu);
-        return true;
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
+
+        // We have a logged in user, so let's get rid of this log in activity.
+        navigateToNextActivity();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        return super.onOptionsItemSelected(item);
+    private void navigateToNextActivity() {
+        Intent intent = new Intent(this, MyJourneysActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

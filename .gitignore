@@ -62,3 +62,6 @@ local.properties
 
 # PDT-specific
 .buildpath
+
+# Plans for world domination
+plan/**
