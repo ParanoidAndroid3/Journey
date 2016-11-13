@@ -1,4 +1,4 @@
-package com.paranoidandroid.journey;
+package com.paranoidandroid.journey.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,6 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.paranoidandroid.journey.R;
+import com.paranoidandroid.journey.adapters.ActivitiesListAdapter;
+import com.paranoidandroid.journey.adapters.DaysListAdapter;
 import com.paranoidandroid.journey.models.Activity;
 import com.paranoidandroid.journey.models.Day;
 import com.paranoidandroid.journey.models.Journey;
@@ -29,7 +32,6 @@ public class DayViewFragment extends Fragment {
     DaysListAdapter mDaysAdapter;
     ActivitiesListAdapter mActivitiesAdapter;
     RecyclerView rvDays, rvActivities;
-    Journey mJourney;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

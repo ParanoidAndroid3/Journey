@@ -1,4 +1,4 @@
-package com.paranoidandroid.journey;
+package com.paranoidandroid.journey.fragments;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -21,6 +21,7 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.models.Leg;
 
 import java.text.SimpleDateFormat;

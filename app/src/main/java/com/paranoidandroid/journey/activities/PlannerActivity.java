@@ -1,4 +1,4 @@
-package com.paranoidandroid.journey;
+package com.paranoidandroid.journey.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -7,6 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.paranoidandroid.journey.fragments.DayViewFragment;
+import com.paranoidandroid.journey.fragments.MapViewFragment;
+import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.models.Journey;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -54,7 +57,7 @@ public class PlannerActivity extends AppCompatActivity implements Toolbar.OnMenu
             if (mIsMapShowing) { showDayView(); }
             else { showMapView(); }
             mIsMapShowing = !mIsMapShowing;
-            item.setTitle(mIsMapShowing ? "Legs" : "Map");
+            item.setTitle(mIsMapShowing ? "Days" : "Map");
         }
         return false;
     }
@@ -94,7 +97,7 @@ public class PlannerActivity extends AppCompatActivity implements Toolbar.OnMenu
     // Handlers
 
     public void addActivityPressed() {
-        // TODO: Open activity explorer 
+        // TODO: Open activity explorer
     }
 
     // Helper methods

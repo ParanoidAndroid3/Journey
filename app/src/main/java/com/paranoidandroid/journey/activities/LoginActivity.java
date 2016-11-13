@@ -1,4 +1,4 @@
-package com.paranoidandroid.journey;
+package com.paranoidandroid.journey.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -6,6 +6,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import com.crashlytics.android.Crashlytics;
+import com.paranoidandroid.journey.R;
+
 import io.fabric.sdk.android.Fabric;
 
 public class LoginActivity extends AppCompatActivity {
