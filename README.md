@@ -6,8 +6,11 @@
 The following **required** functionality is completed:
 
 * [ ] User can log into the app using a Google or Facebook account
-* [ ] User can specify a name for their Journey, can create destinations (legs) by selecting start and end dates and typing in the names of desired cities. Information will be saved on the server.
 * [ ] Users can view a list of all Journeys created by them with general information about the legs.
+* [ ] User can create a new Journey by specifying the following:
+* * [ ] Journey name
+* * [ ] Journey legs
+* * [ ] Journey tags
 * [ ] Once journey is created, user is navigated to a *map-view* of the trip. Map view contains pins for each leg of the trip
 * [ ] User can *flip* over the map view to see a calendar view of the trip.
 * [ ] User can view up to (3) days with all activities that have been added. The user will be able to select the day to view by selecting it.
