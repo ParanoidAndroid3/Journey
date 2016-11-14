@@ -5,4 +5,5 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="login_logo_width">200dp</dimen>
     <dimen name="login_logo_height">200dp</dimen>
+    <dimen name="empty_journeys_title_margin">40dp</dimen>
 </resources>

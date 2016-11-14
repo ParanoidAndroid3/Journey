@@ -18,8 +18,8 @@ public class LogoutConfirmationDialogFragment extends DialogFragment {
 
     private OnLogoutListener listener;
 
+    // Keep this method in case we need to add args.
     public static LogoutConfirmationDialogFragment newInstance() {
-        // Keep this in case we need to add args.
         return new LogoutConfirmationDialogFragment();
     }
 
