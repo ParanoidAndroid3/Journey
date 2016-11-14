@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.models.Leg;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MapViewFragment extends Fragment implements OnMapReadyCallback {
@@ -111,8 +113,10 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
             builder.include(marker.getPosition());
         }
         LatLngBounds bounds = builder.build();
-        int padding = 240; // offset from edges of the map in pixels
-        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+        int width = getResources().getDisplayMetrics().widthPixels;
+        int height = getResources().getDisplayMetrics().heightPixels;
+        int padding = (int) (width * 0.20); // 20% offset from edges of the map in pixels
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, width, height, padding);
         mGoogleMap.moveCamera(cu);
     }
 

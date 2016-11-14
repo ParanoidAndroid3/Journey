@@ -1,10 +1,12 @@
 package com.paranoidandroid.journey.adapters;
 
 import android.content.Context;
+import android.support.v4.widget.TextViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.widget.TextView;
 
 import com.paranoidandroid.journey.R;
@@ -16,6 +18,7 @@ public class DaysListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private List<Day> mDays;
     private Context mContext;
+    private int selectedIndex;
 
     public DaysListAdapter(Context context, List<Day> items) {
         mDays = items;
@@ -37,6 +40,7 @@ public class DaysListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if (day != null) {
             vh.tvDate.setText(day.getFormattedDate());
             vh.tvDay.setText(day.getSeriesString());
+            TextViewCompat.setTextAppearance(vh.tvDay, position == selectedIndex ? R.style.SelectedDayText :R.style.DayText );
             vh.tvCity.setText(day.getCity());
         }
     }
@@ -55,5 +59,13 @@ public class DaysListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             tvDay = (TextView) v.findViewById(R.id.tvDay);
             tvCity = (TextView) v.findViewById(R.id.tvCity);
         }
+    }
+
+    public void setSelectedIndex(int index) {
+        this.selectedIndex = index;
+    }
+
+    public int getSelectedIndex() {
+        return this.selectedIndex;
     }
 }

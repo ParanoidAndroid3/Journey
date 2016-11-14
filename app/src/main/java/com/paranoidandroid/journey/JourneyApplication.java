@@ -35,7 +35,6 @@ public class JourneyApplication extends Application {
         ParseObject.registerSubclass(Leg.class);
         ParseObject.registerSubclass(User.class);
 
-        Parse.enableLocalDatastore(this);
         // Configure parse via a custom builder.
         Parse.initialize(new Parse.Configuration.Builder(this)
                 .applicationId(PARSE_APP_ID)

@@ -17,4 +17,13 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="SelectedDayText" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textStyle">normal|bold</item>
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+    <style name="DayText" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textStyle">normal|bold</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
 </resources>

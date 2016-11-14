@@ -6,16 +6,20 @@ import java.util.Date;
 public class Day {
     int series;
     Date date;
-    String city;
+    Leg leg;
 
-    public Day(int series, Date date, String city) {
+    public Day(int series, Date date, Leg leg) {
         this.series = series;
         this.date = date;
-        this.city = city;
+        this.leg = leg;
     }
 
     public String getCity() {
-        return this.city;
+        return this.leg.getDestination().getCityName();
+    }
+
+    public Leg getLeg() {
+        return this.leg;
     }
 
     public String getFormattedDate() {
