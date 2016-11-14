@@ -6,6 +6,6 @@
     <string name="title_activity_my_journeys">My Journeys</string>
     <string name="confirm_logout">Are you sure you want to log out?</string>
     <string name="catch_phrase_intro">Define Your Own</string>
-    <string name="no_journeys_label">No journeys</string>
-    <string name="create_new_journey_label">Create new journey</string>
+    <string name="no_journeys_label">You have no journeys</string>
+    <string name="create_new_journey_label">Create one now</string>
 </resources>

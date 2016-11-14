@@ -3,7 +3,6 @@ package com.paranoidandroid.journey;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,8 +52,6 @@ public class MyJourneysListFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding.rvJourneys.addItemDecoration(
-                new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         binding.rvJourneys.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.rvJourneys.setAdapter(adapter);
 
@@ -94,7 +91,7 @@ public class MyJourneysListFragment extends Fragment {
             @Override
             public void done(List<Journey> objects, ParseException e) {
                 if (e == null) {
-                    showJourneys(new ArrayList<Journey>());
+                    showJourneys(objects);
                 } else {
                     Toast.makeText(getContext(),
                             "Error retrieving journeys", Toast.LENGTH_SHORT).show();

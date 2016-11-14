@@ -13,7 +13,7 @@ import java.util.List;
 public class Journey extends ParseObject {
 
     // REST JSON Keys
-    private static final String KEY_TITLE = "title";
+    private static final String KEY_NAME = "name";
     private static final String KEY_CREATOR = "creator";
     private static final String KEY_COLLABORATORS = "collaborators";
     private static final String KEY_TRIP_TYPE = "type";
@@ -24,12 +24,12 @@ public class Journey extends ParseObject {
         // Required default constructor.
     }
 
-    public void setTitle(String title) {
-        put(KEY_TITLE, title);
+    public void setName(String name) {
+        put(KEY_NAME, name);
     }
 
-    public String getTitle() {
-        return getString(KEY_TITLE);
+    public String getName() {
+        return getString(KEY_NAME);
     }
 
     public void setCreator(User creator) {
