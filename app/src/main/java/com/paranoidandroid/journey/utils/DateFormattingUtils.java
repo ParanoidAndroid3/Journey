@@ -3,28 +3,28 @@ package com.paranoidandroid.journey.utils;
 import android.content.Context;
 import android.text.format.DateUtils;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public final class DateFormattingUtils {
-    private static DateFormat DATE_FORMAT = SimpleDateFormat.getDateInstance(DateFormat.MEDIUM);
 
     public static String formatDateRange(Context context, Date start, Date end) {
-        if (start == null || end == null) {
-            return "";
+        if (start != null && end != null) {
+            return DateUtils.formatDateRange(context, start.getTime(), end.getTime(), DateUtils.FORMAT_ABBREV_ALL);
         }
-        return DateUtils.formatDateRange(context, start.getTime(), end.getTime(), DateUtils.FORMAT_ABBREV_ALL);
+        return "";
     }
 
     /**
      * Get the number of days between start and end as a string.
      */
-    public static CharSequence formatDurationInDays(Date start, Date end) {
-        // TODO(emmanuel): maybe there is a way to do this that accounts for current locale?
-        long days = getDateDiff(start, end, TimeUnit.DAYS);
-        return days + "d";
+    public static String formatDurationInDays(Date start, Date end) {
+        if (start != null &&  end != null) {
+            // TODO(emmanuel): maybe there is a way to do this that accounts for current locale?
+            long days = getDateDiff(start, end, TimeUnit.DAYS);
+            return days + "d";
+        }
+        return "";
     }
 
     /**

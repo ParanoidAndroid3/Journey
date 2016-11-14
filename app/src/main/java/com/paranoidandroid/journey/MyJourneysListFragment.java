@@ -1,5 +1,6 @@
 package com.paranoidandroid.journey;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -21,15 +22,16 @@ import java.util.List;
 /**
  * Load and display a list of the user's journey's.
  */
-public class MyJourneysListFragment extends Fragment {
+public class MyJourneysListFragment extends Fragment
+        implements JourneyAdapter.OnItemSelectedListener{
 
     public interface OnJourneySelectedListener {
         void onJourneySelected(Journey journey);
-        void onCreateJourney();
     }
 
     private FragmentMyJourneysBinding binding;
     private JourneyAdapter adapter;
+    private OnJourneySelectedListener listener;
 
     public static MyJourneysListFragment newInstance() {
         return new MyJourneysListFragment();
@@ -39,6 +41,7 @@ public class MyJourneysListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         adapter = new JourneyAdapter(new ArrayList<Journey>());
+        adapter.setOnJourneySelectedListener(this);
     }
 
     @Nullable
@@ -56,6 +59,23 @@ public class MyJourneysListFragment extends Fragment {
         binding.rvJourneys.setAdapter(adapter);
 
         fetchJourneys();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnJourneySelectedListener) {
+            listener = (OnJourneySelectedListener) context;
+        } else {
+            throw new IllegalArgumentException(
+                    "context must implement " + OnJourneySelectedListener.class);
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        listener = null;
     }
 
     private void showInitialLoadProgressBar() {
@@ -98,5 +118,12 @@ public class MyJourneysListFragment extends Fragment {
                 }
             }
         });
+    }
+
+    @Override
+    public void onItemSelected(Journey journey) {
+        if (listener != null) {
+            listener.onJourneySelected(journey);
+        }
     }
 }

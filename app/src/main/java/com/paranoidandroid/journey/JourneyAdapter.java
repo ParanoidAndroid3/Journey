@@ -17,16 +17,30 @@ import java.util.List;
 
 public class JourneyAdapter extends RecyclerView.Adapter<JourneyAdapter.ViewHolder> {
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    public interface OnItemSelectedListener {
+        void onItemSelected(Journey journey);
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ItemJourneyBinding binding;
 
         ViewHolder(ItemJourneyBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition();
+            if (position != RecyclerView.NO_POSITION) {
+                selectItemAtPosition(position);
+            }
         }
     }
 
     private List<Journey> items;
+    private OnItemSelectedListener listener;
 
     public JourneyAdapter(List<Journey> items) {
         this.items = items;
@@ -55,7 +69,7 @@ public class JourneyAdapter extends RecyclerView.Adapter<JourneyAdapter.ViewHold
 
         holder.binding.tvDuration.setText(dateRange);
 
-        // Terribly inefficient. Do this better.
+        // TODO(emmanuel): Move this code to a custom view so we can cache inflated layouts.
         holder.binding.llLegs.removeAllViews();
         LayoutInflater inflater = LayoutInflater.from(holder.itemView.getContext());
         for (Leg leg : journey.getLegs()) {
@@ -65,11 +79,9 @@ public class JourneyAdapter extends RecyclerView.Adapter<JourneyAdapter.ViewHold
 
             tvDestination.setText(leg.getDestination().getCityName());
 
-            if (leg.getStartDate() != null && leg.getEndDate() != null) {
-                CharSequence duration = DateFormattingUtils.formatDurationInDays(
-                        leg.getStartDate(), leg.getEndDate());
-                tvDuration.setText(duration);
-            }
+            CharSequence duration = DateFormattingUtils.formatDurationInDays(
+                    leg.getStartDate(), leg.getEndDate());
+            tvDuration.setText(duration);
 
             holder.binding.llLegs.addView(view);
         }
@@ -84,5 +96,16 @@ public class JourneyAdapter extends RecyclerView.Adapter<JourneyAdapter.ViewHold
     public void clear() {
         items.clear();
         notifyDataSetChanged();
+    }
+
+    public void setOnJourneySelectedListener(OnItemSelectedListener listener) {
+        this.listener = listener;
+    }
+
+    private void selectItemAtPosition(int position) {
+        if (listener != null) {
+            Journey journey = items.get(position);
+            listener.onItemSelected(journey);
+        }
     }
 }

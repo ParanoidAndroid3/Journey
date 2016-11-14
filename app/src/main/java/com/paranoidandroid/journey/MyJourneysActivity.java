@@ -9,18 +9,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.paranoidandroid.journey.databinding.ActivityMyJourneysBinding;
 import com.paranoidandroid.journey.models.Journey;
 import com.parse.ParseUser;
 
-import java.util.List;
-
-public class MyJourneysActivity extends AppCompatActivity
-        implements LogoutConfirmationDialogFragment.OnLogoutListener {
+public class MyJourneysActivity extends AppCompatActivity implements
+        LogoutConfirmationDialogFragment.OnLogoutListener,
+        MyJourneysListFragment.OnJourneySelectedListener {
 
     private ActivityMyJourneysBinding binding;
-    private List<Journey> journeys;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,5 +81,11 @@ public class MyJourneysActivity extends AppCompatActivity
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public void onJourneySelected(Journey journey) {
+        String name = journey.getName();
+        Toast.makeText(this, "Selected " + name, Toast.LENGTH_SHORT).show();
     }
 }
