@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:id="@+id/rlTagsFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tvTagsPrompt"
+        style="@style/WizardPrompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tags_prompt"/>
+
+    <RadioGroup
+        android:id="@+id/rgGroupSize"
+        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="60dp"
+        android:layout_below="@id/tvTagsPrompt">
+
+        <RadioButton android:id="@+id/radio_solo"
+            style="@style/SizeButton"
+            android:text="@string/size_solo"/>
+
+        <RadioButton android:id="@+id/radio_couple"
+            style="@style/SizeButton"
+            android:text="@string/size_couple"
+            android:layout_marginStart="10dp"/>
+
+        <RadioButton android:id="@+id/radio_group"
+            style="@style/SizeButton"
+            android:text="@string/size_group"
+            android:layout_marginStart="10dp"/>
+
+
+        <RadioButton android:id="@+id/radio_family"
+            style="@style/SizeButton"
+            android:text="@string/size_family"
+            android:layout_marginStart="10dp"/>
+
+    </RadioGroup>
+
+    <View
+        android:id="@+id/div"
+        android:layout_width="300dp"
+        android:layout_centerHorizontal="true"
+        android:layout_height="2dp"
+        android:background="#c0c0c0"
+        android:layout_marginTop="15dp"
+        android:layout_below="@id/rgGroupSize"/>
+
+    <LinearLayout
+        android:id="@+id/llTags1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/div"
+        android:layout_marginTop="15dp"
+        android:layout_below="@id/div">
+
+        <RadioButton
+            android:id="@+id/radio_culture"
+            style="@style/TagButton"
+            android:text="@string/tag_culture"/>
+
+        <RadioButton
+            android:id="@+id/radio_foodie"
+            style="@style/TagButton"
+            android:text="@string/tag_foodie"
+            android:layout_marginStart="20dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llTags2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/div"
+        android:layout_marginTop="15dp"
+        android:layout_below="@id/llTags1">
+
+        <RadioButton
+            android:id="@+id/radio_adventure"
+            style="@style/TagButton"
+            android:text="@string/tag_adventure"/>
+
+        <RadioButton
+            android:id="@+id/radio_relaxation"
+            style="@style/TagButton"
+            android:text="@string/tag_relaxation"
+            android:layout_marginStart="20dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llTags3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/div"
+        android:layout_marginTop="15dp"
+        android:layout_below="@id/llTags2">
+
+        <RadioButton
+            android:id="@+id/radio_budget"
+            style="@style/TagButton"
+            android:text="@string/tag_budget"/>
+
+        <RadioButton
+            android:id="@+id/radio_luxury"
+            style="@style/TagButton"
+            android:text="@string/tag_luxury"
+            android:layout_marginStart="20dp"/>
+
+    </LinearLayout>
+
+
+</RelativeLayout>
