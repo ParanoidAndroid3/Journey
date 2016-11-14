@@ -4,16 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="com.paranoidandroid.journey.utils.DateFormattingUtils" />
+
+        <import type="com.paranoidandroid.journey.utils.DateFormattingUtils"/>
+
         <variable
             name="journey"
-            type="com.paranoidandroid.journey.models.Journey" />
+            type="com.paranoidandroid.journey.models.Journey"/>
     </data>
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp">
+        android:layout_margin="@dimen/journey_card_margin">
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -27,27 +29,29 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:text="@{journey.name}"
-                    tools:text="Eurotrip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+                    android:text="@{journey.name}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    tools:text="Eurotrip"/>
 
                 <TextView
-                    android:text="@{DateFormattingUtils.formatDuration(journey.legs)}"
-                    tools:text="9/12-9/19"
-                    android:gravity="end"
+                    android:id="@+id/tvDuration"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    tools:text="9/12-9/19"/>
             </LinearLayout>
 
-        <TextView
-            tools:text="foo bar tar jar"
-            android:layout_marginTop="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/llHeader" />
+            <LinearLayout
+                android:id="@+id/llLegs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/llHeader"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical"
+                android:padding="4dp"/>
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </layout>

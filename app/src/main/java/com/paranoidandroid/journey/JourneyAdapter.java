@@ -1,11 +1,16 @@
 package com.paranoidandroid.journey;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.paranoidandroid.journey.databinding.ItemJourneyBinding;
 import com.paranoidandroid.journey.models.Journey;
+import com.paranoidandroid.journey.models.Leg;
+import com.paranoidandroid.journey.utils.DateFormattingUtils;
 
 import java.util.Collection;
 import java.util.List;
@@ -43,7 +48,31 @@ public class JourneyAdapter extends RecyclerView.Adapter<JourneyAdapter.ViewHold
     public void onBindViewHolder(ViewHolder holder, int position) {
         Journey journey = items.get(position);
         holder.binding.setJourney(journey);
-        holder.binding.executePendingBindings();
+
+        Context context = holder.itemView.getContext();
+        CharSequence dateRange = DateFormattingUtils.formatDateRange(
+                context, journey.getStartDate(), journey.getEndDate());
+
+        holder.binding.tvDuration.setText(dateRange);
+
+        // Terribly inefficient. Do this better.
+        holder.binding.llLegs.removeAllViews();
+        LayoutInflater inflater = LayoutInflater.from(holder.itemView.getContext());
+        for (Leg leg : journey.getLegs()) {
+            View view = inflater.inflate(R.layout.item_journey_leg, holder.binding.llLegs, false);
+            TextView tvDestination = (TextView) view.findViewById(R.id.tvDestination);
+            TextView tvDuration = (TextView) view.findViewById(R.id.tvDuration);
+
+            tvDestination.setText(leg.getDestination().getCityName());
+
+            if (leg.getStartDate() != null && leg.getEndDate() != null) {
+                CharSequence duration = DateFormattingUtils.formatDurationInDays(
+                        leg.getStartDate(), leg.getEndDate());
+                tvDuration.setText(duration);
+            }
+
+            holder.binding.llLegs.addView(view);
+        }
     }
 
     public void addAll(Collection<? extends Journey> collection) {
