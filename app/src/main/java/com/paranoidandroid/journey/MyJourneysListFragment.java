@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import java.util.List;
  */
 public class MyJourneysListFragment extends Fragment
         implements JourneyAdapter.OnItemSelectedListener{
+    private static final String TAG = "MyJourneysListFragment";
 
     public interface OnJourneySelectedListener {
         void onJourneySelected(Journey journey);
@@ -78,6 +80,13 @@ public class MyJourneysListFragment extends Fragment
         listener = null;
     }
 
+    @Override
+    public void onItemSelected(Journey journey) {
+        if (listener != null) {
+            listener.onJourneySelected(journey);
+        }
+    }
+
     private void showInitialLoadProgressBar() {
         binding.pbInitialLoad.setVisibility(View.VISIBLE);
         binding.rvJourneys.setVisibility(View.GONE);
@@ -115,15 +124,9 @@ public class MyJourneysListFragment extends Fragment
                 } else {
                     Toast.makeText(getContext(),
                             "Error retrieving journeys", Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "Failed to fetch journeys: ", e);
                 }
             }
         });
-    }
-
-    @Override
-    public void onItemSelected(Journey journey) {
-        if (listener != null) {
-            listener.onJourneySelected(journey);
-        }
     }
 }

@@ -48,11 +48,6 @@ public class MyJourneysActivity extends AppCompatActivity implements
         });
     }
 
-    private void createNewJourney(View view) {
-        Snackbar.make(view, "Create a new journey", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
@@ -87,5 +82,10 @@ public class MyJourneysActivity extends AppCompatActivity implements
     public void onJourneySelected(Journey journey) {
         String name = journey.getName();
         Toast.makeText(this, "Selected " + name, Toast.LENGTH_SHORT).show();
+    }
+
+    private void createNewJourney(View view) {
+        Snackbar.make(view, "Create a new journey", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
     }
 }

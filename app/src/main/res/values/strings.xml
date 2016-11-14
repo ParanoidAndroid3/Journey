@@ -8,4 +8,5 @@
     <string name="catch_phrase_intro">Define Your Own</string>
     <string name="no_journeys_label">You have no journeys</string>
     <string name="create_new_journey_label">Create one now</string>
+    <string name="destination">Destination</string>
 </resources>
