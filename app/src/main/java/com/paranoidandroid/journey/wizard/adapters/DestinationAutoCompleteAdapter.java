@@ -10,7 +10,7 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.paranoidandroid.journey.R;
-import com.paranoidandroid.journey.wizard.models.DestinationItem;
+import com.paranoidandroid.journey.wizard.models.AutoCompleteItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ public class DestinationAutoCompleteAdapter extends BaseAdapter implements Filte
 
     private static final int MAX_RESULTS = 5;
     private Context mContext;
-    private List<DestinationItem> resultList = new ArrayList<>();
+    private List<AutoCompleteItem> resultList = new ArrayList<>();
 
     public DestinationAutoCompleteAdapter(Context context) {
         this.mContext = context;
@@ -52,7 +52,7 @@ public class DestinationAutoCompleteAdapter extends BaseAdapter implements Filte
             convertView = inflater.inflate(R.layout.item_destination_ac_results, parent, false);
         }
 
-        DestinationItem item = (DestinationItem) getItem(position);
+        AutoCompleteItem item = (AutoCompleteItem) getItem(position);
 
         ((TextView) convertView.findViewById(R.id.tvCity)).setText(item.getCity());
         ((TextView) convertView.findViewById(R.id.tvCountry)).setText(item.getCountry());
@@ -68,7 +68,7 @@ public class DestinationAutoCompleteAdapter extends BaseAdapter implements Filte
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults filterResults = new FilterResults();
                 if (constraint != null) {
-                    List<DestinationItem> destinations = findDestinations(mContext, constraint.toString());
+                    List<AutoCompleteItem> destinations = findDestinations(mContext, constraint.toString());
 
                     // Assign the data to the FilterResults
                     filterResults.values = destinations;
@@ -80,7 +80,7 @@ public class DestinationAutoCompleteAdapter extends BaseAdapter implements Filte
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 if (results != null && results.count > 0) {
-                    resultList = (List<DestinationItem>) results.values;
+                    resultList = (List<AutoCompleteItem>) results.values;
                     notifyDataSetChanged();
                 } else {
                     notifyDataSetInvalidated();
@@ -89,11 +89,11 @@ public class DestinationAutoCompleteAdapter extends BaseAdapter implements Filte
         return filter;
     }
 
-    private List<DestinationItem> findDestinations(Context context, String city) {
+    private List<AutoCompleteItem> findDestinations(Context context, String city) {
         // todo: implement background search
-        List<DestinationItem> tempResult = new ArrayList<>();
-        tempResult.add(new DestinationItem("Paris", "France", 1, 2));
-        tempResult.add(new DestinationItem("Paris", "Kentucky", 5, 6));
+        List<AutoCompleteItem> tempResult = new ArrayList<>();
+        tempResult.add(new AutoCompleteItem("Paris", "France", 1234));
+        tempResult.add(new AutoCompleteItem("Paris", "Kentucky", 5678));
         return tempResult;
 
     }

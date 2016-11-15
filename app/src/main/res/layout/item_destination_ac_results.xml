@@ -4,20 +4,22 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="10dp">
+    android:layout_marginStart="10dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp">
 
     <TextView
         android:id="@+id/tvCity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
+        android:textSize="14sp"
         tools:text="Paris"/>
 
     <TextView
         android:id="@+id/tvCountry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="12sp"
+        android:textSize="10sp"
         tools:text="France"/>
 
 </LinearLayout>

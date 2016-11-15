@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="40dp"
     android:layout_marginTop="10dp"
     android:layout_marginStart="20dp">
 
@@ -14,27 +14,35 @@
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/ic_remove"
         android:background="@android:color/transparent"
-        android:layout_gravity="center"
-        android:visibility="invisible"/>
+        android:layout_gravity="center"/>
 
-    <AutoCompleteTextView
-        android:id="@+id/tvDestination"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
+    <com.paranoidandroid.journey.wizard.utils.DelayAutoCompleteTextView
+        android:id="@+id/etDestination"
+        android:layout_width="160dp"
+        android:layout_height="fill_parent"
         android:layout_marginStart="18dp"
         android:maxLines="1"
-        android:textSize="18sp"
-        android:scrollHorizontally="true"
+        android:textSize="12sp"
+        android:textAlignment="textStart"
+        android:imeOptions="flagNoExtractUi|actionSearch"
         android:hint="@string/new_leg_hint" />
 
     <Button
         android:id="@+id/btnStartDate"
-        style="@style/LegCalendar"/>
+        style="@style/LegCalendar"
+        tools:text="09/09"/>
 
     <Button
         android:id="@+id/btnEndDate"
         style="@style/LegCalendar"
-        android:layout_marginStart="20dp"/>
+        android:layout_marginStart="20dp"
+        tools:text="09/12"/>
 
+    <ProgressBar
+        android:id="@+id/pb_loading_indicator"
+        style="?android:attr/progressBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:visibility="gone"/>
 
 </LinearLayout>

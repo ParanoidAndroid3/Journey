@@ -8,6 +8,7 @@ import android.widget.ListView;
 
 import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.wizard.adapters.LegItemArrayAdapter;
+import com.paranoidandroid.journey.wizard.models.LegItem;
 
 import java.util.HashMap;
 
@@ -18,12 +19,18 @@ import java.util.HashMap;
 public class LegsFragment extends WizardFragment {
 
     ListView lvLegs;
+    LegItemArrayAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_wizard_legs, parent, false);
         lvLegs = (ListView) v.findViewById(R.id.lvLegs);
-        lvLegs.setAdapter(new LegItemArrayAdapter(getActivity()));
+        adapter = new LegItemArrayAdapter(getContext());
+        lvLegs.setAdapter(adapter);
+
+        adapter.add(new LegItem());
+        adapter.notifyDataSetChanged();
+
         return v;
     }
 

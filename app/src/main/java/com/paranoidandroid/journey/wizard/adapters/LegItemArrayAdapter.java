@@ -1,21 +1,27 @@
 package com.paranoidandroid.journey.wizard.adapters;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatDelegate;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.paranoidandroid.journey.R;
+import com.paranoidandroid.journey.wizard.models.AutoCompleteItem;
 import com.paranoidandroid.journey.wizard.models.LegItem;
+import com.paranoidandroid.journey.wizard.utils.DelayAutoCompleteTextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+
+import static com.paranoidandroid.journey.R.id.etDestination;
 
 /**
  * Created by epushkarskaya on 11/13/16.
@@ -58,11 +64,19 @@ public class LegItemArrayAdapter extends ArrayAdapter<LegItem> {
                 }
             });
 
+            setupAutocomplete(convertView, holder, leg);
+
         }
 
         holder = (ViewHolder) convertView.getTag();
 
-        holder.tvDestination.setText(leg.getDestination());
+        if (leg.getCity() != null) {
+            holder.etDestination.setText(leg.getCity() + ", " + leg.getCountry());
+            setVisibility(holder, View.VISIBLE);
+        } else {
+            setVisibility(holder, View.GONE);
+        }
+
         assignDate(holder.btnStartDate, leg.getStartDate());
         assignDate(holder.btnEndDate, leg.getEndDate());
 
@@ -76,7 +90,8 @@ public class LegItemArrayAdapter extends ArrayAdapter<LegItem> {
     private void assignDate(Button button, Date date) {
         if (date == null) {
             button.setText("");
-            button.setBackgroundResource(R.drawable.ic_calendar);
+            AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+            button.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_calendar));
         } else {
             String str = new SimpleDateFormat("MM/dd", Locale.US).format(date);
             button.setText(str);
@@ -93,15 +108,52 @@ public class LegItemArrayAdapter extends ArrayAdapter<LegItem> {
         // todo: handle calendar click
     }
 
+    private void setVisibility(ViewHolder holder, int visibility) {
+        holder.btnDeleteLeg.setVisibility(visibility);
+        holder.btnStartDate.setVisibility(visibility);
+        holder.btnEndDate.setVisibility(visibility);
+        if (visibility == View.VISIBLE) {
+            holder.etDestination.setBackgroundResource(0);
+        }
+    }
+
+    private void setupAutocomplete(View view, final ViewHolder holder, final LegItem legItem) {
+        final DelayAutoCompleteTextView destination = (DelayAutoCompleteTextView) view.findViewById(etDestination);
+        destination.setThreshold(3);
+        destination.setAdapter(new DestinationAutoCompleteAdapter(getContext()));
+        destination.setLoadingIndicator(
+                (android.widget.ProgressBar) view.findViewById(R.id.pb_loading_indicator));
+        destination.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                AutoCompleteItem autoCompleteItem = (AutoCompleteItem) adapterView.getItemAtPosition(position);
+                destination.setText(autoCompleteItem.getCity() + ", " + autoCompleteItem.getCountry());
+                legItem.setCity(autoCompleteItem.getCity());
+                legItem.setCountry(autoCompleteItem.getCountry());
+                legItem.setId(autoCompleteItem.getId());
+                legItem.setVisible(true);
+                setVisibility(holder, View.VISIBLE);
+                createEmptyRow();
+            }
+        });
+
+    }
+
+    private void createEmptyRow() {
+        add(new LegItem());
+        notifyDataSetChanged();
+    }
+
     private class ViewHolder {
         ImageButton btnDeleteLeg;
-        AutoCompleteTextView tvDestination;
+        DelayAutoCompleteTextView etDestination;
         Button btnStartDate;
         Button btnEndDate;
 
         public ViewHolder(View view) {
             this.btnDeleteLeg = (ImageButton) view.findViewById(R.id.btnDeleteLeg);
-            this.tvDestination = (AutoCompleteTextView) view.findViewById(R.id.tvDestination);
+            this.etDestination = (DelayAutoCompleteTextView) view.findViewById(R.id.etDestination);
             this.btnStartDate = (Button) view.findViewById(R.id.btnStartDate);
             this.btnEndDate = (Button) view.findViewById(R.id.btnEndDate);
         }

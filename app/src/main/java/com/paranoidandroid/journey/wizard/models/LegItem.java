@@ -8,25 +8,62 @@ import java.util.Date;
 
 public class LegItem {
 
-    private String destination;
+    private String city;
+    private String country;
+    private long id;
     private Date startDate;
     private Date endDate;
+    private boolean visible;
 
-    public LegItem(String destination, Date startDate, Date endDate) {
-        this.destination = destination;
-        this.startDate = startDate;
-        this.endDate = endDate;
+    public LegItem() {
+        visible = false;
     }
 
-    public String getDestination() {
-        return destination;
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public Date getStartDate() {
         return startDate;
     }
 
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
     public Date getEndDate() {
         return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 }
