@@ -6,17 +6,18 @@
 The following **required** functionality is completed:
 
 * [ ] User can log into the app using a Google or Facebook account
-* [ ] Users can view a list of all Journeys created by them with general information about the legs.
+   * [X] Facebook account login
+* [X] Users can view a list of all Journeys created by them with general information about the legs.
 * [ ] User can create a new Journey by specifying the following:
    * [X] Journey name
-   * [X] Journey legs - destination and start/end dates
+   * [X] Journey legs - destination and start/end dates (partial)
    * [X] Journey tags - {solo, couple, group, family} & {adventure, relaxation, budget, luxury, foodie, culture}
-* [ ] Once journey is created, user is navigated to a *map-view* of the trip. Map view contains pins for each leg of the trip
-* [ ] User can *flip* over the map view to see a calendar view of the trip.
-* [ ] User can view up to (3) days with all activities that have been added. The user will be able to select the day to view by selecting it.
+* [X] Once journey is created, user is navigated to a *map-view* of the trip. Map view contains pins for each leg of the trip
+* [X] User can *flip* over the map view to see a calendar view of the trip.
+* [X] User can view up to (3) days with all activities that have been added. The user will be able to select the day to view by selecting it.
 * [ ] A Drawer will contain items to navigate to the list of all journeys, edit legs, edit tags, and edit the current journey's name.
 * [ ] User can add / remove a leg of the trip. Information will be saved on the server.
-* [ ] User can add / remove custom activities to/from a specific day. Information will be saved on the server.
+* [X] User can add / remove custom activities to/from a specific day. Information will be saved on the server.
 * [ ] User can add / remove an activity from the recommendation page to/from a specific day. Information will be saved on the server.
 * [ ] The recommendations page will contain tabs with several activity categories that the user can navigate, and a grid of suggestions below. Suggestions will be populated using popular related APIs (like Google Places)
 
@@ -39,6 +40,10 @@ The following **bonus** features are implemented:
 * [ ] User can share their experience at any time in popular social media. 
   * [ ] They can share before their journey (their route)
   * [ ] They can share during or after their journey (things they did, photos they've taken)
+
+## Walkthrough
+
+* Week 1 Sprint - http://i.imgur.com/keJhu8T.gif
 
 ## Wireframes
 
