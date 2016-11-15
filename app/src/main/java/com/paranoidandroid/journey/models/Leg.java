@@ -32,7 +32,7 @@ public class Leg extends ParseObject {
         return getDate(KEY_START_DATE);
     }
 
-    public Date endDate() {
+    public Date getEndDate() {
         return getDate(KEY_END_DATE);
     }
 

@@ -4,6 +4,7 @@ import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseRelation;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -13,6 +14,7 @@ import java.util.List;
 public class Journey extends ParseObject {
 
     // REST JSON Keys
+    private static final String KEY_NAME = "name";
     private static final String KEY_CREATOR = "creator";
     private static final String KEY_COLLABORATORS = "collaborators";
     private static final String KEY_TRIP_TYPE = "type";
@@ -21,6 +23,14 @@ public class Journey extends ParseObject {
 
     public Journey() {
         // Required default constructor.
+    }
+
+    public void setName(String name) {
+        put(KEY_NAME, name);
+    }
+
+    public String getName() {
+        return getString(KEY_NAME);
     }
 
     public void setCreator(User creator) {
@@ -81,5 +91,20 @@ public class Journey extends ParseObject {
         if (legs.remove(leg)) {
             put(KEY_LEGS, legs);
         }
+    }
+
+    public Date getStartDate() {
+        if (getLegs().size() > 0) {
+            return getLegs().get(0).getStartDate();
+        }
+        return null;
+    }
+
+    public Date getEndDate() {
+        int legCount = getLegs().size();
+        if (legCount > 0) {
+            return getLegs().get(legCount - 1).getEndDate();
+        }
+        return null;
     }
 }

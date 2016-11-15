@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="com.paranoidandroid.journey.support.DateFormattingUtils"/>
+
+        <variable
+            name="journey"
+            type="com.paranoidandroid.journey.models.Journey"/>
+    </data>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="@dimen/card_corner_radius"
+        android:layout_margin="@dimen/journey_card_margin">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:padding="10dp">
+
+            <LinearLayout
+                android:id="@+id/llHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{journey.name}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    tools:text="Eurotrip"/>
+
+                <TextView
+                    android:id="@+id/tvDuration"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    tools:text="9/12-9/19"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llLegs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/llHeader"
+                android:layout_marginTop="@dimen/card_item_vertical_padding"
+                android:orientation="vertical"
+                android:padding="4dp"/>
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</layout>

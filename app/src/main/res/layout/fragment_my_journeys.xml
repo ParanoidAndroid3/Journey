@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="listener"
+            type="com.paranoidandroid.journey.myjourneys.fragments.MyJourneysListFragment.OnJourneySelectedListener" />
+    </data>
+
+    <RelativeLayout
+        android:id="@+id/content_my_journeys"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.paranoidandroid.journey.myjourneys.activities.MyJourneysActivity"
+        tools:showIn="@layout/activity_my_journeys">
+
+        <RelativeLayout
+            android:id="@+id/rlEmptyView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <TextView
+                android:text="@string/no_journeys_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/btnCreateJourney"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="@dimen/empty_journeys_title_margin"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+            <Button
+                android:id="@+id/btnCreateJourney"
+                android:text="@string/create_new_journey_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:onClick="@{v -> listener.onCreateNewJourney()}"/>
+        </RelativeLayout>
+
+        <ProgressBar
+            android:id="@+id/pbInitialLoad"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvJourneys"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </android.support.v7.widget.RecyclerView>
+    </RelativeLayout>
+</layout>

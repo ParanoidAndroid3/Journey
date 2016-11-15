@@ -9,7 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
-import com.paranoidandroid.journey.MyJourneysActivity;
+import com.paranoidandroid.journey.myjourneys.activities.MyJourneysActivity;
 import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.wizard.adapters.WizardPagerAdapter;
 import com.paranoidandroid.journey.wizard.fragments.WizardFragment;

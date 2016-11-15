@@ -1,4 +1,4 @@
-package com.paranoidandroid.journey;
+package com.paranoidandroid.journey.login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.View;
 
 import com.crashlytics.android.Crashlytics;
+import com.paranoidandroid.journey.R;
+import com.paranoidandroid.journey.myjourneys.activities.MyJourneysActivity;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
@@ -47,7 +49,9 @@ public class LoginActivity extends AppCompatActivity {
                 } else if (user == null) {
                     Log.i(TAG, "User cancelled Facebook Login.");
                 } else {
+                    // We have a logged in user, so let's get rid of this log in activity.
                     Log.i(TAG, "Facebook user logged in.");
+                    navigateToNextActivity();
                 }
             }
         });
@@ -57,9 +61,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
-
-        // We have a logged in user, so let's get rid of this log in activity.
-        navigateToNextActivity();
     }
 
     private void navigateToNextActivity() {

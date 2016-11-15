@@ -1,4 +1,4 @@
-package com.paranoidandroid.journey;
+package com.paranoidandroid.journey.myjourneys.fragments;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+
+import com.paranoidandroid.journey.R;
 
 /**
  * Asks user to confirm log out.
@@ -18,8 +20,8 @@ public class LogoutConfirmationDialogFragment extends DialogFragment {
 
     private OnLogoutListener listener;
 
+    // Keep this method in case we need to add args.
     public static LogoutConfirmationDialogFragment newInstance() {
-        // Keep this in case we need to add args.
         return new LogoutConfirmationDialogFragment();
     }
 
