@@ -6,4 +6,23 @@
     <string name="title_activity_my_journeys">My Journeys</string>
     <string name="confirm_logout">Are you sure you want to log out?</string>
     <string name="catch_phrase_intro">Define Your Own</string>
+    <string name="title_activity_wizard">WizardActivity</string>
+
+    <string name="name_prompt">What do you want to name your Journey?</string>
+    <string name="legs_prompt">Where are you going?</string>
+    <string name="tags_prompt">How will you travel?</string>
+    <string name="new_leg_hint">Enter destination…</string>
+
+    <string name="size_solo">Solo</string>
+    <string name="size_couple">Couple</string>
+    <string name="size_group">Group</string>
+    <string name="size_family">Family</string>
+
+    <string name="tag_foodie">Foodie</string>
+    <string name="tag_culture">Culture</string>
+    <string name="tag_adventure">Adventure</string>
+    <string name="tag_relaxation">Chiller</string>
+    <string name="tag_budget">Budget</string>
+    <string name="tag_luxury">Luxury</string>
+
 </resources>

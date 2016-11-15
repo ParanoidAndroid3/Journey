@@ -13,8 +13,37 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="WizardPrompt">
+        <item name="android:textSize">28sp</item>
+        <item name="android:textColor">@color/colorWizardPrompt</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginLeft">@dimen/wizard_prompt_horizontal_margin</item>
+        <item name="android:layout_marginStart">@dimen/wizard_prompt_horizontal_margin</item>
+        <item name="android:layout_marginRight">@dimen/wizard_prompt_horizontal_margin</item>
+        <item name="android:layout_marginEnd">@dimen/wizard_prompt_horizontal_margin</item>
+        <item name="android:layout_marginTop">@dimen/wizard_prompt_vertical_margin</item>
+    </style>
+
+    <style name="LegCalendar">
+        <item name="android:layout_width">35dp</item>
+        <item name="android:layout_height">35dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:visibility">visible</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="TagButton">
+        <item name="android:layout_height">30dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:background">@color/colorTagNotPressed</item>
+    </style>
 
 </resources>
