@@ -1,4 +1,4 @@
-package com.paranoidandroid.journey.activities;
+package com.paranoidandroid.journey.legplanner.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -8,9 +8,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.paranoidandroid.journey.fragments.AddActivityFragment;
-import com.paranoidandroid.journey.fragments.DayViewFragment;
-import com.paranoidandroid.journey.fragments.MapViewFragment;
+import com.paranoidandroid.journey.legplanner.fragments.AddActivityFragment;
+import com.paranoidandroid.journey.legplanner.fragments.DayViewFragment;
+import com.paranoidandroid.journey.legplanner.fragments.MapViewFragment;
 import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.models.Journey;
 import com.parse.GetCallback;
@@ -114,6 +114,7 @@ public class PlannerActivity extends AppCompatActivity implements
     // Helper methods
 
     private void showJourney(Journey journey) {
+        toolbar.setTitle(journey.getName());
         addMarkersToMap(journey);
         addDaysToPlanner(journey);
     }

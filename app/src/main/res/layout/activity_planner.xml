@@ -26,12 +26,12 @@
         android:layout_height="match_parent" >
         <fragment
             android:id="@+id/legs"
-            class="com.paranoidandroid.journey.fragments.DayViewFragment"
+            class="com.paranoidandroid.journey.legplanner.fragments.DayViewFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
         <fragment
             android:id="@+id/map"
-            class="com.paranoidandroid.journey.fragments.MapViewFragment"
+            class="com.paranoidandroid.journey.legplanner.fragments.MapViewFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 

@@ -1,10 +1,6 @@
-package com.paranoidandroid.journey.fragments;
+package com.paranoidandroid.journey.legplanner.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
@@ -13,18 +9,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.paranoidandroid.journey.R;
-import com.paranoidandroid.journey.adapters.ActivitiesListAdapter;
-import com.paranoidandroid.journey.adapters.DaysListAdapter;
+import com.paranoidandroid.journey.legplanner.adapters.ActivitiesListAdapter;
+import com.paranoidandroid.journey.legplanner.adapters.DaysListAdapter;
 import com.paranoidandroid.journey.models.Activity;
 import com.paranoidandroid.journey.models.Day;
 import com.paranoidandroid.journey.models.Leg;
 import com.paranoidandroid.journey.support.ItemClickSupport;
 import com.parse.ParseException;
-import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.SaveCallback;
 

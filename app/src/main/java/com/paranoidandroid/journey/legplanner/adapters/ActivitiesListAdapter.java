@@ -1,4 +1,4 @@
-package com.paranoidandroid.journey.adapters;
+package com.paranoidandroid.journey.legplanner.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.PopupMenu;
@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.paranoidandroid.journey.interfaces.ActivityViewHolderClickListener;
+import com.paranoidandroid.journey.legplanner.interfaces.ActivityViewHolderClickListener;
 import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.models.Activity;
 

@@ -1,4 +1,4 @@
-package com.paranoidandroid.journey.fragments;
+package com.paranoidandroid.journey.legplanner.fragments;
 
 import android.content.Context;
 import android.graphics.Color;
