@@ -8,9 +8,9 @@ The following **required** functionality is completed:
 * [ ] User can log into the app using a Google or Facebook account
 * [ ] Users can view a list of all Journeys created by them with general information about the legs.
 * [ ] User can create a new Journey by specifying the following:
-   * [ ] Journey name
-   * [ ] Journey legs
-   * [ ] Journey tags
+   * [X] Journey name
+   * [X] Journey legs - destination and start/end dates
+   * [X] Journey tags - {solo, couple, group, family} & {adventure, relaxation, budget, luxury, foodie, culture}
 * [ ] Once journey is created, user is navigated to a *map-view* of the trip. Map view contains pins for each leg of the trip
 * [ ] User can *flip* over the map view to see a calendar view of the trip.
 * [ ] User can view up to (3) days with all activities that have been added. The user will be able to select the day to view by selecting it.
@@ -24,8 +24,7 @@ The following **optional** features are implemented:
 
 * [ ] User can register for a new account
 * [ ] User can login to the app using credentials specified during registration
-* [ ] User can *flip-over* the *map-view* to see a zoomed in view of the map. This view contains destinations for a single day in the journey.
-* [ ] Each journey can have tags associated with it, such as Number of travelers, Age, Budget Type = {Thrify, medium, pricey}, Travel type = {Adventurous, Foodie, Meet new people, Museum lover, etc} etc
+* [ ] User can *flip-over* a day-screen in the leg planner to see a zoomed in view of the map. This view contains destinations for a single day in the journey.
 * [ ] Users can pin/star recommendations; these pinned items are visible in a separate list in the recommendations section to be added later to a day
 * [ ] User can add multiple recommendations at once by tapping each to select/unselect
   * [ ] Show a status bar indicating the total number of recommendations currently selected
