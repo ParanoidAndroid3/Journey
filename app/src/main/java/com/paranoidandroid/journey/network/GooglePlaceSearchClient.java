@@ -2,6 +2,7 @@ package com.paranoidandroid.journey.network;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 public class GooglePlaceSearchClient {
@@ -24,12 +25,12 @@ public class GooglePlaceSearchClient {
         client.get(NEARBY_SEARCH_BASE_URL, params, responseHandler);
     }
 
-    public static void autoComplete(String input, AsyncHttpResponseHandler responseHandler) {
+    public static void autoComplete(String input, JsonHttpResponseHandler responseHandler) {
         RequestParams params = new RequestParams();
         params.put("key", GOOGLE_PLACES_API_KEY);
         params.put("types", "geocode");
         params.put("input", input);
 
-        client.get(GOOGLE_PLACES_API_KEY, params, responseHandler);
+        client.get(AUTO_COMPLETE_BASE_URL, params, responseHandler);
     }
 }

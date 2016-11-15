@@ -1,6 +1,7 @@
 package com.paranoidandroid.journey.wizard.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,11 +10,19 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.paranoidandroid.journey.R;
+import com.paranoidandroid.journey.network.GooglePlaceSearchClient;
 import com.paranoidandroid.journey.wizard.models.AutoCompleteItem;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by epushkarskaya on 11/13/16.
@@ -21,9 +30,12 @@ import java.util.List;
 
 public class DestinationAutoCompleteAdapter extends BaseAdapter implements Filterable {
 
-    private static final int MAX_RESULTS = 5;
+    private static final String TAG = "DestinationACAdapter";
+
     private Context mContext;
+
     private List<AutoCompleteItem> resultList = new ArrayList<>();
+    private List<AutoCompleteItem> rawResults = new ArrayList<>();
 
     public DestinationAutoCompleteAdapter(Context context) {
         this.mContext = context;
@@ -54,8 +66,7 @@ public class DestinationAutoCompleteAdapter extends BaseAdapter implements Filte
 
         AutoCompleteItem item = (AutoCompleteItem) getItem(position);
 
-        ((TextView) convertView.findViewById(R.id.tvCity)).setText(item.getCity());
-        ((TextView) convertView.findViewById(R.id.tvCountry)).setText(item.getCountry());
+        ((TextView) convertView.findViewById(R.id.tvDescription)).setText(item.getDescription());
 
         return convertView;
     }
@@ -68,11 +79,11 @@ public class DestinationAutoCompleteAdapter extends BaseAdapter implements Filte
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults filterResults = new FilterResults();
                 if (constraint != null) {
-                    List<AutoCompleteItem> destinations = findDestinations(mContext, constraint.toString());
+                    findDestinations(constraint.toString());
 
                     // Assign the data to the FilterResults
-                    filterResults.values = destinations;
-                    filterResults.count = destinations.size();
+                    filterResults.values = rawResults;
+                    filterResults.count = rawResults.size();
                 }
                 return filterResults;
             }
@@ -89,12 +100,30 @@ public class DestinationAutoCompleteAdapter extends BaseAdapter implements Filte
         return filter;
     }
 
-    private List<AutoCompleteItem> findDestinations(Context context, String city) {
-        // todo: implement background search
-        List<AutoCompleteItem> tempResult = new ArrayList<>();
-        tempResult.add(new AutoCompleteItem("Paris", "France", 1234));
-        tempResult.add(new AutoCompleteItem("Paris", "Kentucky", 5678));
-        return tempResult;
+    /**
+     * This method is responsible for making an async network call to GooglePlaces api.
+     */
+    private void findDestinations(String input) {
+
+        GooglePlaceSearchClient.autoComplete(input, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
+                try {
+                    JSONArray predictions = json.getJSONArray("predictions");
+                    for (int i = 0; i < predictions.length(); i++) {
+                        AutoCompleteItem item = new AutoCompleteItem(predictions.getJSONObject(i));
+                        rawResults.add(item);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.e(TAG, errorResponse.toString());
+            }
+        });
 
     }
 

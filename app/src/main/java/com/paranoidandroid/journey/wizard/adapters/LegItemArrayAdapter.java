@@ -1,6 +1,7 @@
 package com.paranoidandroid.journey.wizard.adapters;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatDelegate;
 import android.view.LayoutInflater;
@@ -12,14 +13,19 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.paranoidandroid.journey.R;
+import com.paranoidandroid.journey.wizard.fragments.WizardFragment;
 import com.paranoidandroid.journey.wizard.models.AutoCompleteItem;
 import com.paranoidandroid.journey.wizard.models.LegItem;
 import com.paranoidandroid.journey.wizard.utils.DelayAutoCompleteTextView;
+import com.paranoidandroid.journey.wizard.utils.JourneyBuilderUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import static com.paranoidandroid.journey.R.id.etDestination;
 
@@ -29,8 +35,13 @@ import static com.paranoidandroid.journey.R.id.etDestination;
 
 public class LegItemArrayAdapter extends ArrayAdapter<LegItem> {
 
-    public LegItemArrayAdapter(Context context) {
+    private static Drawable originalEtDrawable = null;
+
+    private WizardFragment.OnItemUpdatedListener listener;
+
+    public LegItemArrayAdapter(Context context, WizardFragment.OnItemUpdatedListener listener) {
         super(context, 0, new ArrayList<LegItem>());
+        this.listener = listener;
     }
 
     @Override
@@ -70,11 +81,13 @@ public class LegItemArrayAdapter extends ArrayAdapter<LegItem> {
 
         holder = (ViewHolder) convertView.getTag();
 
-        if (leg.getCity() != null) {
-            holder.etDestination.setText(leg.getCity() + ", " + leg.getCountry());
+        // If no city has been selected yet, we do not want show calendars.
+        if (leg.getDestination() != null) {
+            holder.etDestination.setText(leg.getDestination());
             setVisibility(holder, View.VISIBLE);
         } else {
-            setVisibility(holder, View.GONE);
+            holder.etDestination.setText("");
+            setVisibility(holder, View.INVISIBLE);
         }
 
         assignDate(holder.btnStartDate, leg.getStartDate());
@@ -84,15 +97,34 @@ public class LegItemArrayAdapter extends ArrayAdapter<LegItem> {
     }
 
     /**
-     * This method either shows the selected date on the button or
-     * sets the background resource to the calendar icon
+     * Override method to include an update to parent activity
+     */
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+
+        List<LegItem> legs = new ArrayList<>();
+        for (int i = 0; i < getCount() - 1; i++){
+            legs.add(getItem(i));
+        }
+
+        if (getCount() > 1) {
+            Map<String, Object> result = new HashMap<>();
+            result.put(JourneyBuilderUtils.LEGS_KEY, legs);
+            listener.updateJourneyData(result);
+        }
+    }
+
+    /**
+     * This method either shows the selected date on the button or sets the background
+     * resource to the calendar icon.
      */
     private void assignDate(Button button, Date date) {
-        if (date == null) {
+        if (date == null && !button.getText().toString().equals("")) {
             button.setText("");
             AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
             button.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_calendar));
-        } else {
+        } else if (date != null && button.getText().toString().equals("")){
             String str = new SimpleDateFormat("MM/dd", Locale.US).format(date);
             button.setText(str);
             button.setBackgroundResource(0);
@@ -101,19 +133,33 @@ public class LegItemArrayAdapter extends ArrayAdapter<LegItem> {
 
     private void onDeleteClick(int position) {
         remove(getItem(position));
-        notifyDataSetChanged();
     }
 
+    /**
+     * Presents a large calendar view for user to select travel dates.
+     */
     private void onCalendarClick(View view) {
         // todo: handle calendar click
     }
 
+    /**
+     * Used to show or hide calendar views and delete button.
+     */
     private void setVisibility(ViewHolder holder, int visibility) {
         holder.btnDeleteLeg.setVisibility(visibility);
         holder.btnStartDate.setVisibility(visibility);
         holder.btnEndDate.setVisibility(visibility);
+
         if (visibility == View.VISIBLE) {
             holder.etDestination.setBackgroundResource(0);
+            holder.btnDeleteLeg.setClickable(true);
+            holder.btnStartDate.setClickable(true);
+            holder.btnEndDate.setClickable(true);
+        } else {
+            holder.etDestination.setBackground(originalEtDrawable);
+            holder.btnDeleteLeg.setClickable(false);
+            holder.btnStartDate.setClickable(false);
+            holder.btnEndDate.setClickable(false);
         }
     }
 
@@ -128,10 +174,9 @@ public class LegItemArrayAdapter extends ArrayAdapter<LegItem> {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 AutoCompleteItem autoCompleteItem = (AutoCompleteItem) adapterView.getItemAtPosition(position);
-                destination.setText(autoCompleteItem.getCity() + ", " + autoCompleteItem.getCountry());
-                legItem.setCity(autoCompleteItem.getCity());
-                legItem.setCountry(autoCompleteItem.getCountry());
-                legItem.setId(autoCompleteItem.getId());
+                destination.setText(autoCompleteItem.getDescription());
+                legItem.setDestination(autoCompleteItem.getDescription());
+                legItem.setPlacesId(autoCompleteItem.getPlaceId());
                 legItem.setVisible(true);
                 setVisibility(holder, View.VISIBLE);
                 createEmptyRow();
@@ -140,12 +185,43 @@ public class LegItemArrayAdapter extends ArrayAdapter<LegItem> {
 
     }
 
-    private void createEmptyRow() {
-        add(new LegItem());
-        notifyDataSetChanged();
+    /**
+     * This method is used to create and empty row to the list view, if one does not already exist.
+     * Users will use this row to add another destination to their route
+     */
+    public void createEmptyRow() {
+        int index = getCount() - 1;
+        if (index < 0 || getItem(index).isVisible()) {
+            add(new LegItem());
+        }
+    }
+
+    /**
+     * This method returns whether or not all of the data in the list is valid.
+     */
+    public boolean hasValidData() {
+        int numLegs = getCount() -1;
+        if (numLegs == 0) {
+            return false;
+        }
+        for (int i = 0; i < numLegs; i++) {
+            if (!isLegValid(getItem(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * A leg item is valid if a destination id, start date and end date are all defined.
+     * If item is not visible then there is an issue and we will not count list as valid.
+     */
+    private boolean isLegValid(LegItem item) {
+       return item.getPlacesId() != null && item.getStartDate() != null && item.getEndDate() != null && item.isVisible();
     }
 
     private class ViewHolder {
+
         ImageButton btnDeleteLeg;
         DelayAutoCompleteTextView etDestination;
         Button btnStartDate;
@@ -154,6 +230,9 @@ public class LegItemArrayAdapter extends ArrayAdapter<LegItem> {
         public ViewHolder(View view) {
             this.btnDeleteLeg = (ImageButton) view.findViewById(R.id.btnDeleteLeg);
             this.etDestination = (DelayAutoCompleteTextView) view.findViewById(R.id.etDestination);
+            if (originalEtDrawable == null) {
+                originalEtDrawable = etDestination.getBackground();
+            }
             this.btnStartDate = (Button) view.findViewById(R.id.btnStartDate);
             this.btnEndDate = (Button) view.findViewById(R.id.btnEndDate);
         }

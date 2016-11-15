@@ -8,22 +8,31 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.paranoidandroid.journey.MyJourneysActivity;
 import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.wizard.adapters.WizardPagerAdapter;
+import com.paranoidandroid.journey.wizard.fragments.WizardFragment;
 import com.paranoidandroid.journey.wizard.utils.JourneyBuilderUtils;
 
 import java.util.HashMap;
+import java.util.Map;
 
-public class WizardActivity extends AppCompatActivity {
+/**
+ * Created by epushkarskaya on 11/13/16.
+ */
+
+public class WizardActivity extends AppCompatActivity implements WizardFragment.OnItemUpdatedListener, View.OnClickListener {
 
     private static final String TAG = "WizardActivity";
 
+    /**
+     * This map will collected all of the data needed to create a new Journey.
+     **/
+    private Map<String, Object> journeyData;
+
     private WizardPagerAdapter pagerAdapter;
     private ViewPager viewpager;
-    private HashMap<String, Object> journeyData;
     private FloatingActionButton fab;
 
     @Override
@@ -35,35 +44,20 @@ public class WizardActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        fab.setClickable(false);
+        fab.setOnClickListener(this);
 
-                // todo: accumulate data from fragment and add to journey parts
-
-                int currentFragment = viewpager.getCurrentItem();
-                if (currentFragment < 2) {
-                    goToNextFragment(currentFragment);
-                } else {
-                    Toast.makeText(getApplicationContext(), "Complete!", Toast.LENGTH_LONG).show(); // todo: remove
-
-                    int journeyId = JourneyBuilderUtils.buildJourney(journeyData);
-
-                    Intent intent = new Intent(getApplicationContext(), MyJourneysActivity.class); // todo: change this to map view activity
-                    intent.putExtra("journey_id", journeyId);
-                    startActivity(intent);
-                }
-            }
-        });
-
-        viewpager = (ViewPager) findViewById(R.id.viewpager);
         pagerAdapter = new WizardPagerAdapter(getSupportFragmentManager());
+        viewpager = (ViewPager) findViewById(R.id.viewpager);
         viewpager.setAdapter(pagerAdapter);
 
         journeyData = new HashMap<>();
-
     }
 
+    /**
+     * Navigates to the next fragment and updates the page count in the
+     * pagerAdapter if necessary.
+     */
     private void goToNextFragment(int currentFragment) {
         int numFragments = pagerAdapter.getCount();
 
@@ -89,4 +83,57 @@ public class WizardActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Iterates through all fragments to see if all necessarydata to create a new
+     * Journey have been entered.
+     */
+    private boolean allFragmentsComplete() {
+        for (int i = 0; i < pagerAdapter.getCount(); i++) {
+            WizardFragment fragment = (WizardFragment) pagerAdapter.getItem(i);
+            if (!fragment.readyToPublish()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Necessary to implement View.OnClickListener.
+     *
+     * Either navigates to the next fragment or creates a new Journey in parse,
+     * depending on current fragment.
+     */
+    @Override
+    public void onClick(View view) {
+        int currentFragment = viewpager.getCurrentItem();
+
+        if (currentFragment < 2) {
+            goToNextFragment(currentFragment);
+        } else if (allFragmentsComplete()) {
+            int journeyId = JourneyBuilderUtils.buildJourney(journeyData);
+
+            //todo: navigate to map view activity instead of MyJourneysActivity
+            Intent intent = new Intent(getApplicationContext(), MyJourneysActivity.class);
+            intent.putExtra("journey_id", journeyId);
+            startActivity(intent);
+        } else {
+
+        }
+    }
+
+    /**
+     * Necessary to implement WizardFragment.OnItemUpdatedListener.
+     */
+    @Override
+    public void updateJourneyData(Map<String, Object> data) {
+        journeyData.putAll(data);
+    }
+
+    /**
+     * Necessary to implement WizardFragment.OnItemUpdatedListener.
+     */
+    @Override
+    public void enableFab(boolean enable) {
+        fab.setClickable(enable);
+    }
 }

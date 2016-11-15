@@ -4,28 +4,29 @@ package com.paranoidandroid.journey.wizard.models;
  * Created by epushkarskaya on 11/13/16.
  */
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+/**
+ * This model is used to populate the autocomplete results
+ * in the leg planning step of the wizard.
+ */
 public class AutoCompleteItem {
 
-    String city;
-    String country;
-    long id;
+    String description;
+    String placeId;
 
-    public AutoCompleteItem(String city, String country, long id) {
-        this.city = city;
-        this.country = country;
-        this.id = id;
+    public AutoCompleteItem(JSONObject json) throws JSONException {
+        this.description = json.getString("description");
+        this.placeId = json.getString("place_id");
     }
 
-    public String getCity() {
-        return city;
+    public String getDescription() {
+        return description;
     }
 
-    public String getCountry() {
-        return country;
-    }
-
-    public long getId() {
-        return id;
+    public String getPlaceId() {
+        return placeId;
     }
 
 }
