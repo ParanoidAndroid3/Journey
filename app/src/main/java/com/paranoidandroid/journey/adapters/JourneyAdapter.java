@@ -1,4 +1,4 @@
-package com.paranoidandroid.journey;
+package com.paranoidandroid.journey.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.databinding.ItemJourneyBinding;
 import com.paranoidandroid.journey.models.Journey;
 import com.paranoidandroid.journey.models.Leg;

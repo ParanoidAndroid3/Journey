@@ -1,4 +1,4 @@
-package com.paranoidandroid.journey;
+package com.paranoidandroid.journey.activities;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -10,6 +10,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.paranoidandroid.journey.fragments.LogoutConfirmationDialogFragment;
+import com.paranoidandroid.journey.fragments.MyJourneysListFragment;
+import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.databinding.ActivityMyJourneysBinding;
 import com.paranoidandroid.journey.models.Journey;
 import com.parse.ParseUser;

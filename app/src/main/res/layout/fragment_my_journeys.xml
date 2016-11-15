@@ -6,14 +6,14 @@
     <data>
         <variable
             name="listener"
-            type="com.paranoidandroid.journey.MyJourneysListFragment.OnJourneySelectedListener" />
+            type="com.paranoidandroid.journey.fragments.MyJourneysListFragment.OnJourneySelectedListener" />
     </data>
 
     <RelativeLayout
         android:id="@+id/content_my_journeys"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.paranoidandroid.journey.MyJourneysActivity"
+        tools:context="com.paranoidandroid.journey.activities.MyJourneysActivity"
         tools:showIn="@layout/activity_my_journeys">
 
         <RelativeLayout

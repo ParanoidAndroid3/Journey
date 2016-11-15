@@ -1,4 +1,4 @@
-package com.paranoidandroid.journey;
+package com.paranoidandroid.journey.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -11,12 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.paranoidandroid.journey.databinding.FragmentMyJourneysBinding;
+import com.paranoidandroid.journey.adapters.JourneyAdapter;
 import com.paranoidandroid.journey.models.Journey;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +32,7 @@ public class MyJourneysListFragment extends Fragment
         void onCreateNewJourney();
     }
 
-    private FragmentMyJourneysBinding binding;
+    private com.paranoidandroid.journey.databinding.FragmentMyJourneysBinding binding;
     private JourneyAdapter adapter;
     private OnJourneySelectedListener listener;
 
@@ -52,7 +51,7 @@ public class MyJourneysListFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
-        binding = FragmentMyJourneysBinding.inflate(inflater, container, false);
+        binding = com.paranoidandroid.journey.databinding.FragmentMyJourneysBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -116,7 +115,9 @@ public class MyJourneysListFragment extends Fragment
         ParseQuery<Journey> query = ParseQuery.getQuery(Journey.class);
         query.include("legs");
         query.include("legs.destination");
-        query.whereEqualTo("creator", ParseUser.getCurrentUser());
+
+        // TODO(emmanuel): think about security settings so users can't view all other users' data by default.
+        //query.whereEqualTo("creator", ParseUser.getCurrentUser());
 
         showInitialLoadProgressBar();
 
