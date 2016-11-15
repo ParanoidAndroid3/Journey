@@ -9,8 +9,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
-import com.paranoidandroid.journey.myjourneys.activities.MyJourneysActivity;
 import com.paranoidandroid.journey.R;
+import com.paranoidandroid.journey.legplanner.activities.PlannerActivity;
 import com.paranoidandroid.journey.wizard.adapters.WizardPagerAdapter;
 import com.paranoidandroid.journey.wizard.fragments.WizardFragment;
 import com.paranoidandroid.journey.wizard.utils.JourneyBuilderUtils;
@@ -112,8 +112,7 @@ public class WizardActivity extends AppCompatActivity implements WizardFragment.
         } else if (allFragmentsComplete()) {
             int journeyId = JourneyBuilderUtils.buildJourney(journeyData);
 
-            //todo: navigate to map view activity instead of MyJourneysActivity
-            Intent intent = new Intent(getApplicationContext(), MyJourneysActivity.class);
+            Intent intent = new Intent(getApplicationContext(), PlannerActivity.class);
             intent.putExtra("journey_id", journeyId);
             startActivity(intent);
         } else {
