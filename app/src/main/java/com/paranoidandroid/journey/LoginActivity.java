@@ -47,7 +47,9 @@ public class LoginActivity extends AppCompatActivity {
                 } else if (user == null) {
                     Log.i(TAG, "User cancelled Facebook Login.");
                 } else {
+                    // We have a logged in user, so let's get rid of this log in activity.
                     Log.i(TAG, "Facebook user logged in.");
+                    navigateToNextActivity();
                 }
             }
         });
@@ -57,9 +59,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
-
-        // We have a logged in user, so let's get rid of this log in activity.
-        navigateToNextActivity();
     }
 
     private void navigateToNextActivity() {

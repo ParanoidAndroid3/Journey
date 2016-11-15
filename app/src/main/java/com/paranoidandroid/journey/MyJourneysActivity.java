@@ -3,7 +3,6 @@ package com.paranoidandroid.journey;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -43,7 +42,7 @@ public class MyJourneysActivity extends AppCompatActivity implements
         binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createNewJourney(view);
+                onCreateNewJourney();
             }
         });
     }
@@ -84,8 +83,8 @@ public class MyJourneysActivity extends AppCompatActivity implements
         Toast.makeText(this, "Selected " + name, Toast.LENGTH_SHORT).show();
     }
 
-    private void createNewJourney(View view) {
-        Snackbar.make(view, "Create a new journey", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+    @Override
+    public void onCreateNewJourney() {
+        Toast.makeText(this, "Make a new Journey", Toast.LENGTH_SHORT).show();
     }
 }

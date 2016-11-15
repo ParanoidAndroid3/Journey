@@ -16,6 +16,7 @@ import com.paranoidandroid.journey.models.Journey;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,7 @@ public class MyJourneysListFragment extends Fragment
 
     public interface OnJourneySelectedListener {
         void onJourneySelected(Journey journey);
+        void onCreateNewJourney();
     }
 
     private FragmentMyJourneysBinding binding;
@@ -59,6 +61,7 @@ public class MyJourneysListFragment extends Fragment
         super.onViewCreated(view, savedInstanceState);
         binding.rvJourneys.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.rvJourneys.setAdapter(adapter);
+        binding.setListener(listener);
 
         fetchJourneys();
     }
@@ -113,6 +116,7 @@ public class MyJourneysListFragment extends Fragment
         ParseQuery<Journey> query = ParseQuery.getQuery(Journey.class);
         query.include("legs");
         query.include("legs.destination");
+        query.whereEqualTo("creator", ParseUser.getCurrentUser());
 
         showInitialLoadProgressBar();
 
