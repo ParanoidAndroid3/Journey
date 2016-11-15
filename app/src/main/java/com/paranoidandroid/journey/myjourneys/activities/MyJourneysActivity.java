@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.paranoidandroid.journey.legplanner.activities.PlannerActivity;
 import com.paranoidandroid.journey.login.LoginActivity;
 import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.databinding.ActivityMyJourneysBinding;
@@ -84,15 +85,14 @@ public class MyJourneysActivity extends AppCompatActivity implements
 
     @Override
     public void onJourneySelected(Journey journey) {
-        String name = journey.getName();
-        Toast.makeText(this, "Selected " + name, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, PlannerActivity.class);
+        intent.putExtra("journey_id", journey.getObjectId());
+        startActivity(intent);
     }
 
     @Override
     public void onCreateNewJourney() {
-        // Toast.makeText(this, "Make a new Journey", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, WizardActivity.class);
         startActivity(intent);
-        //finish();
     }
 }

@@ -43,6 +43,8 @@ public class Destination extends ParseObject {
         put(KEY_GEO_POINT, new ParseGeoPoint(latitude, longitude));
     }
 
+    public ParseGeoPoint getGeoPoint() { return getParseGeoPoint(KEY_GEO_POINT); }
+
     public double getLatitude() {
         ParseGeoPoint geo = getParseGeoPoint(KEY_GEO_POINT);
         if (geo != null) {

@@ -46,4 +46,17 @@
         <item name="android:background">@color/colorTagNotPressed</item>
     </style>
 
+    <style name="SelectedDayText" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textStyle">normal|bold</item>
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+    <style name="DayText" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textStyle">normal|bold</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+    <style name="Dialog.FullScreen" parent="Theme.AppCompat.Dialog">
+        <item name="android:padding">20dp</item>
+        <item name="android:windowBackground">@android:color/white</item>
+    </style>
+
 </resources>

@@ -41,7 +41,7 @@ public class JourneyApplication extends Application {
         // Configure parse via a custom builder.
         Parse.initialize(new Parse.Configuration.Builder(this)
                 .applicationId(PARSE_APP_ID)
-                .clientKey(null)
+                .clientKey("9K1CTGjvd77TviQw1THcOBneP6mFKjpb")
                 .addNetworkInterceptor(new ParseLogInterceptor())
                 .addNetworkInterceptor(new ParseStethoInterceptor())
                 .server(PARSE_URL).build());
