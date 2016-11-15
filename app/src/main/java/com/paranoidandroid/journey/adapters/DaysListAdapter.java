@@ -14,6 +14,9 @@ import com.paranoidandroid.journey.models.Day;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class DaysListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<Day> mDays;
@@ -45,6 +48,14 @@ public class DaysListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
+    public void setSelectedIndex(int index) {
+        this.selectedIndex = index;
+    }
+
+    public int getSelectedIndex() {
+        return this.selectedIndex;
+    }
+
     @Override
     public int getItemCount() {
         return mDays.size();
@@ -52,20 +63,13 @@ public class DaysListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     static class DayViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tvDate, tvDay, tvCity;
+        @BindView(R.id.tvDate) TextView tvDate;
+        @BindView(R.id.tvDay) TextView tvDay;
+        @BindView(R.id.tvCity) TextView tvCity;
+
         public DayViewHolder(View v) {
             super(v);
-            tvDate = (TextView) v.findViewById(R.id.tvDate);
-            tvDay = (TextView) v.findViewById(R.id.tvDay);
-            tvCity = (TextView) v.findViewById(R.id.tvCity);
+            ButterKnife.bind(this, v);
         }
-    }
-
-    public void setSelectedIndex(int index) {
-        this.selectedIndex = index;
-    }
-
-    public int getSelectedIndex() {
-        return this.selectedIndex;
     }
 }

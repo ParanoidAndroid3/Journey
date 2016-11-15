@@ -18,13 +18,8 @@ public class Activity extends ParseObject {
     private static final String KEY_DATE = "date";
     private static final String KEY_GEO_POINT = "geoPoint";
     private static final String KEY_EVENT_TYPE = "eventType";
-    private static final String KEY_DAY_OF_JOURNEY = "dayOfJourney";
 
     public Activity() {
-    }
-
-    public int getDayOfJourney() {
-        return getInt(KEY_DAY_OF_JOURNEY);
     }
 
     public void setTitle(String title) {

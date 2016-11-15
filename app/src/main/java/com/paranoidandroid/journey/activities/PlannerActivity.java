@@ -8,40 +8,34 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.loopj.android.http.JsonHttpResponseHandler;
+import com.paranoidandroid.journey.fragments.AddActivityFragment;
 import com.paranoidandroid.journey.fragments.DayViewFragment;
 import com.paranoidandroid.journey.fragments.MapViewFragment;
 import com.paranoidandroid.journey.R;
-import com.paranoidandroid.journey.models.Destination;
-import com.paranoidandroid.journey.models.GooglePlace;
 import com.paranoidandroid.journey.models.Journey;
-import com.paranoidandroid.journey.models.Leg;
-import com.paranoidandroid.journey.network.FoursquareVenueSearchClient;
-import com.paranoidandroid.journey.network.GooglePlaceSearchClient;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
-import java.util.List;
+public class PlannerActivity extends AppCompatActivity implements
+        Toolbar.OnMenuItemClickListener,
+        AddActivityFragment.AddActivityListener {
 
-import cz.msebera.android.httpclient.Header;
+    @BindView(R.id.fab_add_activity) FloatingActionButton fabAdd;
+    @BindView(R.id.toolbar) Toolbar toolbar;
 
-public class PlannerActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener {
-
-    private FloatingActionButton btAddActivity;
     private boolean mIsMapShowing = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_planner);
+        ButterKnife.bind(this);
 
         setupToolbar();
-        setupFab();
         showMapView();
         fetchJourney();
     }
@@ -63,6 +57,8 @@ public class PlannerActivity extends AppCompatActivity implements Toolbar.OnMenu
         });
     }
 
+    // Switch view menu
+
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         if (item.getItemId() == R.id.layoutType) {
@@ -74,22 +70,24 @@ public class PlannerActivity extends AppCompatActivity implements Toolbar.OnMenu
         return false;
     }
 
+    // AddActivityListener implementation
+
+    @Override
+    public void onCustomActivityAdded(String title) {
+        getDayViewFragment().addCustomActivity(title);
+    }
+
     // Component setup
 
     private void setupToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.inflateMenu(R.menu.menu_planner);
         toolbar.setOnMenuItemClickListener(this);
-    }
-
-    private void setupFab() {
-        btAddActivity = (FloatingActionButton) findViewById(R.id.fab_add_activity);
     }
 
     // Show / Hide fragment methods
 
     protected void showDayView() {
-        btAddActivity.show();
+        showFab();
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.show(getDayViewFragment());
@@ -98,7 +96,7 @@ public class PlannerActivity extends AppCompatActivity implements Toolbar.OnMenu
     }
 
     protected void showMapView() {
-        btAddActivity.hide();
+        hideFab();
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.show(getMapViewFragment());
@@ -106,35 +104,11 @@ public class PlannerActivity extends AppCompatActivity implements Toolbar.OnMenu
         ft.commit();
     }
 
-    // Handlers
+    // FAB Click handler
 
     public void addActivityPressed(View view) {
-        // TODO: Open activity explorer
-        Leg leg = getDayViewFragment().getSelectedLeg();
-        Destination d = leg.getDestination();
-        GooglePlaceSearchClient.search(d.getLatitude(), d.getLongitude(), "museum", null, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                List<GooglePlace> places = GooglePlace.parseJSON(response);
-            }
-        });
-        /*
-        FoursquareVenueSearchClient.search(d.getLatitude(), d.getLongitude(), new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                try {
-                    JSONObject res = response.getJSONObject("response");
-                    JSONArray groups = res.getJSONArray("groups");
-                    JSONArray items = groups.getJSONObject(0).getJSONArray("items");
-                    for (int i = 0; i < items.length(); i++) {
-                        System.out.println(items.getJSONObject(i).getJSONObject("venue").getString("name"));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        */
+        AddActivityFragment dialog = AddActivityFragment.newInstance();
+        dialog.show(getSupportFragmentManager(), dialog.getTag());
     }
 
     // Helper methods
@@ -159,4 +133,14 @@ public class PlannerActivity extends AppCompatActivity implements Toolbar.OnMenu
     private DayViewFragment getDayViewFragment() {
         return ((DayViewFragment) getSupportFragmentManager().findFragmentById(R.id.legs));
     }
+
+    private void hideFab() {
+        fabAdd.hide();
+    }
+
+    private void showFab() {
+        fabAdd.show();
+    }
+
+
 }

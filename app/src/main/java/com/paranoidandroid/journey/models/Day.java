@@ -18,6 +18,8 @@ public class Day {
         return this.leg.getDestination().getCityName();
     }
 
+    public Date getDate() { return this.date; }
+
     public Leg getLeg() {
         return this.leg;
     }
