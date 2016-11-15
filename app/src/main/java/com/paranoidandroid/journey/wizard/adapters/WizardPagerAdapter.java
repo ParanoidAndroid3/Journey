@@ -47,6 +47,7 @@ public class WizardPagerAdapter extends FragmentPagerAdapter {
             Log.e(TAG, "Cannot increment view pager count");
         } else {
             count++;
+            notifyDataSetChanged();
         }
     }
 

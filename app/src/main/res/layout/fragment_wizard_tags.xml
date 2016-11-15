@@ -12,36 +12,39 @@
         android:layout_height="wrap_content"
         android:text="@string/tags_prompt"/>
 
-    <RadioGroup
-        android:id="@+id/rgGroupSize"
-        android:layout_width="wrap_content"
-        android:layout_centerHorizontal="true"
+    <LinearLayout
+        android:id="@+id/llSizeButtons"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_below="@id/tvTagsPrompt"
         android:layout_marginTop="60dp"
-        android:layout_below="@id/tvTagsPrompt">
+        android:gravity="center_horizontal">
 
-        <RadioButton android:id="@+id/radio_solo"
-            style="@style/SizeButton"
+        <Button
+            android:id="@+id/btnSolo"
+            style="@style/TagButton"
             android:text="@string/size_solo"/>
 
-        <RadioButton android:id="@+id/radio_couple"
-            style="@style/SizeButton"
+        <Button
+            android:id="@+id/btnCouple"
+            style="@style/TagButton"
             android:text="@string/size_couple"
-            android:layout_marginStart="10dp"/>
+            android:layout_marginStart="@dimen/tag_button_margin"/>
 
-        <RadioButton android:id="@+id/radio_group"
-            style="@style/SizeButton"
+        <Button
+            android:id="@+id/btnGroup"
+            style="@style/TagButton"
             android:text="@string/size_group"
-            android:layout_marginStart="10dp"/>
+            android:layout_marginStart="@dimen/tag_button_margin"/>
 
-
-        <RadioButton android:id="@+id/radio_family"
-            style="@style/SizeButton"
+        <Button
+            android:id="@+id/btnFamily"
+            style="@style/TagButton"
             android:text="@string/size_family"
-            android:layout_marginStart="10dp"/>
+            android:layout_marginStart="@dimen/tag_button_margin"/>
 
-    </RadioGroup>
+    </LinearLayout>
 
     <View
         android:id="@+id/div"
@@ -50,68 +53,71 @@
         android:layout_height="2dp"
         android:background="#c0c0c0"
         android:layout_marginTop="15dp"
-        android:layout_below="@id/rgGroupSize"/>
+        android:layout_below="@id/llSizeButtons"/>
 
     <LinearLayout
         android:id="@+id/llTags1"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@id/div"
         android:layout_marginTop="15dp"
+        android:layout_centerHorizontal="true"
         android:layout_below="@id/div">
 
-        <RadioButton
-            android:id="@+id/radio_culture"
+        <Button
+            android:id="@+id/btnCulture"
             style="@style/TagButton"
-            android:text="@string/tag_culture"/>
+            android:text="@string/tag_culture"
+            android:layout_marginEnd="@dimen/tag_button_margin"/>
 
-        <RadioButton
-            android:id="@+id/radio_foodie"
+        <Button
+            android:id="@+id/btnFoodie"
             style="@style/TagButton"
             android:text="@string/tag_foodie"
-            android:layout_marginStart="20dp"/>
+            android:layout_marginStart="@dimen/tag_button_margin"/>
 
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/llTags2"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@id/div"
         android:layout_marginTop="15dp"
+        android:layout_centerHorizontal="true"
         android:layout_below="@id/llTags1">
 
-        <RadioButton
-            android:id="@+id/radio_adventure"
+        <Button
+            android:id="@+id/btnAdventure"
             style="@style/TagButton"
-            android:text="@string/tag_adventure"/>
+            android:text="@string/tag_adventure"
+            android:layout_marginEnd="@dimen/tag_button_margin"/>
 
-        <RadioButton
-            android:id="@+id/radio_relaxation"
+        <Button
+            android:id="@+id/btnRelaxation"
             style="@style/TagButton"
             android:text="@string/tag_relaxation"
-            android:layout_marginStart="20dp"/>
+            android:layout_marginStart="@dimen/tag_button_margin"/>
 
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/llTags3"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@id/div"
         android:layout_marginTop="15dp"
-        android:layout_below="@id/llTags2">
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/llTags2">
 
-        <RadioButton
-            android:id="@+id/radio_budget"
+        <Button
+            android:id="@+id/btnBudget"
             style="@style/TagButton"
-            android:text="@string/tag_budget"/>
+            android:text="@string/tag_budget"
+            android:layout_marginEnd="@dimen/tag_button_margin"/>
 
-        <RadioButton
-            android:id="@+id/radio_luxury"
+        <Button
+            android:id="@+id/btnLuxury"
             style="@style/TagButton"
             android:text="@string/tag_luxury"
-            android:layout_marginStart="20dp"/>
+            android:layout_marginStart="@dimen/tag_button_margin"/>
 
     </LinearLayout>
 

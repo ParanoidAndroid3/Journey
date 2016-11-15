@@ -90,16 +90,11 @@ public class DestinationAutoCompleteAdapter extends BaseAdapter implements Filte
     }
 
     private List<DestinationItem> findDestinations(Context context, String city) {
-
         // todo: implement background search
-
         List<DestinationItem> tempResult = new ArrayList<>();
         tempResult.add(new DestinationItem("Paris", "France", 1, 2));
         tempResult.add(new DestinationItem("Paris", "Kentucky", 5, 6));
         return tempResult;
-
-        //https://maps.googleapis.com/maps/api/place/autocomplete/json?input=Paris&types=geocode&key=YOUR_API_KEY
-
 
     }
 

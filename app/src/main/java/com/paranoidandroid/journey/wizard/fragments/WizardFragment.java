@@ -10,6 +10,12 @@ import java.util.HashMap;
 
 public abstract class WizardFragment extends Fragment {
 
+    public interface OnItemUpdatedListener {
+
+        public void addData();
+
+    }
+
     public abstract HashMap<String, Object> getResult();
 
 }
