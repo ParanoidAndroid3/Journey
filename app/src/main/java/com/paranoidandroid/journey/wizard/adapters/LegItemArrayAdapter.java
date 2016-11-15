@@ -82,7 +82,7 @@ public class LegItemArrayAdapter extends ArrayAdapter<LegItem> {
         holder = (ViewHolder) convertView.getTag();
 
         // If no city has been selected yet, we do not want show calendars.
-        if (leg.getDestination() != null) {
+        if (leg.isVisible()) {
             holder.etDestination.setText(leg.getDestination());
             setVisibility(holder, View.VISIBLE);
         } else {
@@ -120,7 +120,8 @@ public class LegItemArrayAdapter extends ArrayAdapter<LegItem> {
      * resource to the calendar icon.
      */
     private void assignDate(Button button, Date date) {
-        if (date == null && !button.getText().toString().equals("")) {
+        String temp = button.getText().toString();
+        if (date == null) {
             button.setText("");
             AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
             button.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_calendar));
@@ -167,8 +168,6 @@ public class LegItemArrayAdapter extends ArrayAdapter<LegItem> {
         final DelayAutoCompleteTextView destination = (DelayAutoCompleteTextView) view.findViewById(etDestination);
         destination.setThreshold(3);
         destination.setAdapter(new DestinationAutoCompleteAdapter(getContext()));
-        destination.setLoadingIndicator(
-                (android.widget.ProgressBar) view.findViewById(R.id.pb_loading_indicator));
         destination.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -178,7 +177,6 @@ public class LegItemArrayAdapter extends ArrayAdapter<LegItem> {
                 legItem.setDestination(autoCompleteItem.getDescription());
                 legItem.setPlacesId(autoCompleteItem.getPlaceId());
                 legItem.setVisible(true);
-                setVisibility(holder, View.VISIBLE);
                 createEmptyRow();
             }
         });

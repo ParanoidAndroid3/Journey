@@ -1,7 +1,6 @@
 package com.paranoidandroid.journey.wizard.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,19 +9,11 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
-import com.loopj.android.http.JsonHttpResponseHandler;
 import com.paranoidandroid.journey.R;
-import com.paranoidandroid.journey.network.GooglePlaceSearchClient;
 import com.paranoidandroid.journey.wizard.models.AutoCompleteItem;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by epushkarskaya on 11/13/16.
@@ -35,7 +26,6 @@ public class DestinationAutoCompleteAdapter extends BaseAdapter implements Filte
     private Context mContext;
 
     private List<AutoCompleteItem> resultList = new ArrayList<>();
-    private List<AutoCompleteItem> rawResults = new ArrayList<>();
 
     public DestinationAutoCompleteAdapter(Context context) {
         this.mContext = context;
@@ -79,11 +69,11 @@ public class DestinationAutoCompleteAdapter extends BaseAdapter implements Filte
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults filterResults = new FilterResults();
                 if (constraint != null) {
-                    findDestinations(constraint.toString());
+                    List<AutoCompleteItem> destinations = findDestinations(constraint.toString());
 
                     // Assign the data to the FilterResults
-                    filterResults.values = rawResults;
-                    filterResults.count = rawResults.size();
+                    filterResults.values = destinations;
+                    filterResults.count = destinations.size();
                 }
                 return filterResults;
             }
@@ -103,8 +93,14 @@ public class DestinationAutoCompleteAdapter extends BaseAdapter implements Filte
     /**
      * This method is responsible for making an async network call to GooglePlaces api.
      */
-    private void findDestinations(String input) {
+    private List<AutoCompleteItem> findDestinations(String input) {
+        List<AutoCompleteItem> result = new ArrayList<>();
+        result.add(new AutoCompleteItem("Paris, France", "9jf9"));
+        result.add(new AutoCompleteItem("Athens, Greece", "9jfsdf9"));
+        result.add(new AutoCompleteItem("Mykonos, Freece", "9jfsdfsdag9"));
 
+        return result;
+        /*
         GooglePlaceSearchClient.autoComplete(input, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
@@ -123,7 +119,7 @@ public class DestinationAutoCompleteAdapter extends BaseAdapter implements Filte
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Log.e(TAG, errorResponse.toString());
             }
-        });
+        });*/
 
     }
 

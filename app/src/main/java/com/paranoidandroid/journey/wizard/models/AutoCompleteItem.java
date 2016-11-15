@@ -16,6 +16,11 @@ public class AutoCompleteItem {
     String description;
     String placeId;
 
+    public AutoCompleteItem(String description, String placeId) {
+        this.description = description;
+        this.placeId = placeId;
+    }
+
     public AutoCompleteItem(JSONObject json) throws JSONException {
         this.description = json.getString("description");
         this.placeId = json.getString("place_id");
