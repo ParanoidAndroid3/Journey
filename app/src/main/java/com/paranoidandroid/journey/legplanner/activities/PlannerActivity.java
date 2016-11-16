@@ -1,7 +1,9 @@
 package com.paranoidandroid.journey.legplanner.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -14,6 +16,7 @@ import com.paranoidandroid.journey.legplanner.fragments.DayViewFragment;
 import com.paranoidandroid.journey.legplanner.fragments.MapViewFragment;
 import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.models.Journey;
+import com.paranoidandroid.journey.recommendations.RecommendationsActivity;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -25,10 +28,10 @@ public class PlannerActivity extends AppCompatActivity implements
         Toolbar.OnMenuItemClickListener,
         AddActivityFragment.AddActivityListener {
 
-    @BindView(R.id.fab_add_activity) FloatingActionButton fabAdd;
+    @BindView(R.id.fab_add_activity) FloatingActionButton fabAddActivity;
     @BindView(R.id.toolbar) Toolbar toolbar;
 
-    private boolean mIsMapShowing = true;
+    private boolean isMapShowing = true;
     private String journeyId;
 
     @Override
@@ -70,10 +73,10 @@ public class PlannerActivity extends AppCompatActivity implements
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         if (item.getItemId() == R.id.layoutType) {
-            if (mIsMapShowing) { showDayView(); }
+            if (isMapShowing) { showDayView(); }
             else { showMapView(); }
-            mIsMapShowing = !mIsMapShowing;
-            item.setTitle(mIsMapShowing ? "Days" : "Map");
+            isMapShowing = !isMapShowing;
+            item.setTitle(isMapShowing ? "Days" : "Map");
         }
         return false;
     }
@@ -83,6 +86,12 @@ public class PlannerActivity extends AppCompatActivity implements
     @Override
     public void onCustomActivityAdded(String title) {
         getDayViewFragment().addCustomActivity(title);
+    }
+
+    @Override
+    public void onRecommendationActivityClicked() {
+        Intent intent = new Intent(PlannerActivity.this, RecommendationsActivity.class);
+        startActivity(intent);
     }
 
     // Component setup
@@ -96,19 +105,18 @@ public class PlannerActivity extends AppCompatActivity implements
 
     protected void showDayView() {
         showFab();
-
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.show(getDayViewFragment());
-        ft.hide(getMapViewFragment());
-        ft.commit();
+        swapFragment(getMapViewFragment(), getDayViewFragment());
     }
 
     protected void showMapView() {
         hideFab();
+        swapFragment(getDayViewFragment(), getMapViewFragment());
+    }
 
+    private void swapFragment(Fragment toHide, Fragment toShow) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.show(getMapViewFragment());
-        ft.hide(getDayViewFragment());
+        ft.show(toShow);
+        ft.hide(toHide);
         ft.commit();
     }
 
@@ -144,11 +152,11 @@ public class PlannerActivity extends AppCompatActivity implements
     }
 
     private void hideFab() {
-        fabAdd.hide();
+        fabAddActivity.hide();
     }
 
     private void showFab() {
-        fabAdd.show();
+        fabAddActivity.show();
     }
 
 

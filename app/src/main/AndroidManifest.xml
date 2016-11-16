@@ -32,11 +32,11 @@
         <activity
             android:name=".legplanner.activities.PlannerActivity"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        </activity>
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        <activity
+            android:name=".recommendations.RecommendationsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
         <activity

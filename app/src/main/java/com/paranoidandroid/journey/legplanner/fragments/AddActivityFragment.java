@@ -28,6 +28,7 @@ public class AddActivityFragment extends BottomSheetDialogFragment implements
 
     public interface AddActivityListener {
         void onCustomActivityAdded(String title);
+        void onRecommendationActivityClicked();
     }
 
     public static AddActivityFragment newInstance() {
@@ -82,7 +83,10 @@ public class AddActivityFragment extends BottomSheetDialogFragment implements
 
     @OnClick(R.id.btAddSuggestion)
     public void onAddSuggestionClicked(View view) {
-        // TODO
+        if (listener != null) {
+            listener.onRecommendationActivityClicked();
+            dismiss();
+        }
     }
 
     @Override
