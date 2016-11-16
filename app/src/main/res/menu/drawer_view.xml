@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/miMyJourneys"
+        android:icon="@drawable/ic_map"
+        android:title="@string/title_my_journeys"/>
+
+    <item android:title="@string/drawer_title_edit">
+        <menu>
+            <item
+                android:id="@+id/miEditTitle"
+                android:icon="@drawable/ic_edit"
+                android:title="@string/edit_journey_name"/>
+            <item
+                android:id="@+id/miEditLegs"
+                android:icon="@drawable/ic_edit"
+                android:title="@string/edit_legs"/>
+            <item
+                android:id="@+id/miEditTags"
+                android:icon="@drawable/ic_edit"
+                android:title="@string/edit_tags"/>
+        </menu>
+    </item>
+</menu>
