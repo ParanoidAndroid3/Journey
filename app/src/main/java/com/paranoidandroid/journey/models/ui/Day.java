@@ -1,4 +1,6 @@
-package com.paranoidandroid.journey.models;
+package com.paranoidandroid.journey.models.ui;
+
+import com.paranoidandroid.journey.models.Leg;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

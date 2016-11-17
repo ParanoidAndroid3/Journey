@@ -1,4 +1,4 @@
-package com.paranoidandroid.journey.recommendations;
+package com.paranoidandroid.journey.support.ui;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

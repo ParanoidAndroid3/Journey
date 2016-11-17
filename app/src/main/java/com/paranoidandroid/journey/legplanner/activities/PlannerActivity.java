@@ -11,12 +11,14 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.paranoidandroid.journey.legplanner.fragments.AddActivityFragment;
 import com.paranoidandroid.journey.legplanner.fragments.DayViewFragment;
 import com.paranoidandroid.journey.legplanner.fragments.MapViewFragment;
 import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.models.Journey;
-import com.paranoidandroid.journey.recommendations.RecommendationsActivity;
+import com.paranoidandroid.journey.models.Leg;
+import com.paranoidandroid.journey.recommendations.activities.RecommendationsActivity;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -90,7 +92,11 @@ public class PlannerActivity extends AppCompatActivity implements
 
     @Override
     public void onRecommendationActivityClicked() {
+        Leg leg = getDayViewFragment().getSelectedDay().getLeg();
+        LatLng latLng = new LatLng(leg.getDestination().getLatitude(), leg.getDestination().getLongitude());
+
         Intent intent = new Intent(PlannerActivity.this, RecommendationsActivity.class);
+        intent.putExtra("coordinates", latLng);
         startActivity(intent);
     }
 

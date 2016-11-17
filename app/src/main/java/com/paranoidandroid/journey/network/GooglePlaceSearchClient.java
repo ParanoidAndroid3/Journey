@@ -20,6 +20,7 @@ public class GooglePlaceSearchClient {
         if (pageToken != null) {
             params.put("pageToken", pageToken);
         }
+        params.put("language", "en");
         params.put("key", GOOGLE_PLACES_API_KEY);
         System.out.println(params);
         client.get(NEARBY_SEARCH_BASE_URL, params, responseHandler);
