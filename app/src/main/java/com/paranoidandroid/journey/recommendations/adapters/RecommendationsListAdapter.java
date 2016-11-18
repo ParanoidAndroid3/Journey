@@ -11,13 +11,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.maps.model.LatLng;
 import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.models.ui.FoursquareVenue;
 import com.paranoidandroid.journey.models.ui.GooglePlace;
 import com.paranoidandroid.journey.models.ui.Recommendation;
 import com.paranoidandroid.journey.recommendations.interfaces.RecommendationViewHolderClickListener;
 import com.paranoidandroid.journey.recommendations.interfaces.RecommendationsListAdapterClickListener;
+import com.paranoidandroid.journey.support.MapUtils;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import butterknife.BindView;
@@ -31,14 +34,17 @@ public class RecommendationsListAdapter extends RecyclerView.Adapter<RecyclerVie
     private final int GOOGLE_PLACE = 0, FOURSQUARE_VENUE = 1;
     private List<Recommendation> items;
     private Context context;
+    private LatLng headCoordinates;
+    private static DecimalFormat distFormat = new DecimalFormat("#.#");
 
     public void setRecommendationsListAdapterClickListener(RecommendationsListAdapterClickListener listener) {
         this.listener = listener;
     }
 
-    public RecommendationsListAdapter(Context context, List<Recommendation> items) {
+    public RecommendationsListAdapter(Context context, List<Recommendation> items, LatLng headCoordinates) {
         this.items = items;
         this.context = context;
+        this.headCoordinates = headCoordinates;
     }
 
     @Override
@@ -99,9 +105,9 @@ public class RecommendationsListAdapter extends RecyclerView.Adapter<RecyclerVie
                     .load(imageURL)
                     .into(vh.photo);
             vh.name.setText(place.getName());
-            vh.address.setText(place.getAddress());
-            vh.rating.setVisibility(place.getRating() != -1. ? View.VISIBLE : View.GONE);
-            vh.rating.setText(String.valueOf(place.getRating()));
+            vh.distance.setText(distFormat.format(
+                    MapUtils.haversine(place.getLatitude(), place.getLongitude(), this.headCoordinates.latitude, this.headCoordinates.longitude)
+                    ) + "km");
         }
     }
 
@@ -114,27 +120,30 @@ public class RecommendationsListAdapter extends RecyclerView.Adapter<RecyclerVie
                         .load(imageURL)
                         .into(vh.photo);
             vh.name.setText(place.getName());
-            vh.address.setText(place.getAddress());
-            vh.rating.setVisibility(place.getRating() != -1. ? View.VISIBLE : View.GONE);
-            vh.rating.setText(String.valueOf(place.getRating()));
+            vh.distance.setText(distFormat.format(
+                    MapUtils.haversine(place.getLatitude(), place.getLongitude(), this.headCoordinates.latitude, this.headCoordinates.longitude)
+            ) + "km");
         }
     }
 
     @Override
-    public void onSaveGooglePlaceClicked(int position) {
-        // TODO: Implement callbacks
+    public void onSaveRecommendationClickedAtPosition(int position) {
+        if (this.listener != null) {
+            this.listener.onSaveRecommendationClicked(items.get(position));
+        }
     }
 
     @Override
-    public void onAddGooglePlaceClicked(int position) {
-        // TODO: Implement callbacks
+    public void onAddRecommendationClickedAtPosition(int position) {
+        if (this.listener != null) {
+            this.listener.onAddRecommendationClicked(items.get(position));
+        }
     }
 
     public static class RecommendationViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tvName) TextView name;
         @BindView(R.id.ivPhoto) ImageView photo;
-        @BindView(R.id.tvAddress) TextView address;
-        @BindView(R.id.tvRating) TextView rating;
+        @BindView(R.id.tvDistance) TextView distance;
         @BindView(R.id.ibSave) ImageButton save;
         @BindView(R.id.ibAdd) ImageButton add;
         public RecommendationViewHolderClickListener listener;
@@ -150,7 +159,7 @@ public class RecommendationsListAdapter extends RecyclerView.Adapter<RecyclerVie
             if (listener != null) {
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
-                    listener.onSaveGooglePlaceClicked(position);
+                    listener.onSaveRecommendationClickedAtPosition(position);
                 }
             }
         }
@@ -160,7 +169,7 @@ public class RecommendationsListAdapter extends RecyclerView.Adapter<RecyclerVie
             if (listener != null) {
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
-                    listener.onAddGooglePlaceClicked(position);
+                    listener.onSaveRecommendationClickedAtPosition(position);
                 }
             }
         }

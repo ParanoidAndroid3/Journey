@@ -20,6 +20,8 @@ public class FoursquareVenue extends Recommendation{
     public String getName() { return name; }
     public String getAddress() { return address; }
     public double getRating() { return rating; }
+    public double getLatitude() { return lat; }
+    public double getLongitude() { return lng; }
 
     public String getImageURL() {
         if (this.image_url_prefix == null || this.image_url_suffix == null) {

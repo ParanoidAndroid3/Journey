@@ -1,14 +1,17 @@
 package com.paranoidandroid.journey.recommendations.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.paranoidandroid.journey.models.ui.FoursquareVenue;
 import com.paranoidandroid.journey.models.ui.GooglePlace;
+import com.paranoidandroid.journey.models.ui.Recommendation;
 import com.paranoidandroid.journey.network.FoursquareVenueSearchClient;
 import com.paranoidandroid.journey.network.GooglePlaceSearchClient;
 import com.paranoidandroid.journey.recommendations.interfaces.RecommendationsListAdapterClickListener;
+import com.paranoidandroid.journey.support.ui.EndlessRecyclerViewScrollListener;
 
 import org.json.JSONObject;
 
@@ -28,13 +31,38 @@ public class FoursquareRecommendationsFragment extends BaseRecommendationsFragme
         return fragment;
     }
 
+    @Override
     public void search() {
-        FoursquareVenueSearchClient.search(coordinates.latitude, coordinates.longitude, keyword, 0, new JsonHttpResponseHandler() {
+        search(0, true);
+    }
+
+    private void search(int offset, final boolean clearExisting) {
+        FoursquareVenueSearchClient.search(coordinates.latitude, coordinates.longitude, keyword, offset, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 List<FoursquareVenue> places = FoursquareVenue.parseJSON(response);
-                appendItems(places);
+                appendItems(places, clearExisting);
             }
         });
+    }
+
+    public EndlessRecyclerViewScrollListener getEndlessScrollListener() {
+        return new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                Log.d("Foursquare", "onLoadMore:page:"+page+" totalItemsCount:"+totalItemsCount);
+                search(totalItemsCount, false);
+            }
+        };
+    }
+
+    @Override
+    public void onSaveRecommendationClicked(Recommendation r) {
+
+    }
+
+    @Override
+    public void onAddRecommendationClicked(Recommendation r) {
+
     }
 }

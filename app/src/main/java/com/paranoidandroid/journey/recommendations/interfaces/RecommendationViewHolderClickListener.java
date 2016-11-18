@@ -1,6 +1,6 @@
 package com.paranoidandroid.journey.recommendations.interfaces;
 
 public interface RecommendationViewHolderClickListener {
-    void onSaveGooglePlaceClicked(int position);
-    void onAddGooglePlaceClicked(int position);
+    void onSaveRecommendationClickedAtPosition(int position);
+    void onAddRecommendationClickedAtPosition(int position);
 }

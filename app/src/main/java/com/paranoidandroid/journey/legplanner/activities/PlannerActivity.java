@@ -23,6 +23,8 @@ import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
+import java.util.Date;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -46,6 +48,11 @@ public class PlannerActivity extends AppCompatActivity implements
 
         setupToolbar();
         showMapView();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         fetchJourney();
     }
 
@@ -54,6 +61,7 @@ public class PlannerActivity extends AppCompatActivity implements
             Log.e("PlannerActivity", "No journey id provided!");
             return;
         }
+        Log.d("PlannerActivity", "OnResume: fetching Journey");
         ParseQuery<Journey> query = ParseQuery.getQuery(Journey.class);
         query.include("legs");
         query.include("legs.destination");
@@ -94,9 +102,12 @@ public class PlannerActivity extends AppCompatActivity implements
     public void onRecommendationActivityClicked() {
         Leg leg = getDayViewFragment().getSelectedDay().getLeg();
         LatLng latLng = new LatLng(leg.getDestination().getLatitude(), leg.getDestination().getLongitude());
+        Date dayDate = getDayViewFragment().getSelectedDay().getDate();
 
         Intent intent = new Intent(PlannerActivity.this, RecommendationsActivity.class);
         intent.putExtra("coordinates", latLng);
+        intent.putExtra("day_date", dayDate.getTime());
+        intent.putExtra("leg_id", leg.getObjectId());
         startActivity(intent);
     }
 

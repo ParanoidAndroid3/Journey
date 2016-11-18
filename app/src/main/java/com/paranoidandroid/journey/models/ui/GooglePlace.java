@@ -19,6 +19,8 @@ public class GooglePlace extends Recommendation{
     public String getName() { return name; }
     public String getAddress() { return address; }
     public double getRating() { return rating; }
+    public double getLatitude() { return lat; }
+    public double getLongitude() { return lng; }
 
     public String getImageURL() {
         if (this.image_url_reference == null) {
@@ -55,5 +57,16 @@ public class GooglePlace extends Recommendation{
         }
 
         return list;
+    }
+
+    public static String parseNextToken(JSONObject response) {
+        String nextToken = null;
+        try {
+            if (!response.isNull("next_page_token"))
+                nextToken = response.getString("next_page_token");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return nextToken;
     }
 }

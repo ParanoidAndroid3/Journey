@@ -16,6 +16,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.models.ui.GooglePlace;
+import com.paranoidandroid.journey.models.ui.Recommendation;
 import com.paranoidandroid.journey.network.GooglePlaceSearchClient;
 import com.paranoidandroid.journey.recommendations.adapters.RecommendationsListAdapter;
 import com.paranoidandroid.journey.recommendations.interfaces.RecommendationsListAdapterClickListener;
@@ -35,6 +36,9 @@ import cz.msebera.android.httpclient.Header;
 public class GoogleRecommendationsFragment extends BaseRecommendationsFragment implements
         RecommendationsListAdapterClickListener {
 
+    private String nextToken = null;
+    private boolean hasMore = true;
+
     public static GoogleRecommendationsFragment newInstance(LatLng coordinates, String keyword) {
         Bundle args = new Bundle();
         GoogleRecommendationsFragment fragment = new GoogleRecommendationsFragment();
@@ -44,13 +48,42 @@ public class GoogleRecommendationsFragment extends BaseRecommendationsFragment i
         return fragment;
     }
 
+    @Override
     public void search() {
-        GooglePlaceSearchClient.search(coordinates.latitude, coordinates.longitude, keyword, null, new JsonHttpResponseHandler() {
+        search(null, true);
+    }
+
+    private void search(String token, final boolean clearExisting) {
+        GooglePlaceSearchClient.search(coordinates.latitude, coordinates.longitude, keyword, token, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                System.out.println(response);
                 List<GooglePlace> places = GooglePlace.parseJSON(response);
-                appendItems(places);
+                nextToken = GooglePlace.parseNextToken(response);
+                hasMore = nextToken != null;
+                appendItems(places, clearExisting);
             }
         });
+    }
+
+    public EndlessRecyclerViewScrollListener getEndlessScrollListener() {
+        return new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                Log.d("Google", "onLoadMore:page:"+page+" totalItemsCount:"+totalItemsCount+" hasMore?"+hasMore);
+                if (hasMore)
+                    search(nextToken, false);
+            }
+        };
+    }
+
+    @Override
+    public void onSaveRecommendationClicked(Recommendation r) {
+
+    }
+
+    @Override
+    public void onAddRecommendationClicked(Recommendation r) {
+
     }
 }

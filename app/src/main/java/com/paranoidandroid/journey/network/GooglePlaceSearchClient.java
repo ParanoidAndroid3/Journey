@@ -14,13 +14,14 @@ public class GooglePlaceSearchClient {
 
     public static void search(double latitude, double longitude, String type, String pageToken, AsyncHttpResponseHandler responseHandler) {
         RequestParams params = new RequestParams();
-        params.put("location", latitude + "," + longitude);
-        params.put("radius", 5000);
-        params.put("type", type);
-        if (pageToken != null) {
-            params.put("pageToken", pageToken);
+        if (pageToken !=  null) {
+            params.put("pagetoken", pageToken);
+        } else {
+            params.put("location", latitude + "," + longitude);
+            params.put("radius", 5000);
+            params.put("type", type);
+            params.put("language", "en");
         }
-        params.put("language", "en");
         params.put("key", GOOGLE_PLACES_API_KEY);
         System.out.println(params);
         client.get(NEARBY_SEARCH_BASE_URL, params, responseHandler);
