@@ -8,12 +8,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
-import com.paranoidandroid.journey.legplanner.activities.PlannerActivity;
-import com.paranoidandroid.journey.login.LoginActivity;
 import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.databinding.ActivityMyJourneysBinding;
+import com.paranoidandroid.journey.legplanner.activities.PlannerActivity;
+import com.paranoidandroid.journey.login.LoginActivity;
 import com.paranoidandroid.journey.models.Journey;
 import com.paranoidandroid.journey.myjourneys.fragments.LogoutConfirmationDialogFragment;
 import com.paranoidandroid.journey.myjourneys.fragments.MyJourneysListFragment;
