@@ -127,16 +127,9 @@ public class RecommendationsListAdapter extends RecyclerView.Adapter<RecyclerVie
     }
 
     @Override
-    public void onSaveRecommendationClickedAtPosition(int position) {
+    public void onAddRecommendationClickedAtPosition(int position, boolean saveForLater) {
         if (this.listener != null) {
-            this.listener.onSaveRecommendationClicked(items.get(position));
-        }
-    }
-
-    @Override
-    public void onAddRecommendationClickedAtPosition(int position) {
-        if (this.listener != null) {
-            this.listener.onAddRecommendationClicked(items.get(position));
+            this.listener.onAddRecommendationClicked(items.get(position), false);
         }
     }
 
@@ -159,7 +152,7 @@ public class RecommendationsListAdapter extends RecyclerView.Adapter<RecyclerVie
             if (listener != null) {
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
-                    listener.onSaveRecommendationClickedAtPosition(position);
+                    listener.onAddRecommendationClickedAtPosition(position, true);
                 }
             }
         }
@@ -169,7 +162,7 @@ public class RecommendationsListAdapter extends RecyclerView.Adapter<RecyclerVie
             if (listener != null) {
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
-                    listener.onSaveRecommendationClickedAtPosition(position);
+                    listener.onAddRecommendationClickedAtPosition(position, false);
                 }
             }
         }

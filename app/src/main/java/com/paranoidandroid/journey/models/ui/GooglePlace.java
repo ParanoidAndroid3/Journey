@@ -8,20 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GooglePlace extends Recommendation{
-    String id;
-    double lat;
-    double lng;
-    String name;
+
     String image_url_reference;
-    double rating;
-    String address;
 
-    public String getName() { return name; }
-    public String getAddress() { return address; }
-    public double getRating() { return rating; }
-    public double getLatitude() { return lat; }
-    public double getLongitude() { return lng; }
-
+    @Override
     public String getImageURL() {
         if (this.image_url_reference == null) {
             return null;

@@ -201,7 +201,7 @@ public class DayViewFragment extends Fragment implements
             return result;
         }
         for (Activity activity : getSelectedLeg().getActivities()) {
-            if (datesOnSameDay(activity.getDate(), getSelectedDay().getDate()))
+            if (activity.getDate() != null && datesOnSameDay(activity.getDate(), getSelectedDay().getDate()))
                 result.add(activity);
         }
         return result;

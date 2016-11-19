@@ -15,11 +15,17 @@ public class RecommendationsPagerAdapter extends SmartFragmentStatePagerAdapter 
 
     List<RecommendationsActivity.Keyword> tabs;
     LatLng near;
+    long dayTime;
 
-    public static RecommendationsPagerAdapter newInstance(FragmentManager fragmentManager, List<RecommendationsActivity.Keyword> tabs, LatLng near) {
+    public static RecommendationsPagerAdapter newInstance(
+            FragmentManager fragmentManager,
+            List<RecommendationsActivity.Keyword> tabs,
+            LatLng near,
+            long dayTime) {
         RecommendationsPagerAdapter adapter = new RecommendationsPagerAdapter(fragmentManager);
         adapter.tabs = tabs;
         adapter.near = near;
+        adapter.dayTime = dayTime;
         return adapter;
     }
 
@@ -32,9 +38,9 @@ public class RecommendationsPagerAdapter extends SmartFragmentStatePagerAdapter 
         switch (tabs.get(position).type) {
             default:
             case 0: // Google
-                return GoogleRecommendationsFragment.newInstance(near, tabs.get(position).keyword);
+                return GoogleRecommendationsFragment.newInstance(near, tabs.get(position).keyword, tabs.get(position).tabTitle, dayTime);
             case 1: // Foursquare
-                return FoursquareRecommendationsFragment.newInstance(near, tabs.get(position).keyword);
+                return FoursquareRecommendationsFragment.newInstance(near, tabs.get(position).keyword, tabs.get(position).tabTitle, dayTime);
         }
     }
 

@@ -12,9 +12,11 @@ import com.paranoidandroid.journey.network.FoursquareVenueSearchClient;
 import com.paranoidandroid.journey.network.GooglePlaceSearchClient;
 import com.paranoidandroid.journey.recommendations.interfaces.RecommendationsListAdapterClickListener;
 import com.paranoidandroid.journey.support.ui.EndlessRecyclerViewScrollListener;
+import com.parse.ParseObject;
 
 import org.json.JSONObject;
 
+import java.util.Date;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
@@ -22,11 +24,13 @@ import cz.msebera.android.httpclient.Header;
 public class FoursquareRecommendationsFragment extends BaseRecommendationsFragment implements
         RecommendationsListAdapterClickListener {
 
-    public static FoursquareRecommendationsFragment newInstance(LatLng coordinates, String keyword) {
+    public static FoursquareRecommendationsFragment newInstance(LatLng coordinates, String keyword, String typeTitle, long dayTime) {
         Bundle args = new Bundle();
         FoursquareRecommendationsFragment fragment = new FoursquareRecommendationsFragment();
         args.putParcelable("coordinates", coordinates);
         args.putString("keyword", keyword);
+        args.putString("typeTitle", typeTitle);
+        args.putLong("day_time", dayTime);
         fragment.setArguments(args);
         return fragment;
     }
@@ -46,6 +50,11 @@ public class FoursquareRecommendationsFragment extends BaseRecommendationsFragme
         });
     }
 
+    @Override
+    protected void decorateId(ParseObject activity, String id) {
+        activity.put("foursquare_id", id);
+    }
+
     public EndlessRecyclerViewScrollListener getEndlessScrollListener() {
         return new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
@@ -54,15 +63,5 @@ public class FoursquareRecommendationsFragment extends BaseRecommendationsFragme
                 search(totalItemsCount, false);
             }
         };
-    }
-
-    @Override
-    public void onSaveRecommendationClicked(Recommendation r) {
-
-    }
-
-    @Override
-    public void onAddRecommendationClicked(Recommendation r) {
-
     }
 }

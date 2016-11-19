@@ -22,6 +22,7 @@ import com.paranoidandroid.journey.recommendations.adapters.RecommendationsListA
 import com.paranoidandroid.journey.recommendations.interfaces.RecommendationsListAdapterClickListener;
 import com.paranoidandroid.journey.support.ui.EndlessRecyclerViewScrollListener;
 import com.paranoidandroid.journey.support.ui.SpacesItemDecoration;
+import com.parse.ParseObject;
 
 import org.json.JSONObject;
 
@@ -39,11 +40,13 @@ public class GoogleRecommendationsFragment extends BaseRecommendationsFragment i
     private String nextToken = null;
     private boolean hasMore = true;
 
-    public static GoogleRecommendationsFragment newInstance(LatLng coordinates, String keyword) {
+    public static GoogleRecommendationsFragment newInstance(LatLng coordinates, String keyword, String typeTitle, long dayTime) {
         Bundle args = new Bundle();
         GoogleRecommendationsFragment fragment = new GoogleRecommendationsFragment();
         args.putParcelable("coordinates", coordinates);
         args.putString("keyword", keyword);
+        args.putString("typeTitle", typeTitle);
+        args.putLong("day_time", dayTime);
         fragment.setArguments(args);
         return fragment;
     }
@@ -66,6 +69,11 @@ public class GoogleRecommendationsFragment extends BaseRecommendationsFragment i
         });
     }
 
+    @Override
+    protected void decorateId(ParseObject activity, String id) {
+        activity.put("google_id", id);
+    }
+
     public EndlessRecyclerViewScrollListener getEndlessScrollListener() {
         return new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
@@ -75,15 +83,5 @@ public class GoogleRecommendationsFragment extends BaseRecommendationsFragment i
                     search(nextToken, false);
             }
         };
-    }
-
-    @Override
-    public void onSaveRecommendationClicked(Recommendation r) {
-
-    }
-
-    @Override
-    public void onAddRecommendationClicked(Recommendation r) {
-
     }
 }
