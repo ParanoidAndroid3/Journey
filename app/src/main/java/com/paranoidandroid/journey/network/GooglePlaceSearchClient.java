@@ -8,6 +8,7 @@ import com.loopj.android.http.RequestParams;
 public class GooglePlaceSearchClient {
     private static final String NEARBY_SEARCH_BASE_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json";
     private static final String AUTO_COMPLETE_BASE_URL = "https://maps.googleapis.com/maps/api/place/autocomplete/json";
+    private static final String DETAILS_BASE_URL = "https://maps.googleapis.com/maps/api/place/details/json";
     private static final String GOOGLE_PLACES_API_KEY = "AIzaSyDoES56ptzOPbwy62kw9JMT4zBgloJQD7Y";
 
     private static AsyncHttpClient client = new AsyncHttpClient();
@@ -28,9 +29,17 @@ public class GooglePlaceSearchClient {
     public static void autoComplete(String input, JsonHttpResponseHandler responseHandler) {
         RequestParams params = new RequestParams();
         params.put("key", GOOGLE_PLACES_API_KEY);
-        params.put("types", "geocode");
+        params.put("types", "(cities)");
         params.put("input", input);
 
         client.get(AUTO_COMPLETE_BASE_URL, params, responseHandler);
     }
+
+    public static void getPlaceDetails(String placeId, JsonHttpResponseHandler responseHandler) {
+        RequestParams params = new RequestParams();
+        params.put("key", GOOGLE_PLACES_API_KEY);
+        params.put("placeid", placeId);
+        client.get(DETAILS_BASE_URL, params, responseHandler);
+    }
+
 }

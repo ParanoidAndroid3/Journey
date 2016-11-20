@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.paranoidandroid.journey.R;
-import com.paranoidandroid.journey.wizard.utils.JourneyBuilderUtils;
+import com.paranoidandroid.journey.wizard.utils.JourneyBuilder;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,7 +41,7 @@ public class NameFragment extends WizardFragment {
             @Override
             public void afterTextChanged(Editable editable) {
                 Map<String, Object> result = new HashMap<>();
-                result.put(JourneyBuilderUtils.NAME_KEY, editable.toString());
+                result.put(JourneyBuilder.NAME_KEY, editable.toString());
                 listener.updateJourneyData(result);
             }
 
@@ -49,8 +49,4 @@ public class NameFragment extends WizardFragment {
         return v;
     }
 
-    @Override
-    public boolean readyToPublish() {
-        return etName.getText().length() > 0;
-    }
 }

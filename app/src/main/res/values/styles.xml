@@ -31,10 +31,11 @@
     </style>
 
     <style name="LegCalendar">
-        <item name="android:layout_width">25dp</item>
-        <item name="android:layout_height">25dp</item>
+        <item name="android:layout_width">32dp</item>
+        <item name="android:layout_height">32dp</item>
         <item name="android:textSize">12sp</item>
         <item name="android:layout_gravity">center</item>
+        <item name="android:gravity">center_vertical</item>
         <item name="android:background">@android:color/transparent</item>
     </style>
 

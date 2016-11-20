@@ -13,20 +13,19 @@
         android:layout_width="10dp"
         android:layout_height="10dp"
         app:srcCompat="@drawable/ic_remove"
-        android:layout_marginStart="5dp"
+        android:layout_marginStart="10dp"
         android:background="@android:color/transparent"
         android:layout_gravity="center"/>
 
-    <com.paranoidandroid.journey.wizard.utils.DelayAutoCompleteTextView
-        android:id="@+id/etDestination"
-        android:layout_width="240dp"
+    <TextView
+        android:id="@+id/tvDestination"
+        android:layout_width="200dp"
         android:layout_height="fill_parent"
         android:layout_marginStart="18dp"
+        android:gravity="center_vertical"
         android:maxLines="1"
-        android:textSize="14sp"
-        android:textAlignment="textStart"
-        android:imeOptions="flagNoExtractUi|actionSearch"
-        android:hint="@string/new_leg_hint" />
+        android:textSize="18sp"
+        tools:text="Paris, France"/>
 
     <Button
         android:id="@+id/btnStartDate"

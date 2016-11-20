@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.paranoidandroid.journey.R;
-import com.paranoidandroid.journey.wizard.utils.JourneyBuilderUtils;
+import com.paranoidandroid.journey.wizard.utils.JourneyBuilder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -179,7 +179,7 @@ public class TagsFragment extends WizardFragment {
         Map<String, Object> result = new HashMap<>();
         for (Button button : sizeButtons) {
             if (sizeStates.get(button.getText().toString())) {
-                result.put(JourneyBuilderUtils.SIZE_KEY, button.getText().toString());
+                result.put(JourneyBuilder.SIZE_KEY, button.getText().toString());
             }
         }
 
@@ -189,16 +189,8 @@ public class TagsFragment extends WizardFragment {
                 tags.add(button.getText().toString());
             }
         }
-        result.put(JourneyBuilderUtils.TAGS_KEY, tags);
+        result.put(JourneyBuilder.TAGS_KEY, tags);
         listener.updateJourneyData(result);
-    }
-
-    /**
-     * The Journey cannot be published if the group size has not been specified.
-     */
-    @Override
-    public boolean readyToPublish() {
-        return sizeStates.values().contains(Boolean.TRUE);
     }
 
 }

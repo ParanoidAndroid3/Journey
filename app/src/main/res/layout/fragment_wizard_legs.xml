@@ -16,8 +16,16 @@
     <ListView
         android:id="@+id/lvLegs"
         android:layout_width="match_parent"
-        android:layout_height="334dp"
-        android:layout_marginTop="35dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:listSelector="@android:color/transparent"/>
+
+    <com.paranoidandroid.journey.wizard.Views.CustomAutoCompleteTextView
+        android:id="@+id/atvPlaces"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="10dp"
+        android:hint="@string/new_leg_hint" />
 
 </LinearLayout>
