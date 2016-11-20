@@ -50,31 +50,30 @@ public class LegItemArrayAdapter extends ArrayAdapter<LegItem> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_leg_definition, parent, false);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
-
-            holder.btnDeleteLeg.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    onDeleteClick(position);
-                }
-            });
-
-            holder.btnStartDate.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    onCalendarClick((Button) view, position, true);
-                }
-            });
-
-            holder.btnEndDate.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    onCalendarClick((Button) view, position, false);
-                }
-            });
-
         }
 
         holder = (ViewHolder) convertView.getTag();
+
+        holder.btnDeleteLeg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onDeleteClick(position);
+            }
+        });
+
+        holder.btnStartDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onCalendarClick((Button) view, position, true);
+            }
+        });
+
+        holder.btnEndDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onCalendarClick((Button) view, position, false);
+            }
+        });
 
         holder.tvDestination.setText(leg.getDestination());
 
@@ -135,7 +134,7 @@ public class LegItemArrayAdapter extends ArrayAdapter<LegItem> {
     /**
      * Presents a large calendar view for user to select travel dates.
      */
-    private void onCalendarClick(final Button button, int position, final boolean isStart) {
+    private void onCalendarClick(final Button button, final int position, final boolean isStart) {
         final LegItem item = getItem(position);
         Calendar startDate = item.getStartDate();
         Calendar endDate = item.getEndDate();
@@ -143,7 +142,7 @@ public class LegItemArrayAdapter extends ArrayAdapter<LegItem> {
         final Calendar myCalendar = Calendar.getInstance();
         if (isStart && startDate != null) {
             myCalendar.setTime(startDate.getTime());
-        } else if (endDate != null){
+        } else if (!isStart && endDate != null){
             myCalendar.setTime(endDate.getTime());
         }
 
@@ -165,6 +164,8 @@ public class LegItemArrayAdapter extends ArrayAdapter<LegItem> {
                 } else {
                     item.setEndDate(myCalendar);
                 }
+                remove(item);
+                insert(item, position);
             }
 
         };
