@@ -63,18 +63,12 @@ public class Journey extends ParseObject {
         return getString(KEY_TRIP_TYPE);
     }
 
-    public void addTag(Tag tag) {
-        getTagsRelation().add(tag);
-        saveInBackground();
+    public void setTripTags(List<String> tags) {
+        put(KEY_TRIP_TAGS, tags);
     }
 
-    public void removeTag(Tag tag) {
-        getTagsRelation().remove(tag);
-        saveInBackground();
-    }
-
-    public ParseRelation<Tag> getTagsRelation() {
-        return getRelation(KEY_TRIP_TAGS);
+    public List<String> getTripTags() {
+        return (List<String>) get(KEY_TRIP_TAGS);
     }
 
     public void addLeg(Leg leg) {
