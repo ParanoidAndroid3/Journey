@@ -49,7 +49,7 @@ public class JourneyBuilder {
             Leg leg = new Leg();
             leg.setDestination(buildDestination(legitem.getPlacesId()));
             leg.setLegDuration(new Date(1421312), new Date(912391283));
-            //leg.setLegDuration(leg.getStartDate(), leg.getEndDate());
+            leg.setLegDuration(legitem.getStartDate().getTime(), legitem.getEndDate().getTime());
             journey.addLeg(leg);
         }
     }
