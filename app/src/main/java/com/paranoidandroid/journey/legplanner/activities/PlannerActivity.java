@@ -1,25 +1,39 @@
 package com.paranoidandroid.journey.legplanner.activities;
 
+import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.legplanner.fragments.AddActivityFragment;
 import com.paranoidandroid.journey.legplanner.fragments.DayViewFragment;
 import com.paranoidandroid.journey.legplanner.fragments.MapViewFragment;
-import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.models.Journey;
+import com.paranoidandroid.journey.myjourneys.activities.MyJourneysActivity;
+import com.paranoidandroid.journey.support.SharedPreferenceUtils;
+import com.paranoidandroid.journey.wizard.activities.WizardActivity;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 public class PlannerActivity extends AppCompatActivity implements
         Toolbar.OnMenuItemClickListener,
@@ -27,7 +41,10 @@ public class PlannerActivity extends AppCompatActivity implements
 
     @BindView(R.id.fab_add_activity) FloatingActionButton fabAdd;
     @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.drawer) DrawerLayout drawer;
+    @BindView(R.id.navigationView) NavigationView navigationView;
 
+    private ActionBarDrawerToggle drawerToggle;
     private boolean mIsMapShowing = true;
     private String journeyId;
 
@@ -40,6 +57,7 @@ public class PlannerActivity extends AppCompatActivity implements
         journeyId = getIntent().getExtras().getString("journey_id", "");
 
         setupToolbar();
+        setupDrawer();
         showMapView();
         fetchJourney();
     }
@@ -63,6 +81,23 @@ public class PlannerActivity extends AppCompatActivity implements
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return drawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        drawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        drawerToggle.onConfigurationChanged(newConfig);
     }
 
     // Switch view menu
@@ -90,6 +125,53 @@ public class PlannerActivity extends AppCompatActivity implements
     private void setupToolbar() {
         toolbar.inflateMenu(R.menu.menu_planner);
         toolbar.setOnMenuItemClickListener(this);
+    }
+
+    private void setupDrawer() {
+        drawerToggle = setupDrawerToggle(drawer, toolbar);
+        drawer.addDrawerListener(drawerToggle);
+        setupDrawerContent(navigationView);
+    }
+
+    private ActionBarDrawerToggle setupDrawerToggle(DrawerLayout drawer, Toolbar toolbar) {
+        return new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.drawer_open,  R.string.drawer_close);
+    }
+
+    private void setupDrawerContent(NavigationView navigationView) {
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.miMyJourneys:
+                        launchMyJourneys();
+                        break;
+                    case R.id.miEditTitle:
+                        launchWizard(WizardActivity.EDIT_MODE_TITLE);
+                        break;
+                    case R.id.miEditLegs:
+                        launchWizard(WizardActivity.EDIT_MODE_LEGS);
+                        break;
+                    case R.id.miEditTags:
+                        launchWizard(WizardActivity.EDIT_MODE_TAGS);
+                        break;
+                }
+                item.setChecked(false);
+                drawer.closeDrawers();
+                return true;
+            }
+        });
+    }
+
+    private void launchMyJourneys() {
+        Intent intent = new Intent(PlannerActivity.this, MyJourneysActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
+
+    private void launchWizard(int editMode) {
+        Intent intent = WizardActivity.createEditIntent(this, journeyId, editMode);
+        startActivity(intent);
     }
 
     // Show / Hide fragment methods
@@ -123,8 +205,31 @@ public class PlannerActivity extends AppCompatActivity implements
 
     private void showJourney(Journey journey) {
         toolbar.setTitle(journey.getName());
+        setDrawerData(journey);
         addMarkersToMap(journey);
         addDaysToPlanner(journey);
+    }
+
+    private void setDrawerData(Journey journey) {
+        // Title in Drawer.
+        MenuItem item = navigationView.getMenu().findItem(R.id.miEditTitle);
+        item.setTitle(journey.getName());
+
+        View navHeader = navigationView.getHeaderView(0);
+
+        String userName = SharedPreferenceUtils.getCurrentUserName(this);
+        if (userName != null) {
+            TextView tvUserName = (TextView) navHeader.findViewById(R.id.tvUserName);
+            tvUserName.setText(userName);
+        }
+
+        String imageUri = SharedPreferenceUtils.getCurrentImageProfileUri(this);
+        if (imageUri != null) {
+            ImageView ivProfileImage = (ImageView) navHeader.findViewById(R.id.ivProfileImage);
+            Glide.with(this).load(imageUri)
+                    .bitmapTransform(new CropCircleTransformation(this))
+                    .into(ivProfileImage);
+        }
     }
 
     private void addMarkersToMap(Journey journey) {

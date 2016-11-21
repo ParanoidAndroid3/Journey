@@ -15,7 +15,7 @@ The following **required** functionality is completed:
 * [X] Once journey is created, user is navigated to a *map-view* of the trip. Map view contains pins for each leg of the trip
 * [X] User can *flip* over the map view to see a calendar view of the trip.
 * [X] User can view up to (3) days with all activities that have been added. The user will be able to select the day to view by selecting it.
-* [ ] A Drawer will contain items to navigate to the list of all journeys, edit legs, edit tags, and edit the current journey's name.
+* [X] A Drawer will contain items to navigate to the list of all journeys, edit legs, edit tags, and edit the current journey's name.
 * [ ] User can add / remove a leg of the trip. Information will be saved on the server.
 * [X] User can add / remove custom activities to/from a specific day. Information will be saved on the server.
 * [ ] User can add / remove an activity from the recommendation page to/from a specific day. Information will be saved on the server.

@@ -17,6 +17,7 @@ import com.paranoidandroid.journey.models.Journey;
 import com.paranoidandroid.journey.myjourneys.fragments.LogoutConfirmationDialogFragment;
 import com.paranoidandroid.journey.myjourneys.fragments.MyJourneysListFragment;
 import com.paranoidandroid.journey.network.FacebookClient;
+import com.paranoidandroid.journey.support.SharedPreferenceUtils;
 import com.paranoidandroid.journey.wizard.activities.WizardActivity;
 import com.parse.ParseUser;
 
@@ -79,6 +80,7 @@ public class MyJourneysActivity extends AppCompatActivity implements
     public void onLogout() {
         FacebookClient.revokeAppPermissions();
         ParseUser.logOut();
+        SharedPreferenceUtils.clearUserInfo(this);
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();

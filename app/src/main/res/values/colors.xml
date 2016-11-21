@@ -10,5 +10,8 @@
     <color name="colorTagNotPressed">#94d4bf</color>
     <color name="colorTagPressed">#649182</color>
 
+    <!-- To support android versions < 21 -->
+    <color name="textColorPrimary">?android:attr/textColorPrimary</color>
+    <color name="textColorPrimaryInverse">?android:attr/textColorPrimaryInverse</color>
 
 </resources>
