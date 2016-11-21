@@ -31,12 +31,12 @@ public class LoginActivity extends AppCompatActivity {
         // Add fabric crash reporting
         Fabric.with(this, new Crashlytics());
 
-        setContentView(R.layout.activity_login);
-
         if (ParseUser.getCurrentUser() != null) {
             // We are already signed in. Continue as current user.
             addFacebookLoginDataToSharedPreferences();
             navigateToNextActivity();
+        } else {
+            setContentView(R.layout.activity_login);
         }
     }
 
