@@ -7,7 +7,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.paranoidandroid.journey.R;
+import com.paranoidandroid.journey.models.Journey;
 import com.paranoidandroid.journey.wizard.utils.JourneyBuilder;
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,16 +24,9 @@ import java.util.Map;
 
 public class TagsFragment extends WizardFragment {
 
-    /**
-     * Buttons that describe the size of the travel group
-     **/
     Map<String, Boolean> sizeStates;
     List<Button> sizeButtons;
 
-
-    /**
-     * Buttons that describe the interests of the traveler(s)
-     **/
     Map<String, Boolean> tagStates;
     List<Button> tagButtons;
 
@@ -38,7 +35,7 @@ public class TagsFragment extends WizardFragment {
         TagsFragment fragment = new TagsFragment();
 
         Bundle args = new Bundle();
-        args.putString("journeyId", journeyId);
+        args.putString("journey_id", journeyId);
         fragment.setArguments(args);
 
         return fragment;
@@ -57,9 +54,53 @@ public class TagsFragment extends WizardFragment {
         sizeButtons = new ArrayList<>();
         tagButtons = new ArrayList<>();
         setupButtons(v);
+
+        if (getArguments() != null) {
+            String journeyId = getArguments().getString("journey_id");
+            if (journeyId != null) {
+                loadJourneyData(journeyId);
+            }
+        }
+
         setupStates();
         setupListeners();
         return v;
+    }
+
+    private void loadJourneyData(String journeyId) {
+        ParseQuery<Journey> query = ParseQuery.getQuery(Journey.class);
+        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
+        query.getInBackground(journeyId, new GetCallback<Journey>() {
+            public void done(final Journey journey, ParseException e) {
+                if (e == null) {
+                    populateMapsFromJourney(journey);
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void populateMapsFromJourney(Journey journey) {
+        String type = journey.getTripType();
+        for (Button button : sizeButtons) {
+            String current = button.getText().toString();
+            if (current.equals(type)) {
+                sizeStates.put(current, true);
+            } else {
+                sizeStates.put(current, false);
+            }
+        }
+
+        List<String> tags = journey.getTripTags();
+        for (Button button : tagButtons) {
+            String current = button.getText().toString();
+            if (tags.contains(current)) {
+                tagStates.put(current, true);
+            } else {
+                tagStates.put(current, false);
+            }
+        }
     }
 
     /**
@@ -67,7 +108,6 @@ public class TagsFragment extends WizardFragment {
      * adds them to the appropriate map
      */
     private void setupButtons(View v) {
-        // find first set of button views
         Button btnSolo = (Button) v.findViewById(R.id.btnSolo);
         Button btnCouple = (Button) v.findViewById(R.id.btnCouple);
         Button btnGroup = (Button) v.findViewById(R.id.btnGroup);

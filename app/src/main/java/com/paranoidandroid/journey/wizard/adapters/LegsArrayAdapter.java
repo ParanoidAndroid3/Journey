@@ -14,13 +14,14 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.paranoidandroid.journey.R;
+import com.paranoidandroid.journey.models.Leg;
 import com.paranoidandroid.journey.wizard.fragments.WizardFragment;
-import com.paranoidandroid.journey.wizard.models.LegItem;
 import com.paranoidandroid.journey.wizard.utils.JourneyBuilder;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -33,13 +34,13 @@ import java.util.Map;
 public class LegsArrayAdapter extends RecyclerView.Adapter<LegsArrayAdapter.ViewHolder> {
 
     private WizardFragment.OnItemUpdatedListener listener;
-    private List<LegItem> legs;
+    private List<Leg> legs;
     private Context context;
 
-    public LegsArrayAdapter(Context context, WizardFragment.OnItemUpdatedListener listener) {
+    public LegsArrayAdapter(Context context, List<Leg> legs, WizardFragment.OnItemUpdatedListener listener) {
         this.context = context;
         this.listener = listener;
-        this.legs = new ArrayList<>();
+        this.legs = legs;
     }
 
     @Override
@@ -56,10 +57,10 @@ public class LegsArrayAdapter extends RecyclerView.Adapter<LegsArrayAdapter.View
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        LegItem leg = legs.get(position);
+        Leg leg = legs.get(position);
 
         // Set item views based on your views and data model
-        holder.tvDestination.setText(leg.getDestination());
+        holder.tvDestination.setText(leg.getDestination().getDisplayName());
 
         holder.btnDeleteLeg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,14 +83,15 @@ public class LegsArrayAdapter extends RecyclerView.Adapter<LegsArrayAdapter.View
             }
         });
 
-        Calendar startDate = leg.getStartDate();
+        Calendar startDate = getCal(leg.getStartDate());
+
         if (startDate == null && position > 0) {
-            Calendar previousEndDate = getItem(position - 1).getEndDate();
+            Date previousEndDate = getItem(position - 1).getEndDate();
             if (previousEndDate != null) {
                 startDate = Calendar.getInstance();
-                startDate.setTime(previousEndDate.getTime());
+                startDate.setTime(previousEndDate);
                 startDate.add(Calendar.DAY_OF_YEAR, 1);
-                leg.setStartDate(startDate);
+                leg.setStartDate(startDate.getTime());
                 legs.set(position, leg);
             }
         }
@@ -104,22 +106,22 @@ public class LegsArrayAdapter extends RecyclerView.Adapter<LegsArrayAdapter.View
         return legs.size();
     }
 
-    public void add(LegItem item) {
+    public void add(Leg item) {
         legs.add(item);
         updateParent();
     }
 
-    public void remove(LegItem item) {
+    public void remove(Leg item) {
         legs.remove(item);
         updateParent();
     }
 
-    public void insert(LegItem item, int i) {
+    public void insert(Leg item, int i) {
         legs.set(i, item);
         updateParent();
     }
 
-    public LegItem getItem(int i) {
+    public Leg getItem(int i) {
         return legs.get(i);
     }
 
@@ -130,7 +132,7 @@ public class LegsArrayAdapter extends RecyclerView.Adapter<LegsArrayAdapter.View
     private void updateParent() {
         notifyDataSetChanged();
 
-        List<LegItem> legs = new ArrayList<>();
+        List<Leg> legs = new ArrayList<>();
         for (int i = 0; i < getItemCount(); i++){
             legs.add(getItem(i));
         }
@@ -141,6 +143,9 @@ public class LegsArrayAdapter extends RecyclerView.Adapter<LegsArrayAdapter.View
         listener.updateJourneyData(result);
     }
 
+    private void assignDate(Button button, Date date) {
+        assignDate(button, getCal(date));
+    }
     /**
      * This method either shows the selected date on the button or sets the background
      * resource to the calendar icon.
@@ -165,9 +170,9 @@ public class LegsArrayAdapter extends RecyclerView.Adapter<LegsArrayAdapter.View
      * Presents a large calendar view for user to select travel dates.
      */
     private void onCalendarClick(final Button button, final int position, final boolean isStart) {
-        final LegItem item = getItem(position);
-        Calendar startDate = item.getStartDate();
-        Calendar endDate = item.getEndDate();
+        final Leg item = getItem(position);
+        Calendar startDate = getCal(item.getStartDate());
+        Calendar endDate = getCal(item.getEndDate());
 
         final Calendar myCalendar = Calendar.getInstance();
         if (isStart && startDate != null) {
@@ -190,9 +195,9 @@ public class LegsArrayAdapter extends RecyclerView.Adapter<LegsArrayAdapter.View
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                 assignDate(button, myCalendar);
                 if (isStart) {
-                    item.setStartDate(myCalendar);
+                    item.setStartDate(myCalendar.getTime());
                 } else {
-                    item.setEndDate(myCalendar);
+                    item.setEndDate(myCalendar.getTime());
                 }
                 insert(item, position);
             }
@@ -209,6 +214,15 @@ public class LegsArrayAdapter extends RecyclerView.Adapter<LegsArrayAdapter.View
             }
         });
 
+    }
+
+    private Calendar getCal(Date date) {
+        if (date == null) {
+            return null;
+        }
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        return cal;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

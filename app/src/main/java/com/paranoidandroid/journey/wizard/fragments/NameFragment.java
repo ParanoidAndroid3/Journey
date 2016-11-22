@@ -9,7 +9,11 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.paranoidandroid.journey.R;
+import com.paranoidandroid.journey.models.Journey;
 import com.paranoidandroid.journey.wizard.utils.JourneyBuilder;
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +30,7 @@ public class NameFragment extends WizardFragment {
         NameFragment fragment = new NameFragment();
 
         Bundle args = new Bundle();
-        args.putString("journeyId", journeyId);
+        args.putString("journey_id", journeyId);
         fragment.setArguments(args);
 
         return fragment;
@@ -36,6 +40,14 @@ public class NameFragment extends WizardFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_wizard_name, parent, false);
         etName = (EditText) v.findViewById(R.id.etName);
+
+        if (getArguments() != null) {
+            String journeyId = getArguments().getString("journey_id");
+            if (journeyId != null) {
+                loadJourneyName(journeyId);
+            }
+        }
+
         etName.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -57,6 +69,20 @@ public class NameFragment extends WizardFragment {
 
         });
         return v;
+    }
+
+    private void loadJourneyName(String journeyId) {
+        ParseQuery<Journey> query = ParseQuery.getQuery(Journey.class);
+        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
+        query.getInBackground(journeyId, new GetCallback<Journey>() {
+            public void done(final Journey journey, ParseException e) {
+                if (e == null) {
+                    etName.setText(journey.getName());
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
 }

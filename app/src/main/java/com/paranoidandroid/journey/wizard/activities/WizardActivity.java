@@ -13,9 +13,9 @@ import android.widget.Toast;
 import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.legplanner.activities.PlannerActivity;
 import com.paranoidandroid.journey.models.Journey;
+import com.paranoidandroid.journey.models.Leg;
 import com.paranoidandroid.journey.wizard.adapters.WizardPagerAdapter;
 import com.paranoidandroid.journey.wizard.fragments.WizardFragment;
-import com.paranoidandroid.journey.wizard.models.LegItem;
 import com.paranoidandroid.journey.wizard.utils.JourneyBuilder;
 import com.parse.ParseException;
 import com.parse.SaveCallback;
@@ -108,12 +108,9 @@ public class WizardActivity extends AppCompatActivity implements WizardFragment.
         if (!journeyData.containsKey(JourneyBuilder.LEGS_KEY)){
             return false;
         }
-        List<LegItem> legs = (List<LegItem>) journeyData.get(JourneyBuilder.LEGS_KEY);
-        for (LegItem leg : legs) {
-            if (leg.getDestination().isEmpty()) {
-                return false;
-            }
-            if (leg.getPlacesId().isEmpty()) {
+        List<Leg> legs = (List<Leg>) journeyData.get(JourneyBuilder.LEGS_KEY);
+        for (Leg leg : legs) {
+            if (leg.getDestination() == null) {
                 return false;
             }
             if (leg.getStartDate() == null) {

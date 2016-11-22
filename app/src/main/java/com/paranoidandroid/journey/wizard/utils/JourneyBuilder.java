@@ -5,13 +5,11 @@ import com.paranoidandroid.journey.models.Destination;
 import com.paranoidandroid.journey.models.Journey;
 import com.paranoidandroid.journey.models.Leg;
 import com.paranoidandroid.journey.network.GooglePlaceSearchClient;
-import com.paranoidandroid.journey.wizard.models.LegItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -40,21 +38,14 @@ public class JourneyBuilder {
         journey.setName((String) journeyParts.get(NAME_KEY));
         journey.setTripType((String) journeyParts.get(SIZE_KEY));
         journey.setTripTags((List<String>) journeyParts.get(TAGS_KEY));
-        buildLegs(journey, (List<LegItem>) journeyParts.get(LEGS_KEY));
+        List<Leg> legs = (List<Leg>) journeyParts.get(LEGS_KEY);
+        for (Leg leg : legs) {
+            journey.addLeg(leg);
+        }
         return journey;
     }
 
-    private static void buildLegs(Journey journey, List<LegItem> legs) {
-        for (LegItem legitem : legs) {
-            Leg leg = new Leg();
-            leg.setDestination(buildDestination(legitem.getPlacesId()));
-            leg.setLegDuration(new Date(1421312), new Date(912391283));
-            leg.setLegDuration(legitem.getStartDate().getTime(), legitem.getEndDate().getTime());
-            journey.addLeg(leg);
-        }
-    }
-
-    private static Destination buildDestination(String placeId) {
+    public static Destination findDestination(String placeId) {
 
         final Destination destination = new Destination();
 
@@ -80,7 +71,7 @@ public class JourneyBuilder {
                     }
                     JSONObject location = result.getJSONObject("geometry").getJSONObject("location");
                     destination.setGeoPoint(location.getDouble("lat"), location.getDouble("lng"));
-                    destination.saveInBackground();
+                    //destination.saveInBackground();
 
                 } catch (JSONException e) {
                     e.printStackTrace();

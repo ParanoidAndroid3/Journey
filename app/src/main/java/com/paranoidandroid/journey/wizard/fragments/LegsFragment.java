@@ -13,14 +13,22 @@ import android.widget.AutoCompleteTextView;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.paranoidandroid.journey.R;
+import com.paranoidandroid.journey.models.Destination;
+import com.paranoidandroid.journey.models.Journey;
+import com.paranoidandroid.journey.models.Leg;
 import com.paranoidandroid.journey.network.GooglePlaceSearchClient;
 import com.paranoidandroid.journey.wizard.adapters.AutocompleteArrayAdapter;
 import com.paranoidandroid.journey.wizard.adapters.LegsArrayAdapter;
 import com.paranoidandroid.journey.wizard.models.LegItem;
+import com.paranoidandroid.journey.wizard.utils.JourneyBuilder;
 import com.paranoidandroid.journey.wizard.utils.PlaceJSONParser;
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
@@ -39,7 +47,7 @@ public class LegsFragment extends WizardFragment {
         LegsFragment fragment = new LegsFragment();
 
         Bundle args = new Bundle();
-        args.putString("journeyId", journeyId);
+        args.putString("journey_id", journeyId);
         fragment.setArguments(args);
 
         return fragment;
@@ -49,7 +57,16 @@ public class LegsFragment extends WizardFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_wizard_legs, parent, false);
         rvLegs = (RecyclerView) v.findViewById(R.id.rvLegs);
-        adapter = new LegsArrayAdapter(getContext(), listener);
+
+        if (getArguments() != null) {
+            String journeyId = getArguments().getString("journey_id");
+            if (journeyId != null) {
+                loadJourneyLegs(journeyId);
+            }
+        } else {
+            adapter = new LegsArrayAdapter(getContext(), new ArrayList<Leg>(), listener);
+        }
+
         rvLegs.setAdapter(adapter);
         rvLegs.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -90,12 +107,32 @@ public class LegsFragment extends WizardFragment {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         input.setText("");
-                        adapter.add(acAdapter.getItem(i));
+                        LegItem item = acAdapter.getItem(i);
+                        Destination destination = JourneyBuilder.findDestination(item.getPlacesId());
+                        destination.setDisplayName(item.getDestination());
+                        Leg leg = new Leg();
+                        leg.setDestination(destination);
+                        adapter.add(leg);
                     }
                 });
             }
         });
 
+    }
+
+    private void loadJourneyLegs(String journeyId) {
+        ParseQuery<Journey> query = ParseQuery.getQuery(Journey.class);
+        query.include("legs");
+        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
+        query.getInBackground(journeyId, new GetCallback<Journey>() {
+            public void done(final Journey journey, ParseException e) {
+                if (e == null) {
+                    adapter = new LegsArrayAdapter(getContext(), journey.getLegs(), listener);
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
 }

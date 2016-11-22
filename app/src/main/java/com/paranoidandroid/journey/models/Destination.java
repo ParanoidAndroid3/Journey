@@ -10,6 +10,7 @@ import com.parse.ParseObject;
 @ParseClassName("Destination")
 public class Destination extends ParseObject {
     private static final String KEY_CITY_NAME = "cityName";
+    private static final String KEY_DISPLAY_NAME = "displayName";
     private static final String KEY_COUNTRY_NAME = "countryName";
     private static final String KEY_GEO_POINT = "geoPoint";
 
@@ -37,6 +38,14 @@ public class Destination extends ParseObject {
 
     public String getCountryName() {
         return getString(KEY_COUNTRY_NAME);
+    }
+
+    public void setDisplayName(String name) {
+        put(KEY_DISPLAY_NAME, name);
+    }
+
+    public String getDisplayName() {
+        return getString(KEY_DISPLAY_NAME);
     }
 
     public void setGeoPoint(double latitude, double longitude) {
