@@ -22,6 +22,16 @@ public class NameFragment extends WizardFragment {
 
     EditText etName;
 
+    public static NameFragment newInstance(String journeyId) {
+        NameFragment fragment = new NameFragment();
+
+        Bundle args = new Bundle();
+        args.putString("journeyId", journeyId);
+        fragment.setArguments(args);
+
+        return fragment;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_wizard_name, parent, false);

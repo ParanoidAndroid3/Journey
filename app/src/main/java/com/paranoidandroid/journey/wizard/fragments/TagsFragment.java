@@ -34,6 +34,16 @@ public class TagsFragment extends WizardFragment {
     List<Button> tagButtons;
 
 
+    public static TagsFragment newInstance(String journeyId) {
+        TagsFragment fragment = new TagsFragment();
+
+        Bundle args = new Bundle();
+        args.putString("journeyId", journeyId);
+        fragment.setArguments(args);
+
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -35,6 +35,16 @@ public class LegsFragment extends WizardFragment {
     LegsArrayAdapter adapter;
     AutoCompleteTextView atvPlaces;
 
+    public static LegsFragment newInstance(String journeyId) {
+        LegsFragment fragment = new LegsFragment();
+
+        Bundle args = new Bundle();
+        args.putString("journeyId", journeyId);
+        fragment.setArguments(args);
+
+        return fragment;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_wizard_legs, parent, false);
