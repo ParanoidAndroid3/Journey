@@ -1,5 +1,6 @@
 package com.paranoidandroid.journey.wizard.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -33,6 +34,14 @@ public class WizardActivity extends AppCompatActivity implements WizardFragment.
 
     private static final String TAG = "WizardActivity";
 
+    public static final int EDIT_MODE_ALL = 0;
+    public static final int EDIT_MODE_TITLE = 1;
+    public static final int EDIT_MODE_LEGS = 2;
+    public static final int EDIT_MODE_TAGS = 3;
+
+    public static final String EXTRA_JOURNEY_ID = "com.paranoidandroid.journey.JOURNEY_ID";
+    public static final String EXTRA_EDIT_MODE = "com.paranoidandroid.journey.EDIT_MODE";
+
     /**
      * This map will collected all of the data needed to create a new Journey.
      **/
@@ -41,6 +50,8 @@ public class WizardActivity extends AppCompatActivity implements WizardFragment.
     private WizardPagerAdapter pagerAdapter;
     private ViewPager viewpager;
     private FloatingActionButton fab;
+    private int editMode;
+    private String journeyId;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -59,6 +70,15 @@ public class WizardActivity extends AppCompatActivity implements WizardFragment.
         viewpager.setAdapter(pagerAdapter);
 
         journeyData = new HashMap<>();
+
+        // Check if we are editing an existing Journey.
+        Bundle extras = getIntent().getExtras();
+        editMode = extras.getInt(EXTRA_EDIT_MODE, EDIT_MODE_ALL);
+        journeyId = extras.getString(EXTRA_JOURNEY_ID, null);
+
+        if (journeyId != null) {
+            // Find Journey and populate fragments with data.
+        }
     }
 
     /**
@@ -184,5 +204,12 @@ public class WizardActivity extends AppCompatActivity implements WizardFragment.
     @Override
     public void enableFab(boolean enable) {
         fab.setClickable(enable);
+    }
+
+    public static Intent createEditIntent(Context context, String journeyId, int editMode) {
+        Intent intent = new Intent(context, WizardActivity.class);
+        intent.putExtra(EXTRA_JOURNEY_ID, journeyId);
+        intent.putExtra(EXTRA_EDIT_MODE, editMode);
+        return intent;
     }
 }

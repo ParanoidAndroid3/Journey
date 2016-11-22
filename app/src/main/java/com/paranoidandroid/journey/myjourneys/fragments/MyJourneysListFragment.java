@@ -99,7 +99,6 @@ public class MyJourneysListFragment extends Fragment
     }
 
     private void showJourneys(List<Journey> journeys) {
-        hideInitialLoadProgressBar();
         if (journeys.size() == 0) {
             // Show empty journey view.
             binding.rlEmptyView.setVisibility(View.VISIBLE);
@@ -124,9 +123,12 @@ public class MyJourneysListFragment extends Fragment
         query.findInBackground(new FindCallback<Journey>() {
             @Override
             public void done(List<Journey> objects, ParseException e) {
+                hideInitialLoadProgressBar();
+
                 if (e == null) {
                     showJourneys(objects);
                 } else {
+                    // TODO(emmanuel): show offline message.
                     Toast.makeText(getContext(),
                             "Error retrieving journeys", Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "Failed to fetch journeys: ", e);

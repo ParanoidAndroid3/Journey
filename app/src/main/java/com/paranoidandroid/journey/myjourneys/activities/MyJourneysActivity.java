@@ -8,15 +8,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
-import com.paranoidandroid.journey.legplanner.activities.PlannerActivity;
-import com.paranoidandroid.journey.login.LoginActivity;
 import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.databinding.ActivityMyJourneysBinding;
+import com.paranoidandroid.journey.legplanner.activities.PlannerActivity;
+import com.paranoidandroid.journey.login.LoginActivity;
 import com.paranoidandroid.journey.models.Journey;
 import com.paranoidandroid.journey.myjourneys.fragments.LogoutConfirmationDialogFragment;
 import com.paranoidandroid.journey.myjourneys.fragments.MyJourneysListFragment;
+import com.paranoidandroid.journey.network.FacebookClient;
+import com.paranoidandroid.journey.support.SharedPreferenceUtils;
 import com.paranoidandroid.journey.wizard.activities.WizardActivity;
 import com.parse.ParseUser;
 
@@ -77,7 +78,9 @@ public class MyJourneysActivity extends AppCompatActivity implements
 
     @Override
     public void onLogout() {
+        FacebookClient.revokeAppPermissions();
         ParseUser.logOut();
+        SharedPreferenceUtils.clearUserInfo(this);
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();

@@ -49,7 +49,7 @@ public class Leg extends ParseObject {
     }
 
     public Destination getDestination() {
-        return (Destination) get(KEY_DESTINATION);
+        return (Destination) getParseObject(KEY_DESTINATION);
     }
 
     public void addActivity(Activity activity) {

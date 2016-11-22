@@ -27,22 +27,36 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
 
         <activity
             android:name=".legplanner.activities.PlannerActivity"
             android:theme="@style/AppTheme.NoActionBar">
-            <!--<intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter> -->
         </activity>
 
         <activity
             android:name=".myjourneys.activities.MyJourneysActivity"
-            android:label="@string/title_activity_my_journeys"
+            android:label="@string/title_my_journeys"
             android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+
+        <activity
+            android:name=".wizard.activities.WizardActivity"
+            android:label="@string/title_activity_wizard"
+            android:noHistory="true"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+
+        <activity
+            android:name=".splash.SplashActivity"
+            android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
 
         <!-- Facebook config -->
@@ -63,23 +77,14 @@
             android:name="com.parse.APPLICATION_ID"
             android:value="@string/parse_app_id" />
 
-        <activity
-            android:name=".wizard.activities.WizardActivity"
-            android:label="@string/title_activity_wizard"
-            android:noHistory="true"
-            android:theme="@style/AppTheme.NoActionBar">
-
-            <!--<intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>-->
-
-        </activity>
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
 
         <meta-data android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/google_maps_api_key" />
+
+        <!-- Glide configuration -->
+        <meta-data android:name="com.paranoidandroid.journey.glide.GlideConfiguration"
+                   android:value="GlideModule" />
     </application>
 
 </manifest>
