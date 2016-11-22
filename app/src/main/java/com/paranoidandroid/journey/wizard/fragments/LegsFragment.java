@@ -1,6 +1,8 @@
 package com.paranoidandroid.journey.wizard.fragments;
 
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -8,13 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
-import android.widget.ListView;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.network.GooglePlaceSearchClient;
 import com.paranoidandroid.journey.wizard.adapters.AutocompleteArrayAdapter;
-import com.paranoidandroid.journey.wizard.adapters.LegItemArrayAdapter;
+import com.paranoidandroid.journey.wizard.adapters.LegsArrayAdapter;
 import com.paranoidandroid.journey.wizard.models.LegItem;
 import com.paranoidandroid.journey.wizard.utils.PlaceJSONParser;
 
@@ -30,16 +31,17 @@ import cz.msebera.android.httpclient.Header;
 
 public class LegsFragment extends WizardFragment {
 
-    ListView lvLegs;
-    LegItemArrayAdapter adapter;
+    RecyclerView rvLegs;
+    LegsArrayAdapter adapter;
     AutoCompleteTextView atvPlaces;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_wizard_legs, parent, false);
-        lvLegs = (ListView) v.findViewById(R.id.lvLegs);
-        adapter = new LegItemArrayAdapter(getContext(), listener);
-        lvLegs.setAdapter(adapter);
+        rvLegs = (RecyclerView) v.findViewById(R.id.rvLegs);
+        adapter = new LegsArrayAdapter(getContext(), listener);
+        rvLegs.setAdapter(adapter);
+        rvLegs.setLayoutManager(new LinearLayoutManager(getContext()));
 
         atvPlaces = (AutoCompleteTextView) v.findViewById(R.id.atvPlaces);
         atvPlaces.setThreshold(1);

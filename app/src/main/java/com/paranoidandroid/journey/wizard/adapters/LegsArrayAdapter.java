@@ -4,10 +4,10 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatDelegate;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
@@ -27,32 +27,39 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * Created by epushkarskaya on 11/13/16.
+ * Created by epushkarskaya on 11/21/16.
  */
 
-public class LegItemArrayAdapter extends ArrayAdapter<LegItem> {
-
-    private static final String TAG = "LegItemAdapter";
+public class LegsArrayAdapter extends RecyclerView.Adapter<LegsArrayAdapter.ViewHolder> {
 
     private WizardFragment.OnItemUpdatedListener listener;
+    private List<LegItem> legs;
+    private Context context;
 
-    public LegItemArrayAdapter(Context context, WizardFragment.OnItemUpdatedListener listener) {
-        super(context, 0, new ArrayList<LegItem>());
+    public LegsArrayAdapter(Context context, WizardFragment.OnItemUpdatedListener listener) {
+        this.context = context;
         this.listener = listener;
+        this.legs = new ArrayList<>();
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
-        LegItem leg = getItem(position);
-        ViewHolder holder;
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(context);
 
-        if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_leg_definition, parent, false);
-            holder = new ViewHolder(convertView);
-            convertView.setTag(holder);
-        }
+        // Inflate the custom layout
+        View contactView = inflater.inflate(R.layout.item_leg_definition, parent, false);
 
-        holder = (ViewHolder) convertView.getTag();
+        // Return a new holder instance
+        ViewHolder viewHolder = new ViewHolder(contactView);
+        return viewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, final int position) {
+        LegItem leg = legs.get(position);
+
+        // Set item views based on your views and data model
+        holder.tvDestination.setText(leg.getDestination());
 
         holder.btnDeleteLeg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,8 +82,6 @@ public class LegItemArrayAdapter extends ArrayAdapter<LegItem> {
             }
         });
 
-        holder.tvDestination.setText(leg.getDestination());
-
         Calendar startDate = leg.getStartDate();
         if (startDate == null && position > 0) {
             Calendar previousEndDate = getItem(position - 1).getEndDate();
@@ -90,18 +95,42 @@ public class LegItemArrayAdapter extends ArrayAdapter<LegItem> {
         assignDate(holder.btnStartDate, startDate);
         assignDate(holder.btnEndDate, leg.getEndDate());
 
-        return convertView;
     }
 
-    /**
-     * Override method to include an update to parent activity
-     */
     @Override
-    public void notifyDataSetChanged() {
-        super.notifyDataSetChanged();
+    public int getItemCount() {
+        return legs.size();
+    }
+
+    public void add(LegItem item) {
+        legs.add(item);
+        updateParent();
+    }
+
+    public void remove(LegItem item) {
+        int i = legs.indexOf(item);
+        legs.remove(item);
+        updateParent();
+    }
+
+    public void insert(LegItem item, int i) {
+        legs.set(i, item);
+        updateParent();
+    }
+
+    public LegItem getItem(int i) {
+        return legs.get(i);
+    }
+
+    private Context getContext() {
+        return context;
+    }
+
+    private void updateParent() {
+        notifyDataSetChanged();
 
         List<LegItem> legs = new ArrayList<>();
-        for (int i = 0; i < getCount(); i++){
+        for (int i = 0; i < getItemCount(); i++){
             legs.add(getItem(i));
         }
 
@@ -164,7 +193,6 @@ public class LegItemArrayAdapter extends ArrayAdapter<LegItem> {
                 } else {
                     item.setEndDate(myCalendar);
                 }
-                remove(item);
                 insert(item, position);
             }
 
@@ -182,18 +210,19 @@ public class LegItemArrayAdapter extends ArrayAdapter<LegItem> {
 
     }
 
-    private class ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+
         ImageButton btnDeleteLeg;
         TextView tvDestination;
         Button btnStartDate;
         Button btnEndDate;
 
         public ViewHolder(View view) {
-            this.btnDeleteLeg = (ImageButton) view.findViewById(R.id.btnDeleteLeg);
-            this.tvDestination = (TextView) view.findViewById(R.id.tvDestination);
-            this.btnStartDate = (Button) view.findViewById(R.id.btnStartDate);
-            this.btnEndDate = (Button) view.findViewById(R.id.btnEndDate);
+            super(view);
+            btnDeleteLeg = (ImageButton) view.findViewById(R.id.btnDeleteLeg);
+            tvDestination = (TextView) view.findViewById(R.id.tvDestination);
+            btnStartDate = (Button) view.findViewById(R.id.btnStartDate);
+            btnEndDate = (Button) view.findViewById(R.id.btnEndDate);
         }
     }
-
 }
