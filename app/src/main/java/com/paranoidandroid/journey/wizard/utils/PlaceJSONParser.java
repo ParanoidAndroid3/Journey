@@ -54,7 +54,7 @@ public class PlaceJSONParser {
         try {
             LegItem place = new LegItem();
             place.setDestination(jPlace.getString("description"));
-            place.setPlacesId(jPlace.getString("id"));
+            place.setPlacesId(jPlace.getString("place_id"));
             return place;
         } catch (JSONException e) {
             e.printStackTrace();

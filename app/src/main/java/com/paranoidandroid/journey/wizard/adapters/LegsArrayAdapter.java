@@ -55,7 +55,7 @@ public class LegsArrayAdapter extends RecyclerView.Adapter<LegsArrayAdapter.View
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         LegItem leg = legs.get(position);
 
         // Set item views based on your views and data model
@@ -64,21 +64,21 @@ public class LegsArrayAdapter extends RecyclerView.Adapter<LegsArrayAdapter.View
         holder.btnDeleteLeg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onDeleteClick(position);
+                onDeleteClick(holder.getAdapterPosition());
             }
         });
 
         holder.btnStartDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onCalendarClick((Button) view, position, true);
+                onCalendarClick((Button) view, holder.getAdapterPosition(), true);
             }
         });
 
         holder.btnEndDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onCalendarClick((Button) view, position, false);
+                onCalendarClick((Button) view, holder.getAdapterPosition(), false);
             }
         });
 
@@ -110,7 +110,6 @@ public class LegsArrayAdapter extends RecyclerView.Adapter<LegsArrayAdapter.View
     }
 
     public void remove(LegItem item) {
-        int i = legs.indexOf(item);
         legs.remove(item);
         updateParent();
     }

@@ -21,7 +21,7 @@
 
     <com.paranoidandroid.journey.wizard.views.CustomAutoCompleteTextView
         android:id="@+id/atvPlaces"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="75dp"
         android:layout_marginStart="48dp"
         android:layout_marginTop="-65dp"
