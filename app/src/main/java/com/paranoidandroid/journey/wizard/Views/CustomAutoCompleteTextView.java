@@ -1,4 +1,4 @@
-package com.paranoidandroid.journey.wizard.Views;
+package com.paranoidandroid.journey.wizard.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
