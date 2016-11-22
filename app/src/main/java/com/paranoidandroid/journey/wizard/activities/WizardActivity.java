@@ -66,11 +66,13 @@ public class WizardActivity extends AppCompatActivity implements WizardFragment.
 
         // Check if we are editing an existing Journey.
         Bundle extras = getIntent().getExtras();
-        editMode = extras.getInt(EXTRA_EDIT_MODE, EDIT_MODE_ALL);
-        journeyId = extras.getString(EXTRA_JOURNEY_ID, null);
+        if (extras != null) {
+            editMode = extras.getInt(EXTRA_EDIT_MODE, EDIT_MODE_ALL);
+            journeyId = extras.getString(EXTRA_JOURNEY_ID, null);
 
-        if (journeyId != null) {
-            // Find Journey and populate fragments with data.
+            if (journeyId != null) {
+                // Find Journey and populate fragments with data.
+            }
         }
     }
 
@@ -156,10 +158,20 @@ public class WizardActivity extends AppCompatActivity implements WizardFragment.
         fab.setClickable(enable);
     }
 
+    /**
+     * Creates an intent to edit an exisiting Journey.
+     */
     public static Intent createEditIntent(Context context, String journeyId, int editMode) {
         Intent intent = new Intent(context, WizardActivity.class);
         intent.putExtra(EXTRA_JOURNEY_ID, journeyId);
         intent.putExtra(EXTRA_EDIT_MODE, editMode);
         return intent;
+    }
+
+    /**
+     * Creates an intent to build a new Journey.
+     */
+    public static Intent createIntent(Context context) {
+        return createEditIntent(context, null, EDIT_MODE_ALL);
     }
 }

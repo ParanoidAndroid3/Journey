@@ -11,11 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.paranoidandroid.journey.myjourneys.adapters.JourneyAdapter;
 import com.paranoidandroid.journey.models.Journey;
+import com.paranoidandroid.journey.myjourneys.adapters.JourneyAdapter;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -116,7 +117,7 @@ public class MyJourneysListFragment extends Fragment
         query.include("legs.destination");
 
         // TODO(emmanuel): think about security settings so users can't view all other users' data by default.
-        //query.whereEqualTo("creator", ParseUser.getCurrentUser());
+        query.whereEqualTo("creator", ParseUser.getCurrentUser());
 
         showInitialLoadProgressBar();
 

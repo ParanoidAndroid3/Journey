@@ -95,7 +95,7 @@ public class MyJourneysActivity extends AppCompatActivity implements
 
     @Override
     public void onCreateNewJourney() {
-        Intent intent = new Intent(this, WizardActivity.class);
+        Intent intent = WizardActivity.createIntent(this);
         startActivity(intent);
     }
 }
