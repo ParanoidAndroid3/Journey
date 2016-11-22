@@ -89,6 +89,8 @@ public class LegsArrayAdapter extends RecyclerView.Adapter<LegsArrayAdapter.View
                 startDate = Calendar.getInstance();
                 startDate.setTime(previousEndDate.getTime());
                 startDate.add(Calendar.DAY_OF_YEAR, 1);
+                leg.setStartDate(startDate);
+                legs.set(position, leg);
             }
         }
 
