@@ -58,6 +58,10 @@
         <item name="android:padding">20dp</item>
         <item name="android:windowBackground">@android:color/white</item>
     </style>
+    
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_background</item>
+    </style>
 
     <!-- Drawer styles -->
     <style name="DrawerUserName" parent="TextAppearance.AppCompat.Inverse">
