@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/llLegsFragment"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rlLegsFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -14,8 +13,10 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvLegs"
+        android:layout_below="@id/tvLegsPrompt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingBottom="75dp"
         android:layout_marginTop="20dp"/>
 
     <com.paranoidandroid.journey.wizard.Views.CustomAutoCompleteTextView
@@ -23,8 +24,9 @@
         android:layout_width="match_parent"
         android:layout_height="75dp"
         android:layout_marginStart="18dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="-65dp"
         android:layout_marginBottom="5dp"
+        android:layout_below="@id/rvLegs"
         android:hint="@string/new_leg_hint" />
 
-</LinearLayout>
+</RelativeLayout>
