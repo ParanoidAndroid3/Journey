@@ -2,6 +2,7 @@ package com.paranoidandroid.journey.myjourneys.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,10 +10,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.paranoidandroid.journey.myjourneys.adapters.JourneyAdapter;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.paranoidandroid.journey.models.Journey;
+import com.paranoidandroid.journey.myjourneys.adapters.JourneyAdapter;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -23,8 +25,9 @@ import java.util.List;
 /**
  * Load and display a list of the user's journey's.
  */
-public class MyJourneysListFragment extends Fragment
-        implements JourneyAdapter.OnItemSelectedListener{
+public class MyJourneysListFragment extends Fragment implements
+        JourneyAdapter.OnItemSelectedListener,
+        GoogleApiClient.OnConnectionFailedListener {
     private static final String TAG = "MyJourneysListFragment";
 
     public interface OnJourneySelectedListener {
@@ -60,6 +63,7 @@ public class MyJourneysListFragment extends Fragment
         super.onViewCreated(view, savedInstanceState);
         binding.rvJourneys.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.rvJourneys.setAdapter(adapter);
+        binding.rvJourneys.getItemAnimator().setChangeDuration(0);
         binding.setListener(listener);
 
         fetchJourneys();
@@ -89,13 +93,18 @@ public class MyJourneysListFragment extends Fragment
         }
     }
 
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.e(TAG, "GoogleApiClient connection failure: " + connectionResult.toString());
+    }
+
     private void showInitialLoadProgressBar() {
-        binding.pbInitialLoad.setVisibility(View.VISIBLE);
+        binding.pbInitialLoad.show();
         binding.rvJourneys.setVisibility(View.GONE);
     }
 
     private void hideInitialLoadProgressBar() {
-        binding.pbInitialLoad.setVisibility(View.GONE);
+        binding.pbInitialLoad.hide();
     }
 
     private void showJourneys(List<Journey> journeys) {
@@ -111,11 +120,10 @@ public class MyJourneysListFragment extends Fragment
     }
 
     protected void fetchJourneys() {
-        ParseQuery<Journey> query = ParseQuery.getQuery(Journey.class);
-        query.include("legs");
-        query.include("legs.destination");
+        ParseQuery<Journey> query = Journey.createQuery();
+        query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ELSE_CACHE);
 
-        // TODO(emmanuel): think about security settings so users can't view all other users' data by default.
+        // TODO(emmanuel): should journeys be protected by ACL?
         //query.whereEqualTo("creator", ParseUser.getCurrentUser());
 
         showInitialLoadProgressBar();
@@ -123,15 +131,13 @@ public class MyJourneysListFragment extends Fragment
         query.findInBackground(new FindCallback<Journey>() {
             @Override
             public void done(List<Journey> objects, ParseException e) {
+                adapter.clear();
                 hideInitialLoadProgressBar();
 
                 if (e == null) {
                     showJourneys(objects);
                 } else {
-                    // TODO(emmanuel): show offline message.
-                    Toast.makeText(getContext(),
-                            "Error retrieving journeys", Toast.LENGTH_SHORT).show();
-                    Log.e(TAG, "Failed to fetch journeys: ", e);
+                    Log.e(TAG, "Failed to fetch journeys:", e);
                 }
             }
         });

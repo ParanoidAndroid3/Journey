@@ -14,6 +14,7 @@ public class Destination extends ParseObject {
     private static final String KEY_COUNTRY_NAME = "countryName";
     private static final String KEY_GEO_POINT = "geoPoint";
     private static final String KEY_GOOGLE_PLACE_ID = "googlePlaceId";
+    private static final String KEY_CACHED_IMAGE_REFERENCE = "cachedGoogleImageReference";
 
     public Destination() {
     }
@@ -77,5 +78,13 @@ public class Destination extends ParseObject {
 
     public String getGooglePlaceId() {
         return getString(KEY_GOOGLE_PLACE_ID);
+    }
+
+    public void setCachedImageReference(String imageReference) {
+        put(KEY_CACHED_IMAGE_REFERENCE, imageReference);
+    }
+
+    public String getCachedImageReference() {
+        return getString(KEY_CACHED_IMAGE_REFERENCE);
     }
 }

@@ -6,8 +6,8 @@
     <dimen name="login_logo_width">200dp</dimen>
     <dimen name="login_logo_height">200dp</dimen>
     <dimen name="empty_journeys_title_margin">40dp</dimen>
-    <dimen name="journey_card_margin">8dp</dimen>
-    <dimen name="card_corner_radius">4dp</dimen>
+    <dimen name="journey_card_margin">4dp</dimen>
+    <dimen name="card_corner_radius">3dp</dimen>
     <dimen name="card_item_vertical_padding">10dp</dimen>
     <dimen name="wizard_prompt_horizontal_margin">18dp</dimen>
     <dimen name="wizard_prompt_vertical_margin">38dp</dimen>

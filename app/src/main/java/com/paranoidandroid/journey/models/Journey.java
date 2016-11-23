@@ -4,6 +4,7 @@ import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
+import com.parse.ParseUser;
 
 import java.util.Date;
 import java.util.List;
@@ -34,7 +35,7 @@ public class Journey extends ParseObject {
         return getString(KEY_NAME);
     }
 
-    public void setCreator(User creator) {
+    public void setCreator(ParseUser creator) {
         put(KEY_CREATOR, creator);
     }
 

@@ -2,21 +2,33 @@ package com.paranoidandroid.journey.myjourneys.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.databinding.ItemJourneyBinding;
+import com.paranoidandroid.journey.models.Destination;
 import com.paranoidandroid.journey.models.Journey;
 import com.paranoidandroid.journey.models.Leg;
+import com.paranoidandroid.journey.models.ui.GooglePlace;
 import com.paranoidandroid.journey.support.DateFormattingUtils;
 
 import java.util.Collection;
 import java.util.List;
 
 public class JourneyAdapter extends RecyclerView.Adapter<JourneyAdapter.ViewHolder> {
+    private static final String TAG = "JourneyAdapter";
+    private static final int DEFAULT_SCREEN_WIDTH = 1080;
 
     public interface OnItemSelectedListener {
         void onItemSelected(Journey journey);
@@ -42,9 +54,11 @@ public class JourneyAdapter extends RecyclerView.Adapter<JourneyAdapter.ViewHold
 
     private List<Journey> items;
     private OnItemSelectedListener listener;
+    private int screenWidth;
 
     public JourneyAdapter(List<Journey> items) {
         this.items = items;
+        this.screenWidth = DEFAULT_SCREEN_WIDTH;
     }
 
     @Override
@@ -53,14 +67,14 @@ public class JourneyAdapter extends RecyclerView.Adapter<JourneyAdapter.ViewHold
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         ItemJourneyBinding binding = ItemJourneyBinding.inflate(inflater, parent, false);
         return new ViewHolder(binding);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         Journey journey = items.get(position);
         holder.binding.setJourney(journey);
 
@@ -86,6 +100,48 @@ public class JourneyAdapter extends RecyclerView.Adapter<JourneyAdapter.ViewHold
 
             holder.binding.llLegs.addView(view);
         }
+
+        holder.binding.ivBackdrop.setImageResource(R.drawable.image_placeholder);
+        loadBackdropImage(holder, journey);
+    }
+
+    private void loadBackdropImage(final ViewHolder holder, Journey journey) {
+        Context context = holder.itemView.getContext();
+
+        if (journey.getLegs().size() == 0) {
+            Log.e(TAG, "Can't load backdrop: no legs on Journey.");
+            return;
+        }
+
+        final Destination destination = journey.getLegs().get(0).getDestination();
+        String imageReference = destination.getCachedImageReference();
+
+        if (imageReference == null) {
+            holder.binding.ivScrim.setVisibility(View.INVISIBLE);
+            String placeId = destination.getGooglePlaceId();
+            GooglePlace.getPlaceImageAsync(placeId, new GooglePlace.OnImageReferenceReadyHandler() {
+                @Override
+                public void onImageReferenceReady(String imageReference) {
+                    destination.setCachedImageReference(imageReference);
+                    destination.saveEventually();
+                    notifyItemChanged(holder.getAdapterPosition());
+                }
+
+                @Override
+                public void onFailure(Throwable throwable) {
+                    Log.e(TAG, "Unable to get backdrop image", throwable);
+                }
+            });
+
+        } else {
+            // We can use the cached URL.
+            SimpleTarget<GlideDrawable> target = new BackdropTarget(
+                    holder.binding.ivBackdrop, holder.binding.ivScrim);
+
+            // TODO: maxWidth should be the current screen width.
+            String imageUrl = GooglePlace.makeImageUrl(imageReference, screenWidth);
+            Glide.with(context).load(imageUrl).into(target);
+        }
     }
 
     public void addAll(Collection<? extends Journey> collection) {
@@ -107,6 +163,30 @@ public class JourneyAdapter extends RecyclerView.Adapter<JourneyAdapter.ViewHold
         if (listener != null) {
             Journey journey = items.get(position);
             listener.onItemSelected(journey);
+        }
+    }
+
+    /**
+     * Loads the scrim at the same when an Glide finishes loading an image.
+     */
+    private static class BackdropTarget extends SimpleTarget<GlideDrawable> {
+        ImageView backdrop;
+        ImageView scrim;
+        Animation fadeIn = new AlphaAnimation(0.0f, 1.0f);
+
+        BackdropTarget(ImageView backdrop, ImageView scrim) {
+            this.backdrop = backdrop;
+            this.scrim = scrim;
+            fadeIn.setDuration(500);
+        }
+
+        @Override
+        public void onResourceReady(GlideDrawable resource,
+                GlideAnimation<? super GlideDrawable> glideAnimation) {
+            backdrop.setImageDrawable(resource.getCurrent());
+            backdrop.startAnimation(fadeIn);
+            scrim.startAnimation(fadeIn);
+            scrim.setVisibility(View.VISIBLE);
         }
     }
 }

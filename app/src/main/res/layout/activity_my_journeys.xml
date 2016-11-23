@@ -41,6 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/fab_margin"
+            app:layout_behavior="com.paranoidandroid.journey.support.ScrollAwareFabBehavior"
             app:srcCompat="@drawable/ic_add_black_24dp"
             android:tint="@android:color/white" />
 
