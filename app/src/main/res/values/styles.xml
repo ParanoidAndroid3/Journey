@@ -113,4 +113,8 @@
         <item name="textAllCaps">true</item>
     </style>
 
+    <style name="ListStyle">
+        <item name="android:background">@color/listBackgroundColor</item>
+    </style>
+
 </resources>
