@@ -4,6 +4,10 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
+    <!-- fab disabled/enabled -->
+    <color name="colorFabEnabled">@color/colorAccent</color>
+    <color name="colorFabDisabled">#c7c0c2</color>
+
     <color name="colorWizardPrompt">#6b6b6b</color>
     <color name="colorWizardName">#8f8f8f</color>
 

@@ -28,6 +28,14 @@ public class Leg extends ParseObject {
         put(KEY_END_DATE, endDate);
     }
 
+    public void setStartDate(Date startDate) {
+        put(KEY_START_DATE, startDate);
+    }
+
+    public void setEndDate(Date endDate) {
+        put(KEY_END_DATE, endDate);
+    }
+
     public Date getStartDate() {
         return getDate(KEY_START_DATE);
     }

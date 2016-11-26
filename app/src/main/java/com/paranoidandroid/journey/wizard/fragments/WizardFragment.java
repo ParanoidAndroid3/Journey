@@ -13,13 +13,6 @@ public abstract class WizardFragment extends Fragment {
 
     protected OnItemUpdatedListener listener;
 
-    /**
-     * This method can be called by parent activities
-     * to determine if all all required data has been
-     * entered.
-     */
-    public abstract boolean readyToPublish();
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
