@@ -59,7 +59,11 @@ public class TagsFragment extends WizardFragment {
             String journeyId = getArguments().getString("journey_id");
             if (journeyId != null) {
                 loadJourneyData(journeyId);
+            } else {
+                listener.enableFab(false);
             }
+        } else {
+            listener.enableFab(false);
         }
 
         setupStates();
@@ -74,6 +78,7 @@ public class TagsFragment extends WizardFragment {
             public void done(final Journey journey, ParseException e) {
                 if (e == null) {
                     populateMapsFromJourney(journey);
+                    listener.enableFab(true);
                 } else {
                     e.printStackTrace();
                 }

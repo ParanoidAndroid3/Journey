@@ -2,6 +2,7 @@ package com.paranoidandroid.journey.wizard.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewPager;
@@ -73,8 +74,10 @@ public class WizardActivity extends AppCompatActivity implements WizardFragment.
 
         // Check if we are editing an existing Journey.
         Bundle extras = getIntent().getExtras();
-        editMode = extras.getInt(EXTRA_EDIT_MODE, EDIT_MODE_ALL);
-        journeyId = extras.getString(EXTRA_JOURNEY_ID, null);
+        if (extras != null) {
+            editMode = extras.getInt(EXTRA_EDIT_MODE, EDIT_MODE_ALL);
+            journeyId = extras.getString(EXTRA_JOURNEY_ID, null);
+        }
 
         if (journeyId != null) {
             // Find Journey and populate fragments with data.
@@ -204,6 +207,9 @@ public class WizardActivity extends AppCompatActivity implements WizardFragment.
     @Override
     public void enableFab(boolean enable) {
         fab.setClickable(enable);
+        int resource = enable ? R.color.colorFabEnabled : R.color.colorFabDisabled;
+        int color = getResources().getColor(resource);
+        fab.setBackgroundTintList(ColorStateList.valueOf(color));
     }
 
     public static Intent createEditIntent(Context context, String journeyId, int editMode) {

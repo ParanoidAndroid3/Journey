@@ -133,9 +133,16 @@ public class LegsArrayAdapter extends RecyclerView.Adapter<LegsArrayAdapter.View
         notifyDataSetChanged();
 
         List<Leg> legs = new ArrayList<>();
+        boolean enableFab = getItemCount() > 0;
         for (int i = 0; i < getItemCount(); i++){
+            Leg leg = getItem(i);
+            if (leg.getStartDate() == null || leg.getEndDate() == null) {
+                enableFab = false;
+            }
             legs.add(getItem(i));
         }
+
+        listener.enableFab(enableFab);
 
         Map<String, Object> result = new HashMap<>();
         result.put(JourneyBuilder.LEGS_KEY, legs);
@@ -164,6 +171,9 @@ public class LegsArrayAdapter extends RecyclerView.Adapter<LegsArrayAdapter.View
 
     private void onDeleteClick(int position) {
         remove(getItem(position));
+        if (getItemCount() == 0) {
+            listener.enableFab(false);
+        }
     }
 
     /**

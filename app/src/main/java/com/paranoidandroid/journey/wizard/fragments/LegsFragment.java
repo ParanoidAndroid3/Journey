@@ -62,9 +62,12 @@ public class LegsFragment extends WizardFragment {
             String journeyId = getArguments().getString("journey_id");
             if (journeyId != null) {
                 loadJourneyLegs(journeyId);
+            } else {
+                listener.enableFab(false);
             }
         } else {
             adapter = new LegsArrayAdapter(getContext(), new ArrayList<Leg>(), listener);
+            listener.enableFab(false);
         }
 
         rvLegs.setAdapter(adapter);
@@ -128,6 +131,7 @@ public class LegsFragment extends WizardFragment {
             public void done(final Journey journey, ParseException e) {
                 if (e == null) {
                     adapter = new LegsArrayAdapter(getContext(), journey.getLegs(), listener);
+                    listener.enableFab(true);
                 } else {
                     e.printStackTrace();
                 }

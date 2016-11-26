@@ -45,7 +45,11 @@ public class NameFragment extends WizardFragment {
             String journeyId = getArguments().getString("journey_id");
             if (journeyId != null) {
                 loadJourneyName(journeyId);
+            } else {
+                listener.enableFab(false);
             }
+        } else {
+           listener.enableFab(false);
         }
 
         etName.addTextChangedListener(new TextWatcher() {
@@ -78,6 +82,7 @@ public class NameFragment extends WizardFragment {
             public void done(final Journey journey, ParseException e) {
                 if (e == null) {
                     etName.setText(journey.getName());
+                    listener.enableFab(true);
                 } else {
                     e.printStackTrace();
                 }
