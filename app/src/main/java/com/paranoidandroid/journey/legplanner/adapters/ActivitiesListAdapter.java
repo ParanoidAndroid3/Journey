@@ -1,6 +1,8 @@
 package com.paranoidandroid.journey.legplanner.adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,10 +10,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.paranoidandroid.journey.legplanner.interfaces.ActivityViewHolderClickListener;
+import com.bumptech.glide.Glide;
 import com.paranoidandroid.journey.R;
+import com.paranoidandroid.journey.legplanner.interfaces.ActivityViewHolderClickListener;
 import com.paranoidandroid.journey.models.Activity;
 
 import java.util.List;
@@ -29,6 +33,7 @@ public class ActivitiesListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     public interface ActivityAdapterClickListener {
         void onDeleteActivityAtAdapterIndex(int position);
+        void onSelectActivityAtAdapterIndex(int position);
     }
 
     public void setActivityAdapterClickListener(ActivityAdapterClickListener listener) {
@@ -43,7 +48,7 @@ public class ActivitiesListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View v1 = inflater.inflate(R.layout.viewholder_activity, parent, false);
+        View v1 = inflater.inflate(R.layout.item_activity, parent, false);
         RecyclerView.ViewHolder viewHolder = new ActivityViewHolder(v1, this);
         return viewHolder;
     }
@@ -55,6 +60,11 @@ public class ActivitiesListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         if (activity != null) {
             vh.tvName.setText(activity.getTitle());
             vh.tvType.setText(activity.getEventType());
+            Glide.with(mContext)
+                    .load(activity.getImageUrl())
+                    .placeholder(R.drawable.ic_map_marker_placeholder)
+                    .error(R.drawable.ic_map_marker_placeholder)
+                    .into(vh.ivPhoto);
         }
     }
 
@@ -72,37 +82,61 @@ public class ActivitiesListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
     }
 
+    @Override
+    public void onActivitySelectedAtIndex(int position) {
+        if (listener != null) {
+            listener.onSelectActivityAtAdapterIndex(position);
+        }
+    }
+
     static class ActivityViewHolder extends RecyclerView.ViewHolder implements
-            PopupMenu.OnMenuItemClickListener {
+            View.OnLongClickListener, View.OnClickListener {
 
         @BindView(R.id.tvType) TextView tvType;
         @BindView(R.id.tvName) TextView tvName;
-        @BindView(R.id.ibMenu) ImageButton ibMenu;
+        @BindView(R.id.ivPhoto) ImageView ivPhoto;
+
         ActivityViewHolderClickListener mListener;
 
         public ActivityViewHolder(View v, ActivityViewHolderClickListener listener) {
             super(v);
             ButterKnife.bind(this, v);
+            v.setOnLongClickListener(this);
+            v.setOnClickListener(this);
             mListener = listener;
         }
 
-        @OnClick(R.id.ibMenu)
-        public void onMenuClicked(View v) {
-            PopupMenu popup = new PopupMenu(v.getContext(), v);
-            popup.getMenuInflater().inflate(R.menu.menu_activity, popup.getMenu());
-            popup.setOnMenuItemClickListener(this);
-            popup.show();
+        @Override
+        public boolean onLongClick(View view) {
+            new AlertDialog.Builder(tvName.getContext())
+                    .setTitle("Delete Activity")
+                    .setMessage("Do you want to delete this activity?")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (mListener != null) {
+                                int position = getAdapterPosition();
+                                if (position != RecyclerView.NO_POSITION) {
+                                    mListener.onDeletePressedAtIndex(position);
+                                }
+                            }
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) { }
+                    })
+                    .setIcon(R.drawable.ic_journey)
+                    .show();
+            return true;
         }
 
         @Override
-        public boolean onMenuItemClick(MenuItem item) {
+        public void onClick(View view) {
             if (mListener != null) {
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
-                    mListener.onDeletePressedAtIndex(position);
+                    mListener.onActivitySelectedAtIndex(position);
                 }
             }
-            return true;
         }
     }
 }

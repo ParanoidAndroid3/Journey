@@ -15,6 +15,7 @@ public class Leg extends ParseObject {
     private static final String KEY_END_DATE = "endDate";
     private static final String KEY_DESTINATION = "destination";
     private static final String KEY_ACTIVITIES = "activities";
+    private static final String KEY_BOOKMARKS = "bookmarks";
 
     public Leg() {
     }
@@ -55,16 +56,32 @@ public class Leg extends ParseObject {
     public void addActivity(Activity activity) {
         add(KEY_ACTIVITIES, activity);
     }
+    public void addBookmark(Bookmark bookmark) {
+        add(KEY_BOOKMARKS, bookmark);
+    }
+
+    public void addAllActivities(List<Activity> activities) {
+        addAll(KEY_ACTIVITIES, activities);
+    }
 
     public void removeActivity(Activity activity) {
-        // TODO: test me!!!
         List<Activity> activities = getActivities();
         if (activities.remove(activity)) {
             put(KEY_ACTIVITIES, activities);
         }
     }
 
+    public void removeBookmark(Bookmark bookmark) {
+        List<Bookmark> bookmarks = getBookmarks();
+        if (bookmarks.remove(bookmark)) {
+            put(KEY_BOOKMARKS, bookmarks);
+        }
+    }
+
     public List<Activity> getActivities() {
         return getList(KEY_ACTIVITIES);
+    }
+    public List<Bookmark> getBookmarks() {
+        return getList(KEY_BOOKMARKS);
     }
 }

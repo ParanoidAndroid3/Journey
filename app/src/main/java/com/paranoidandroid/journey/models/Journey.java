@@ -2,6 +2,7 @@ package com.paranoidandroid.journey.models;
 
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 
 import java.util.Date;
@@ -100,5 +101,15 @@ public class Journey extends ParseObject {
             return getLegs().get(legCount - 1).getEndDate();
         }
         return null;
+    }
+
+    public static ParseQuery<Journey> createQuery() {
+        ParseQuery<Journey> query = ParseQuery.getQuery(Journey.class);
+        query.include("legs");
+        query.include("legs.destination");
+        query.include("legs.activities");
+        query.include("legs.bookmarks");
+        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
+        return query;
     }
 }

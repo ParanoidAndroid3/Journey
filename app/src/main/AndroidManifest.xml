@@ -32,8 +32,12 @@
 
         <activity
             android:name=".legplanner.activities.PlannerActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/Theme.DesignDemo">
+        </activity>
 
+        <activity
+            android:name=".recommendations.activities.RecommendationsActivity"
+            android:theme="@style/Theme.DesignDemo">
         </activity>
 
         <activity
