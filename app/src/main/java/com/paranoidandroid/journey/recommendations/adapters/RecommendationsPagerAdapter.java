@@ -2,6 +2,7 @@ package com.paranoidandroid.journey.recommendations.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.view.View;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.paranoidandroid.journey.recommendations.activities.RecommendationsActivity;
@@ -13,19 +14,16 @@ import java.util.List;
 
 public class RecommendationsPagerAdapter extends SmartFragmentStatePagerAdapter {
 
-    List<RecommendationsActivity.Keyword> tabs;
+    List<RecommendationsActivity.Keyword> keywordList;
     LatLng near;
-    long dayTime;
 
     public static RecommendationsPagerAdapter newInstance(
             FragmentManager fragmentManager,
-            List<RecommendationsActivity.Keyword> tabs,
-            LatLng near,
-            long dayTime) {
+            List<RecommendationsActivity.Keyword> keywords,
+            LatLng near) {
         RecommendationsPagerAdapter adapter = new RecommendationsPagerAdapter(fragmentManager);
-        adapter.tabs = tabs;
+        adapter.keywordList = keywords;
         adapter.near = near;
-        adapter.dayTime = dayTime;
         return adapter;
     }
 
@@ -34,23 +32,29 @@ public class RecommendationsPagerAdapter extends SmartFragmentStatePagerAdapter 
     }
 
     @Override
+    public View getTabView(int i) {
+        return null;
+    }
+
+    // Create a fragment according to the API source id
+
+    @Override
     public Fragment getItem(int position) {
-        switch (tabs.get(position).type) {
-            default:
-            case 0: // Google
-                return GoogleRecommendationsFragment.newInstance(near, tabs.get(position).keyword, tabs.get(position).tabTitle, dayTime);
-            case 1: // Foursquare
-                return FoursquareRecommendationsFragment.newInstance(near, tabs.get(position).keyword, tabs.get(position).tabTitle, dayTime);
+        if (keywordList.get(position).sourceId.equals("google_id")) {
+            return GoogleRecommendationsFragment.newInstance(near, keywordList.get(position));
+        } else if (keywordList.get(position).sourceId.equals("foursquare_id")) {
+            return FoursquareRecommendationsFragment.newInstance(near, keywordList.get(position));
         }
+        return new Fragment();
     }
 
     @Override
     public int getCount() {
-        return tabs.size();
+        return keywordList.size();
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return tabs.get(position).tabTitle;
+        return keywordList.get(position).title;
     }
 }

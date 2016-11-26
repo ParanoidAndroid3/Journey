@@ -18,7 +18,9 @@ import com.paranoidandroid.journey.models.ui.GooglePlace;
 import com.paranoidandroid.journey.models.ui.Recommendation;
 import com.paranoidandroid.journey.recommendations.interfaces.RecommendationViewHolderClickListener;
 import com.paranoidandroid.journey.recommendations.interfaces.RecommendationsListAdapterClickListener;
+import com.paranoidandroid.journey.recommendations.viewholders.ViewHolders;
 import com.paranoidandroid.journey.support.MapUtils;
+import com.paranoidandroid.journey.support.ui.DynamicHeightImageView;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -26,6 +28,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.paranoidandroid.journey.recommendations.viewholders.ViewHolders.RecommendationViewHolder;
 
 public class RecommendationsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements
         RecommendationViewHolderClickListener {
@@ -98,75 +102,46 @@ public class RecommendationsListAdapter extends RecyclerView.Adapter<RecyclerVie
 
     private void configureGooglePlaceViewHolder(RecommendationViewHolder vh, int position) {
         GooglePlace place = (GooglePlace) items.get(position);
-        String imageURL;
         if (place != null) {
-            if ((imageURL = place.getImageURL()) != null)
-                Glide.with(context)
-                    .load(imageURL)
+            vh.photo.setHeightRatio(1);
+            Glide.with(context)
+                    .load(place.getImageUrl())
+                    .placeholder(R.drawable.ic_placeholder)
+                    .error(R.drawable.ic_placeholder)
                     .into(vh.photo);
             vh.name.setText(place.getName());
             vh.distance.setText(distFormat.format(
                     MapUtils.haversine(place.getLatitude(), place.getLongitude(), this.headCoordinates.latitude, this.headCoordinates.longitude)
                     ) + "km");
+            vh.save.setImageResource(place.isBookmarked() ? R.drawable.ic_bookmark_activity_selected : R.drawable.ic_bookmark_activity_normal);
         }
     }
 
     private void configureFoursquareVenueViewHolder(RecommendationViewHolder vh, int position) {
         FoursquareVenue place = (FoursquareVenue) items.get(position);
-        String imageURL;
         if (place != null) {
-            if ((imageURL = place.getImageURL()) != null)
-                Glide.with(context)
-                        .load(imageURL)
-                        .into(vh.photo);
+            vh.photo.setHeightRatio(1);
+            Glide.with(context)
+                    .load(place.getImageUrl())
+                    .placeholder(R.drawable.ic_placeholder)
+                    .error(R.drawable.ic_placeholder)
+                    .into(vh.photo);
             vh.name.setText(place.getName());
             vh.distance.setText(distFormat.format(
                     MapUtils.haversine(place.getLatitude(), place.getLongitude(), this.headCoordinates.latitude, this.headCoordinates.longitude)
             ) + "km");
+            vh.save.setImageResource(place.isBookmarked() ? R.drawable.ic_bookmark_activity_selected : R.drawable.ic_bookmark_activity_normal);
         }
     }
 
     @Override
-    public void onAddRecommendationClickedAtPosition(int position, boolean saveForLater) {
+    public void onAddBookmarkClickedAt(int position) {
         if (this.listener != null) {
-            this.listener.onAddRecommendationClicked(items.get(position), false);
-        }
-    }
-
-    public static class RecommendationViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.tvName) TextView name;
-        @BindView(R.id.ivPhoto) ImageView photo;
-        @BindView(R.id.tvDistance) TextView distance;
-        @BindView(R.id.ibSave) ImageButton save;
-        @BindView(R.id.ibAdd) ImageButton add;
-        public RecommendationViewHolderClickListener listener;
-
-        public RecommendationViewHolder(View v, RecommendationViewHolderClickListener listener) {
-            super(v);
-            ButterKnife.bind(this, v);
-            this.listener = listener;
-        }
-
-        @OnClick(R.id.ibSave)
-        public void onSaveClicked(View v) {
-            if (listener != null) {
-                int position = getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION) {
-                    listener.onAddRecommendationClickedAtPosition(position, true);
-                }
-            }
-        }
-
-        @OnClick(R.id.ibAdd)
-        public void onAddClicked(View v) {
-            if (listener != null) {
-                int position = getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION) {
-                    listener.onAddRecommendationClickedAtPosition(position, false);
-                }
+            if (items.get(position).isBookmarked()) {
+                this.listener.onRemoveBookmarkClicked(items.get(position), position);
+            } else {
+                this.listener.onAddBookmarkClicked(items.get(position), position);
             }
         }
     }
-
-
 }

@@ -3,23 +3,21 @@ package com.paranoidandroid.journey.models.ui;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Parcel
 public class FoursquareVenue extends Recommendation{
 
-    String image_url_prefix;
-    String image_url_suffix;
-
-    @Override
-    public String getImageURL() {
-        if (this.image_url_prefix == null || this.image_url_suffix == null) {
+    public static String makeImageUrl(String image_url_prefix, String image_url_suffix) {
+        if (image_url_prefix == null || image_url_suffix == null) {
             return null;
         }
-        return this.image_url_prefix
+        return image_url_prefix
                 + "cap500"
-                + this.image_url_suffix;
+                + image_url_suffix;
     }
 
     private static FoursquareVenue parseVenue(JSONObject jsonPlace) throws JSONException {
@@ -37,8 +35,7 @@ public class FoursquareVenue extends Recommendation{
         JSONObject group = groups.getJSONObject(0); // assume we have at least one group
         JSONArray items = group.getJSONArray("items");
         JSONObject item = items.getJSONObject(0); // assume we have at least one item
-        fv.image_url_prefix = item.getString("prefix");
-        fv.image_url_suffix = item.getString("suffix");
+        fv.imageUrl = makeImageUrl(item.getString("prefix"), item.getString("suffix"));
         return fv;
     }
 

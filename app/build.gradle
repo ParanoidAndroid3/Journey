@@ -60,6 +60,7 @@ dependencies {
     compile 'com.github.rubensousa:gravitysnaphelper:1.0'
     compile 'com.google.android.gms:play-services-maps:9.8.0'
     compile 'com.google.android.gms:play-services-location:9.8.0'
+    compile 'com.google.android.gms:play-services:9.8.0'
     compile 'com.github.hotchemi:permissionsdispatcher:2.2.0'
     compile 'com.google.maps.android:android-maps-utils:0.4+'
     apt 'com.github.hotchemi:permissionsdispatcher-processor:2.2.0'
@@ -68,4 +69,7 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.4.0'
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
     compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'org.parceler:parceler-api:1.1.1'
+    apt 'org.parceler:parceler:1.1.1'
+    compile 'com.github.clans:fab:1.6.4'
 }

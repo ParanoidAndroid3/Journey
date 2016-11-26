@@ -18,6 +18,7 @@ import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.models.ui.GooglePlace;
 import com.paranoidandroid.journey.models.ui.Recommendation;
 import com.paranoidandroid.journey.network.GooglePlaceSearchClient;
+import com.paranoidandroid.journey.recommendations.activities.RecommendationsActivity;
 import com.paranoidandroid.journey.recommendations.adapters.RecommendationsListAdapter;
 import com.paranoidandroid.journey.recommendations.interfaces.RecommendationsListAdapterClickListener;
 import com.paranoidandroid.journey.support.ui.EndlessRecyclerViewScrollListener;
@@ -25,6 +26,7 @@ import com.paranoidandroid.journey.support.ui.SpacesItemDecoration;
 import com.parse.ParseObject;
 
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,16 +39,16 @@ import cz.msebera.android.httpclient.Header;
 public class GoogleRecommendationsFragment extends BaseRecommendationsFragment implements
         RecommendationsListAdapterClickListener {
 
+    // Implements search and endless scrolling for Google Places
+
     private String nextToken = null;
     private boolean hasMore = true;
 
-    public static GoogleRecommendationsFragment newInstance(LatLng coordinates, String keyword, String typeTitle, long dayTime) {
+    public static GoogleRecommendationsFragment newInstance(LatLng coordinates, RecommendationsActivity.Keyword keyword) {
         Bundle args = new Bundle();
         GoogleRecommendationsFragment fragment = new GoogleRecommendationsFragment();
         args.putParcelable("coordinates", coordinates);
-        args.putString("keyword", keyword);
-        args.putString("typeTitle", typeTitle);
-        args.putLong("day_time", dayTime);
+        args.putParcelable("keyword", Parcels.wrap(keyword));
         fragment.setArguments(args);
         return fragment;
     }
@@ -57,7 +59,7 @@ public class GoogleRecommendationsFragment extends BaseRecommendationsFragment i
     }
 
     private void search(String token, final boolean clearExisting) {
-        GooglePlaceSearchClient.search(coordinates.latitude, coordinates.longitude, keyword, token, new JsonHttpResponseHandler() {
+        GooglePlaceSearchClient.search(coordinates.latitude, coordinates.longitude, keyword.keyword, token, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 System.out.println(response);
@@ -69,16 +71,10 @@ public class GoogleRecommendationsFragment extends BaseRecommendationsFragment i
         });
     }
 
-    @Override
-    protected void decorateId(ParseObject activity, String id) {
-        activity.put("google_id", id);
-    }
-
-    public EndlessRecyclerViewScrollListener getEndlessScrollListener() {
+    public EndlessRecyclerViewScrollListener getScrollListener() {
         return new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                Log.d("Google", "onLoadMore:page:"+page+" totalItemsCount:"+totalItemsCount+" hasMore?"+hasMore);
                 if (hasMore)
                     search(nextToken, false);
             }

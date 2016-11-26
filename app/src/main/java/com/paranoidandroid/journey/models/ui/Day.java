@@ -9,11 +9,13 @@ public class Day {
     int series;
     Date date;
     Leg leg;
+    int legOrder;
 
-    public Day(int series, Date date, Leg leg) {
+    public Day(int series, Date date, Leg leg, int legOrder) {
         this.series = series;
         this.date = date;
         this.leg = leg;
+        this.legOrder = legOrder;
     }
 
     public String getCity() {
@@ -34,4 +36,8 @@ public class Day {
     public String getSeriesString() {
         return "DAY " + this.series;
     }
+
+    public int getSeries() { return this.series; }
+
+    public int getLegOrder() { return this.legOrder; }
 }

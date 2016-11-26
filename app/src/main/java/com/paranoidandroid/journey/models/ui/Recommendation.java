@@ -1,6 +1,9 @@
 package com.paranoidandroid.journey.models.ui;
 
-public abstract class Recommendation {
+import org.parceler.Parcel;
+
+@Parcel
+public class Recommendation {
 
     double lat;
     double lng;
@@ -8,8 +11,26 @@ public abstract class Recommendation {
     String address;
     String name;
     String id;
+    String imageUrl;
 
-    public abstract String getImageURL();
+    boolean added;
+    boolean bookmarked;
+
+    public boolean isAdded() {
+        return added;
+    }
+
+    public boolean isBookmarked() {
+        return bookmarked;
+    }
+
+    public void setBookmarked(boolean bookmarked) {
+        this.bookmarked = bookmarked;
+    }
+
+    public void setAdded(boolean added) {
+        this.added = added;
+    }
 
     public String getId() { return id; }
 
@@ -31,5 +52,13 @@ public abstract class Recommendation {
 
     public double getLongitude() {
         return lng;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

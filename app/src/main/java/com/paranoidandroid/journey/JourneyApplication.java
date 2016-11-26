@@ -5,6 +5,7 @@ import android.app.Application;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.stetho.Stetho;
 import com.paranoidandroid.journey.models.Activity;
+import com.paranoidandroid.journey.models.Bookmark;
 import com.paranoidandroid.journey.models.Destination;
 import com.paranoidandroid.journey.models.Journey;
 import com.paranoidandroid.journey.models.Leg;
@@ -32,6 +33,7 @@ public class JourneyApplication extends Application {
         Stetho.initializeWithDefaults(this);
 
         // Register models
+        ParseObject.registerSubclass(Bookmark.class);
         ParseObject.registerSubclass(Activity.class);
         ParseObject.registerSubclass(Destination.class);
         ParseObject.registerSubclass(Journey.class);

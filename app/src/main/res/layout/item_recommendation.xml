@@ -17,10 +17,11 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <ImageView
+
+            <com.paranoidandroid.journey.support.ui.DynamicHeightImageView
                 android:id="@+id/ivPhoto"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"/>
             <TextView
@@ -34,8 +35,8 @@
                 android:layout_alignParentBottom="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
-        </RelativeLayout>
 
+        </RelativeLayout>
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -51,26 +52,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="24dp"/>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <ImageButton
+                android:id="@+id/ibSave"
+                android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:orientation="horizontal"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true">
-                <ImageButton
-                    android:id="@+id/ibSave"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:paddingRight="8dp"
-                    android:background="@android:color/white"
-                    app:srcCompat="@drawable/ic_bookmark_activity_normal" />
-                <ImageButton
-                    android:id="@+id/ibAdd"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:background="@android:color/white"
-                    app:srcCompat="@drawable/ic_add_activity_normal" />
-            </LinearLayout>
+                android:background="@android:color/white"
+                app:srcCompat="@drawable/ic_bookmark_activity_normal" />
 
         </RelativeLayout>
 
