@@ -64,9 +64,11 @@ public class LoginActivity extends AppCompatActivity {
 
     private void addFacebookLoginDataToSharedPreferences() {
         Profile profile = Profile.getCurrentProfile();
-        SharedPreferenceUtils.setCurrentUserName(this, profile.getName());
-        SharedPreferenceUtils.setCurrentUserImageProfileUri(
-                this, profile.getProfilePictureUri(200, 200).toString());
+        if (profile != null) {
+            SharedPreferenceUtils.setCurrentUserName(this, profile.getName());
+            SharedPreferenceUtils.setCurrentUserImageProfileUri(
+                    this, profile.getProfilePictureUri(200, 200).toString());
+        }
     }
 
     @Override
