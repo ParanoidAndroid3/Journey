@@ -6,15 +6,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.databinding.ItemJourneyBinding;
 import com.paranoidandroid.journey.models.Destination;
@@ -117,7 +111,6 @@ public class JourneyAdapter extends RecyclerView.Adapter<JourneyAdapter.ViewHold
         String imageReference = destination.getCachedImageReference();
 
         if (imageReference == null) {
-            holder.binding.ivScrim.setVisibility(View.INVISIBLE);
             String placeId = destination.getGooglePlaceId();
             GooglePlace.getPlaceImageAsync(placeId, new GooglePlace.OnImageReferenceReadyHandler() {
                 @Override
@@ -135,12 +128,9 @@ public class JourneyAdapter extends RecyclerView.Adapter<JourneyAdapter.ViewHold
 
         } else {
             // We can use the cached URL.
-            SimpleTarget<GlideDrawable> target = new BackdropTarget(
-                    holder.binding.ivBackdrop, holder.binding.ivScrim);
-
-            // TODO: maxWidth should be the current screen width.
+            // TODO: screenWidth should be the current screen width.
             String imageUrl = GooglePlace.makeImageUrl(imageReference, screenWidth);
-            Glide.with(context).load(imageUrl).into(target);
+            Glide.with(context).load(imageUrl).into(holder.binding.ivBackdrop);
         }
     }
 
@@ -163,30 +153,6 @@ public class JourneyAdapter extends RecyclerView.Adapter<JourneyAdapter.ViewHold
         if (listener != null) {
             Journey journey = items.get(position);
             listener.onItemSelected(journey);
-        }
-    }
-
-    /**
-     * Loads the scrim at the same when an Glide finishes loading an image.
-     */
-    private static class BackdropTarget extends SimpleTarget<GlideDrawable> {
-        ImageView backdrop;
-        ImageView scrim;
-        Animation fadeIn = new AlphaAnimation(0.0f, 1.0f);
-
-        BackdropTarget(ImageView backdrop, ImageView scrim) {
-            this.backdrop = backdrop;
-            this.scrim = scrim;
-            fadeIn.setDuration(500);
-        }
-
-        @Override
-        public void onResourceReady(GlideDrawable resource,
-                GlideAnimation<? super GlideDrawable> glideAnimation) {
-            backdrop.setImageDrawable(resource.getCurrent());
-            backdrop.startAnimation(fadeIn);
-            scrim.startAnimation(fadeIn);
-            scrim.setVisibility(View.VISIBLE);
         }
     }
 }
