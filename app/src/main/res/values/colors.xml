@@ -15,6 +15,7 @@
     <color name="colorTagPressed">#649182</color>
 
     <color name="listBackgroundColor">#EFEFEF</color>
+    <color name="darkTranslucent">#BB000000</color>
 
     <!-- To support android versions < 21 -->
     <color name="textColorPrimary">?android:attr/textColorPrimary</color>
