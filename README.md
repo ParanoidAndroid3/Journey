@@ -5,30 +5,28 @@
 
 The following **required** functionality is completed:
 
-* [ ] User can log into the app using a Google or Facebook account
-   * [X] Facebook account login
+* [X] User can log into the app using a Google or Facebook account
 * [X] Users can view a list of all Journeys created by them with general information about the legs.
 * [ ] User can create a new Journey by specifying the following:
    * [X] Journey name
    * [X] Journey legs - destination and start/end dates (partial)
    * [X] Journey tags - {solo, couple, group, family} & {adventure, relaxation, budget, luxury, foodie, culture}
 * [X] Once journey is created, user is navigated to a *map-view* of the trip. Map view contains pins for each leg of the trip
-* [X] User can *flip* over the map view to see a calendar view of the trip.
-* [X] User can view up to (3) days with all activities that have been added. The user will be able to select the day to view by selecting it.
+* [X] User can *swipe off* the map view to see a calendar view of the trip.
+* [X] User can view a view pager for days with all activities that have been added. The user will be able to select the day to view by selecting it.
 * [X] A Drawer will contain items to navigate to the list of all journeys, edit legs, edit tags, and edit the current journey's name.
 * [ ] User can add / remove a leg of the trip. Information will be saved on the server.
 * [X] User can add / remove custom activities to/from a specific day. Information will be saved on the server.
-* [ ] User can add / remove an activity from the recommendation page to/from a specific day. Information will be saved on the server.
-* [ ] The recommendations page will contain tabs with several activity categories that the user can navigate, and a grid of suggestions below. Suggestions will be populated using popular related APIs (like Google Places)
+* [X] User can add / remove an activity from the recommendation page to/from a specific day. Information will be saved on the server.
+* [X] The recommendations page will contain tabs with several activity categories that the user can navigate, and a grid of suggestions below. Suggestions will be populated using popular related APIs (like Google Places)
 
 The following **optional** features are implemented:
 
 * [ ] User can register for a new account
 * [ ] User can login to the app using credentials specified during registration
-* [ ] User can *flip-over* a day-screen in the leg planner to see a zoomed in view of the map. This view contains destinations for a single day in the journey.
-* [ ] Users can pin/star recommendations; these pinned items are visible in a separate list in the recommendations section to be added later to a day
-* [ ] User can add multiple recommendations at once by tapping each to select/unselect
-  * [ ] Show a status bar indicating the total number of recommendations currently selected
+* [X] User can see a zoomed in view of the map. This view contains destinations for a single day in the journey.
+* [X] Users can pin/star recommendations; these pinned items are visible in a separate list to be added later to a day
+* [X] User can bookmark multiple recommendations at once by tapping each to select/unselect
 * [ ] User can add photos/comments to each leg of the trip
 * [ ] User can take a photo directly from the app
 
