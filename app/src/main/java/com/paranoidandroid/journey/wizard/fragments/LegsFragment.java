@@ -127,7 +127,7 @@ public class LegsFragment extends WizardFragment {
         ParseQuery<Journey> query = ParseQuery.getQuery(Journey.class);
         query.include("legs");
         query.include("legs.destination");
-        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
+        query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ONLY);
         query.getInBackground(journeyId, new GetCallback<Journey>() {
             public void done(final Journey journey, ParseException e) {
                 if (e == null) {
