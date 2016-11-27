@@ -67,10 +67,6 @@ public class WizardActivity extends BaseWizardActivity implements View.OnClickLi
         }
     }
 
-    public void onWizardExit(View view) {
-        finish();
-    }
-
     /**
      * Returns true if all necessary data is present
      */

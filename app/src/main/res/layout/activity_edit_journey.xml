@@ -7,6 +7,11 @@
     android:fitsSystemWindows="true"
     tools:context="com.paranoidandroid.journey.wizard.activities.WizardActivity">
 
+    <FrameLayout
+        android:id="@+id/flContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <ImageButton
         android:id="@+id/btnExit"
         android:layout_width="40dp"

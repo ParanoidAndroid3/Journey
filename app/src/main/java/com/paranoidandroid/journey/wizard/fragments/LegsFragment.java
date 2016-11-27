@@ -68,10 +68,9 @@ public class LegsFragment extends WizardFragment {
         } else {
             adapter = new LegsArrayAdapter(getContext(), new ArrayList<Leg>(), listener);
             listener.enableFab(false);
+            rvLegs.setAdapter(adapter);
+            rvLegs.setLayoutManager(new LinearLayoutManager(getContext()));
         }
-
-        rvLegs.setAdapter(adapter);
-        rvLegs.setLayoutManager(new LinearLayoutManager(getContext()));
 
         atvPlaces = (AutoCompleteTextView) v.findViewById(R.id.atvPlaces);
         atvPlaces.setThreshold(1);
@@ -127,12 +126,15 @@ public class LegsFragment extends WizardFragment {
     private void loadJourneyLegs(String journeyId) {
         ParseQuery<Journey> query = ParseQuery.getQuery(Journey.class);
         query.include("legs");
+        query.include("legs.destination");
         query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
         query.getInBackground(journeyId, new GetCallback<Journey>() {
             public void done(final Journey journey, ParseException e) {
                 if (e == null) {
                     adapter = new LegsArrayAdapter(getContext(), journey.getLegs(), listener);
                     listener.enableFab(true);
+                    rvLegs.setAdapter(adapter);
+                    rvLegs.setLayoutManager(new LinearLayoutManager(getContext()));
                 } else {
                     e.printStackTrace();
                 }

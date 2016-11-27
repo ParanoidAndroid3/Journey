@@ -53,6 +53,12 @@
         </activity>
 
         <activity
+            android:name=".wizard.activities.EditJourneyActivity"
+            android:noHistory="true"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+
+        <activity
             android:name=".splash.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>

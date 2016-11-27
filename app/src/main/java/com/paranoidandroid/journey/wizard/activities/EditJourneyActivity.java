@@ -4,14 +4,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.widget.Toast;
 
 import com.paranoidandroid.journey.R;
-import com.paranoidandroid.journey.models.Journey;
-import com.parse.GetCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
+import com.paranoidandroid.journey.wizard.fragments.LegsFragment;
+import com.paranoidandroid.journey.wizard.fragments.NameFragment;
+import com.paranoidandroid.journey.wizard.fragments.TagsFragment;
+import com.paranoidandroid.journey.wizard.fragments.WizardFragment;
+
+import java.util.Map;
 
 import static com.loopj.android.http.AsyncHttpClient.log;
 
@@ -28,11 +31,12 @@ public class EditJourneyActivity extends BaseWizardActivity implements View.OnCl
     public static final int EDIT_MODE_LEGS = 1;
     public static final int EDIT_MODE_TAGS = 2;
 
-    public static final String EXTRA_JOURNEY_ID = "com.paranoidandroid.journey.JOURNEY_ID";
-    public static final String EXTRA_EDIT_MODE = "com.paranoidandroid.journey.EDIT_MODE";
+    private static final String EXTRA_JOURNEY_ID = "com.paranoidandroid.journey.JOURNEY_ID";
+    private static final String EXTRA_EDIT_MODE = "com.paranoidandroid.journey.EDIT_MODE";
 
-    private Journey mJourney;
+    private String journeyId;
     private int editMode;
+    private boolean changed;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -40,43 +44,44 @@ public class EditJourneyActivity extends BaseWizardActivity implements View.OnCl
         setContentView(R.layout.activity_edit_journey);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setClickable(false); // todo: remove?
         fab.setOnClickListener(this);
 
+        changed = false;
+
         Bundle extras = getIntent().getExtras();
-        String journeyId = null;
 
-        if (extras != null) {
-            editMode = extras.getInt(EXTRA_EDIT_MODE);
-            journeyId = extras.getString(EXTRA_JOURNEY_ID, null);
-        }
+        editMode = extras.getInt(EXTRA_EDIT_MODE, -1);
+        journeyId = extras.getString(EXTRA_JOURNEY_ID, null);
 
-        if (journeyId != null) {
-            fetchJourney(journeyId);
+        if (journeyId != null && editMode != -1) {
             addFragment();
         } else {
             log.e(TAG, "Could not find journey id for editing");
         }
     }
 
-    private void fetchJourney(String journeyId)  {
-        if (journeyId.isEmpty()) {
-            return;
-        }
-        ParseQuery<Journey> query = Journey.createQuery();
-        query.getInBackground(journeyId, new GetCallback<Journey>() {
-            public void done(final Journey journey, ParseException e) {
-                if (e == null) {
-                    mJourney = journey;
-                } else {
-                    e.printStackTrace();
-                }
-            }
-        });
+    @Override
+    public void updateJourneyData(Map<String, Object> data) {
+        changed = true;
+        super.updateJourneyData(data);
     }
 
     private void addFragment() {
-        // todo: populate screen with fragment
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        WizardFragment fragment = null;
+        switch (editMode) {
+            case EDIT_MODE_TITLE:
+                fragment = NameFragment.newInstance(journeyId);
+                break;
+            case EDIT_MODE_LEGS:
+                fragment = LegsFragment.newInstance(journeyId);
+                break;
+            case EDIT_MODE_TAGS:
+                fragment = TagsFragment.newInstance(journeyId);
+                break;
+        }
+
+        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
     }
 
     @Override
@@ -84,18 +89,20 @@ public class EditJourneyActivity extends BaseWizardActivity implements View.OnCl
         boolean success = false;
         switch (editMode) {
             case EDIT_MODE_TITLE:
-                success = nameComplete();
+                success = !changed || nameComplete();
                 break;
             case EDIT_MODE_LEGS:
-                success = legsComplete();
+                success = !changed || legsComplete();
                 break;
             case EDIT_MODE_TAGS:
-                success = tagsComplete();
+                success = !changed || tagsComplete();
                 break;
         }
 
         if (success) {
-            // todo: save & end activity
+            Toast.makeText(this, "Saving data!", Toast.LENGTH_LONG).show();
+            // todo: save data
+            finish();
         } else {
             Toast.makeText(this, "Missing data. Please fill out form", Toast.LENGTH_LONG).show();
         }
@@ -103,7 +110,7 @@ public class EditJourneyActivity extends BaseWizardActivity implements View.OnCl
     }
 
     public static Intent createEditIntent(Context context, String journeyId, int editMode) {
-        Intent intent = new Intent(context, WizardActivity.class);
+        Intent intent = new Intent(context, EditJourneyActivity.class);
         intent.putExtra(EXTRA_JOURNEY_ID, journeyId);
         intent.putExtra(EXTRA_EDIT_MODE, editMode);
         return intent;

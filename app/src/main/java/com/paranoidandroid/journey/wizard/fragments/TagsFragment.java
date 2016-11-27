@@ -61,12 +61,13 @@ public class TagsFragment extends WizardFragment {
                 loadJourneyData(journeyId);
             } else {
                 listener.enableFab(false);
+                setupStates();
             }
         } else {
             listener.enableFab(false);
+            setupStates();
         }
 
-        setupStates();
         setupListeners();
         return v;
     }
@@ -78,6 +79,7 @@ public class TagsFragment extends WizardFragment {
             public void done(final Journey journey, ParseException e) {
                 if (e == null) {
                     populateMapsFromJourney(journey);
+                    setupStates();
                     listener.enableFab(true);
                 } else {
                     e.printStackTrace();
