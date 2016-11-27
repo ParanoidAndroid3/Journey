@@ -7,13 +7,18 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.model.LatLng;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.models.Bookmark;
 import com.paranoidandroid.journey.models.Leg;
+import com.paranoidandroid.journey.models.ui.GooglePlace;
 import com.paranoidandroid.journey.models.ui.Recommendation;
+import com.paranoidandroid.journey.network.GooglePlaceSearchClient;
 import com.paranoidandroid.journey.recommendations.adapters.RecommendationsPagerAdapter;
 import com.paranoidandroid.journey.recommendations.interfaces.RecommendationActivityListener;
 import com.parse.GetCallback;
@@ -21,6 +26,7 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
+import org.json.JSONObject;
 import org.parceler.Parcel;
 
 import java.util.Arrays;
@@ -30,6 +36,7 @@ import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cz.msebera.android.httpclient.Header;
 
 public class RecommendationsActivity extends AppCompatActivity implements
         RecommendationActivityListener {
@@ -38,6 +45,7 @@ public class RecommendationsActivity extends AppCompatActivity implements
     @BindView(R.id.viewpager) ViewPager pager;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.tvCity) TextView tvCity;
+    @BindView(R.id.ivBackdrop) ImageView ivBackdrop;
 
     private RecommendationsPagerAdapter adapter;
     private Leg leg;
@@ -81,13 +89,32 @@ public class RecommendationsActivity extends AppCompatActivity implements
                     leg = object;
                     setupTabs();
                     tvCity.setText(leg.getDestination().getCityName());
-                    // TODO: add image to app bar
+                    loadPhotoFromGooglePlaceId(leg.getDestination().getGooglePlaceId());
                 } else {
                     e.printStackTrace();
                     Snackbar.make(tabLayout, "Error loading recommendations!", Snackbar.LENGTH_SHORT).show();
                 }
             }
         });
+    }
+
+    // Get backdrop image from Google Place API using the Place ID saved in Leg
+
+    private void loadPhotoFromGooglePlaceId(final String googlePlaceId) {
+        GooglePlaceSearchClient.findDetails(googlePlaceId, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                GooglePlace googlePlace = GooglePlace.parsePlaceDetails(response);
+                if (googlePlace != null)
+                    loadBackdrop(googlePlace.getImageUrl());
+            }
+        });
+    }
+
+    private void loadBackdrop(String url) {
+        if (url != null) {
+            Glide.with(this).load(url).centerCrop().into(ivBackdrop);
+        }
     }
 
     // RecommendationActivityListener implementation
