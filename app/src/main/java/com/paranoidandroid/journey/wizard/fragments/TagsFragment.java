@@ -74,7 +74,7 @@ public class TagsFragment extends WizardFragment {
 
     private void loadJourneyData(String journeyId) {
         ParseQuery<Journey> query = ParseQuery.getQuery(Journey.class);
-        query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ONLY);
+        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
         query.getInBackground(journeyId, new GetCallback<Journey>() {
             public void done(final Journey journey, ParseException e) {
                 if (e == null) {
