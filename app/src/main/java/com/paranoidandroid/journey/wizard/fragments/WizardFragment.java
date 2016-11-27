@@ -3,6 +3,8 @@ package com.paranoidandroid.journey.wizard.fragments;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 
+import com.paranoidandroid.journey.models.Journey;
+
 import java.util.Map;
 
 /**
@@ -32,6 +34,10 @@ public abstract class WizardFragment extends Fragment {
         void updateJourneyData(Map<String, Object> data);
 
         void enableFab(boolean enable);
+
+        void setJourney(Journey journey);
+
+        Journey getJourney();
 
     }
 

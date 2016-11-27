@@ -78,6 +78,7 @@ public class TagsFragment extends WizardFragment {
         query.getInBackground(journeyId, new GetCallback<Journey>() {
             public void done(final Journey journey, ParseException e) {
                 if (e == null) {
+                    listener.setJourney(journey);
                     populateMapsFromJourney(journey);
                     setupStates();
                     listener.enableFab(true);
@@ -149,6 +150,8 @@ public class TagsFragment extends WizardFragment {
             for (Button button : tagButtons) {
                 if (tagStates.get(button.getText().toString())) {
                     turnOn(tagStates, button);
+                } else {
+                    turnOff(tagStates, button);
                 }
             }
         }
@@ -161,6 +164,8 @@ public class TagsFragment extends WizardFragment {
             for (Button button : sizeButtons) {
                 if (sizeStates.get(button.getText().toString())) {
                     turnOn(sizeStates, button);
+                } else {
+                    turnOff(sizeStates, button);
                 }
             }
         }

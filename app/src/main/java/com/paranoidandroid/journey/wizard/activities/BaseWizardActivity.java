@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.paranoidandroid.journey.R;
+import com.paranoidandroid.journey.models.Journey;
 import com.paranoidandroid.journey.models.Leg;
 import com.paranoidandroid.journey.wizard.fragments.WizardFragment;
 import com.paranoidandroid.journey.wizard.utils.JourneyBuilder;
@@ -25,10 +26,13 @@ public abstract class BaseWizardActivity extends AppCompatActivity implements Wi
     protected Map<String, Object> journeyData;
     protected FloatingActionButton fab;
 
+    protected Journey journey;
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         journeyData = new HashMap<>();
+        journey = null;
     }
 
     public void onExit(View view) {
@@ -82,6 +86,16 @@ public abstract class BaseWizardActivity extends AppCompatActivity implements Wi
         int resource = enable ? R.color.colorFabEnabled : R.color.colorFabDisabled;
         int color = getResources().getColor(resource);
         fab.setBackgroundTintList(ColorStateList.valueOf(color));
+    }
+
+    @Override
+    public void setJourney(Journey journey) {
+        this.journey = journey;
+    }
+
+    @Override
+    public Journey getJourney() {
+        return this.journey;
     }
 
 }

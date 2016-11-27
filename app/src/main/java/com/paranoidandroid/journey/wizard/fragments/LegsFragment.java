@@ -66,7 +66,7 @@ public class LegsFragment extends WizardFragment {
                 listener.enableFab(false);
             }
         } else {
-            adapter = new LegsArrayAdapter(getContext(), new ArrayList<Leg>(), listener);
+            adapter = new LegsArrayAdapter(getContext(), new ArrayList<Leg>(), listener, false);
             listener.enableFab(false);
             rvLegs.setAdapter(adapter);
             rvLegs.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -131,7 +131,8 @@ public class LegsFragment extends WizardFragment {
         query.getInBackground(journeyId, new GetCallback<Journey>() {
             public void done(final Journey journey, ParseException e) {
                 if (e == null) {
-                    adapter = new LegsArrayAdapter(getContext(), journey.getLegs(), listener);
+                    listener.setJourney(journey);
+                    adapter = new LegsArrayAdapter(getContext(), journey.getLegs(), listener, true);
                     listener.enableFab(true);
                     rvLegs.setAdapter(adapter);
                     rvLegs.setLayoutManager(new LinearLayoutManager(getContext()));

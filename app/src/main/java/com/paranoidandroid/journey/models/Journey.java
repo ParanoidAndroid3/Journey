@@ -65,6 +65,7 @@ public class Journey extends ParseObject {
     }
 
     public void setTripTags(List<String> tags) {
+        remove(KEY_TRIP_TAGS);
         put(KEY_TRIP_TAGS, tags);
     }
 

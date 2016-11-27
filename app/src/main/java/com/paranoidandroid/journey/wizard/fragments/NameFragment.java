@@ -81,6 +81,7 @@ public class NameFragment extends WizardFragment {
         query.getInBackground(journeyId, new GetCallback<Journey>() {
             public void done(final Journey journey, ParseException e) {
                 if (e == null) {
+                    listener.setJourney(journey);
                     etName.setText(journey.getName());
                     listener.enableFab(true);
                 } else {

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -13,11 +14,9 @@ import com.paranoidandroid.journey.wizard.fragments.LegsFragment;
 import com.paranoidandroid.journey.wizard.fragments.NameFragment;
 import com.paranoidandroid.journey.wizard.fragments.TagsFragment;
 import com.paranoidandroid.journey.wizard.fragments.WizardFragment;
+import com.paranoidandroid.journey.wizard.utils.JourneyBuilder;
 
 import java.util.Map;
-
-import static com.loopj.android.http.AsyncHttpClient.log;
-
 
 /**
  * Created by epushkarskaya on 11/27/16.
@@ -56,7 +55,7 @@ public class EditJourneyActivity extends BaseWizardActivity implements View.OnCl
         if (journeyId != null && editMode != -1) {
             addFragment();
         } else {
-            log.e(TAG, "Could not find journey id for editing");
+            Log.e(TAG, "Could not find journey id for editing");
         }
     }
 
@@ -89,24 +88,66 @@ public class EditJourneyActivity extends BaseWizardActivity implements View.OnCl
         boolean success = false;
         switch (editMode) {
             case EDIT_MODE_TITLE:
-                success = !changed || nameComplete();
+                success = handleNameChange();
                 break;
             case EDIT_MODE_LEGS:
-                success = !changed || legsComplete();
+                success = handleLegsChange();
                 break;
             case EDIT_MODE_TAGS:
-                success = !changed || tagsComplete();
+                success = handleTagsChange();
                 break;
         }
 
         if (success) {
             Toast.makeText(this, "Saving data!", Toast.LENGTH_LONG).show();
-            // todo: save data
             finish();
         } else {
             Toast.makeText(this, "Missing data. Please fill out form", Toast.LENGTH_LONG).show();
         }
+    }
 
+    private boolean handleNameChange() {
+        if (!changed) {
+            return true;
+        }
+
+        if (!nameComplete()) {
+            return false;
+        }
+
+        JourneyBuilder.setName(journey, journeyData);
+        journey.saveInBackground();
+
+        return true;
+    }
+
+    private boolean handleLegsChange() {
+        if (!changed) {
+            return true;
+        }
+
+        if (!legsComplete()) {
+            return false;
+        }
+
+        journey.saveInBackground();
+
+        return true;
+    }
+
+    private boolean handleTagsChange() {
+        if (!changed) {
+            return true;
+        }
+
+        if (!tagsComplete()) {
+            return false;
+        }
+
+        JourneyBuilder.setTags(journey, journeyData);
+        journey.saveInBackground();
+
+        return true;
     }
 
     public static Intent createEditIntent(Context context, String journeyId, int editMode) {
