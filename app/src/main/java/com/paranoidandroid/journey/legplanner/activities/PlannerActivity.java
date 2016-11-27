@@ -1,5 +1,7 @@
 package com.paranoidandroid.journey.legplanner.activities;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -26,6 +28,8 @@ import android.widget.TextView;
 import android.view.animation.AnimationUtils;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.paranoidandroid.journey.R;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.maps.MapView;
@@ -70,6 +74,8 @@ public class PlannerActivity extends AppCompatActivity implements
         DayPlannerListener,
         MapEventListener {
 
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 1979;
+
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.appbar) AppBarLayout appBar;
     @BindView(R.id.menu_yellow) FloatingActionMenu floatingMenu;
@@ -94,11 +100,13 @@ public class PlannerActivity extends AppCompatActivity implements
         setupDrawer();
         setupFabs();
     }
-
+    
     @Override
     protected void onResume() {
         super.onResume();
-        fetchJourney();
+        if (checkPlayServices()) {
+            fetchJourney();
+        }
     }
 
     private void fetchJourney() {
@@ -428,5 +436,27 @@ public class PlannerActivity extends AppCompatActivity implements
 
     private DayPlannerFragment getDayPlannerFragment() {
         return ((DayPlannerFragment) getSupportFragmentManager().findFragmentById(R.id.legs));
+    }
+
+    // Exit the activity if Google Play Services are not installed
+    
+    private boolean checkPlayServices() {
+        GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
+        int result = googleAPI.isGooglePlayServicesAvailable(this);
+        if(result != ConnectionResult.SUCCESS) {
+            if(googleAPI.isUserResolvableError(result)) {
+                Dialog dialog = googleAPI.getErrorDialog(this, result,
+                        PLAY_SERVICES_RESOLUTION_REQUEST);
+                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        finish();
+                    }
+                });
+                dialog.show();
+            }
+            return false;
+        }
+        return true;
     }
 }
