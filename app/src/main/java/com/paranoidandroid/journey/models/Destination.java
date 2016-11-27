@@ -13,6 +13,7 @@ public class Destination extends ParseObject {
     private static final String KEY_DISPLAY_NAME = "displayName";
     private static final String KEY_COUNTRY_NAME = "countryName";
     private static final String KEY_GEO_POINT = "geoPoint";
+    private static final String KEY_GOOGLE_PLACE_ID = "googlePlaceId";
 
     public Destination() {
     }
@@ -68,5 +69,13 @@ public class Destination extends ParseObject {
             return geo.getLongitude();
         }
         return 0;
+    }
+
+    public void setGooglePlaceId(String id) {
+        put(KEY_GOOGLE_PLACE_ID, id);
+    }
+
+    public String getGooglePlaceId() {
+        return getString(KEY_GOOGLE_PLACE_ID);
     }
 }
