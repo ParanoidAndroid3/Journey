@@ -48,7 +48,6 @@
 
         <activity
             android:name=".wizard.activities.WizardActivity"
-            android:label="@string/title_activity_wizard"
             android:noHistory="true"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
