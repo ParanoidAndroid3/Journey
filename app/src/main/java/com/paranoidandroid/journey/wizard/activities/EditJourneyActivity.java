@@ -99,7 +99,6 @@ public class EditJourneyActivity extends BaseWizardActivity implements View.OnCl
         }
 
         if (success) {
-            Toast.makeText(this, "Saving data!", Toast.LENGTH_LONG).show();
             finish();
         } else {
             Toast.makeText(this, "Missing data. Please fill out form", Toast.LENGTH_LONG).show();
