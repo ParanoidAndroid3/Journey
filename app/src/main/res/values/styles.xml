@@ -119,11 +119,6 @@
 
     <style name="TitleOverImage" parent="TextAppearance.AppCompat.Inverse">
         <item name="android:textSize">18sp</item>
-        <item name="android:background">@color/darkTranslucent</item>
-        <item name="android:paddingStart">3dp</item>
-        <item name="android:paddingEnd">5dp</item>
-        <item name="android:paddingTop">0dp</item>
-        <item name="android:paddingBottom">3dp</item>
         <item name="android:textStyle">normal|bold</item>
         <item name="android:ellipsize">end</item>
         <item name="android:maxLines">1</item>

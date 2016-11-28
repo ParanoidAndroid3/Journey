@@ -6,9 +6,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.databinding.ItemJourneyBinding;
 import com.paranoidandroid.journey.models.Destination;
@@ -110,9 +116,12 @@ public class JourneyAdapter extends RecyclerView.Adapter<JourneyAdapter.ViewHold
         Destination destination = journey.getLegs().get(0).getDestination();
         String imageReference = destination.getGoogleImageReference();
         if (imageReference != null) {
+            SimpleTarget<GlideDrawable> target = new BackdropTarget(
+                    holder.binding.ivBackdrop, holder.binding.ivScrim);
+
             // TODO: screenWidth should be the current screen width.
             String imageUrl = GooglePlace.makeImageUrl(imageReference, screenWidth);
-            Glide.with(context).load(imageUrl).into(holder.binding.ivBackdrop);
+            Glide.with(context).load(imageUrl).into(target);
         }
     }
 
@@ -127,6 +136,25 @@ public class JourneyAdapter extends RecyclerView.Adapter<JourneyAdapter.ViewHold
         notifyDataSetChanged();
     }
 
+    public Journey get(int position) {
+        return items.get(position);
+    }
+
+    public int indexOf(String itemId) {
+        for (int i = 0; i < items.size(); i++) {
+            Journey j = items.get(i);
+            if (j.getObjectId().equals(itemId))
+                return i;
+        }
+        return -1;
+    }
+
+    public Journey remove(int position) {
+        Journey oldValue = items.remove(position);
+        notifyItemRemoved(position);
+        return oldValue;
+    }
+
     public void setOnJourneySelectedListener(OnItemSelectedListener listener) {
         this.listener = listener;
     }
@@ -135,6 +163,31 @@ public class JourneyAdapter extends RecyclerView.Adapter<JourneyAdapter.ViewHold
         if (listener != null) {
             Journey journey = items.get(position);
             listener.onItemSelected(journey);
+        }
+    }
+
+    /**
+     * Loads the scrim at the same when an Glide finishes loading an image.
+     */
+    private static class BackdropTarget extends SimpleTarget<GlideDrawable> {
+        ImageView backdrop;
+        ImageView scrim;
+        Animation fadeIn = new AlphaAnimation(0.0f, 1.0f);
+
+        BackdropTarget(ImageView backdrop, ImageView scrim) {
+            this.backdrop = backdrop;
+            this.scrim = scrim;
+            fadeIn.setDuration(500);
+            scrim.setVisibility(View.INVISIBLE);
+        }
+
+        @Override
+        public void onResourceReady(GlideDrawable resource,
+                GlideAnimation<? super GlideDrawable> glideAnimation) {
+            backdrop.setImageDrawable(resource.getCurrent());
+            backdrop.startAnimation(fadeIn);
+            scrim.startAnimation(fadeIn);
+            scrim.setVisibility(View.VISIBLE);
         }
     }
 }

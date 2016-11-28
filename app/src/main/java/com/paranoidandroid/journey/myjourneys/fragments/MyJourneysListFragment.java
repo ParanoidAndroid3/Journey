@@ -2,19 +2,19 @@ package com.paranoidandroid.journey.myjourneys.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.paranoidandroid.journey.models.Journey;
 import com.paranoidandroid.journey.myjourneys.adapters.JourneyAdapter;
+import com.paranoidandroid.journey.support.ui.ItemClickSupport;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -26,9 +26,11 @@ import java.util.List;
 /**
  * Load and display a list of the user's journey's.
  */
-public class MyJourneysListFragment extends Fragment
-        implements JourneyAdapter.OnItemSelectedListener{
+public class MyJourneysListFragment extends Fragment implements
+        JourneyAdapter.OnItemSelectedListener,
+        DeleteConfirmationDialogFragment.OnDeleteListener {
     private static final String TAG = "MyJourneysListFragment";
+    private static final int REQUEST_CODE = 300;
 
     public interface OnJourneySelectedListener {
         void onJourneySelected(Journey journey);
@@ -64,6 +66,16 @@ public class MyJourneysListFragment extends Fragment
         binding.rvJourneys.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.rvJourneys.setAdapter(adapter);
         binding.rvJourneys.getItemAnimator().setChangeDuration(0);
+
+        ItemClickSupport.addTo(binding.rvJourneys).setOnItemLongClickListener(
+                new ItemClickSupport.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClicked(RecyclerView recyclerView, int position, View v) {
+                deleteJourneyAtPosition(position);
+                return true;
+            }
+        });
+
         binding.setListener(listener);
     }
 
@@ -94,6 +106,26 @@ public class MyJourneysListFragment extends Fragment
     public void onItemSelected(Journey journey) {
         if (listener != null) {
             listener.onJourneySelected(journey);
+        }
+    }
+
+    private void deleteJourneyAtPosition(int position) {
+        Journey item = adapter.get(position);
+        FragmentManager fm = getFragmentManager();
+        DeleteConfirmationDialogFragment fragment = DeleteConfirmationDialogFragment
+                .newInstance(item.getName(), item.getObjectId());
+        fragment.setTargetFragment(this, REQUEST_CODE);
+        fragment.show(fm, "delete_confirmation");
+    }
+
+    @Override
+    public void onDelete(String journeyId) {
+        int position = adapter.indexOf(journeyId);
+        if (position != -1) {
+            Journey journey = adapter.remove(position);
+            journey.deleteEventually();
+        } else {
+            Log.e(TAG, "Tried to delete non-existent Journey(" + journeyId + ")");
         }
     }
 
