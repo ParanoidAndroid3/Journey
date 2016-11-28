@@ -20,6 +20,7 @@ import com.paranoidandroid.journey.wizard.adapters.WizardPagerAdapter;
 import com.paranoidandroid.journey.wizard.fragments.WizardFragment;
 import com.paranoidandroid.journey.wizard.utils.JourneyBuilder;
 import com.parse.ParseException;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.util.HashMap;
@@ -167,7 +168,8 @@ public class WizardActivity extends AppCompatActivity implements WizardFragment.
         if (currentFragment < 2) {
             goToNextFragment(currentFragment);
         } else if (readyToPublish()) {
-            final Journey journey = JourneyBuilder.buildJourney(journeyData);
+            ParseUser creator = ParseUser.getCurrentUser();
+            final Journey journey = JourneyBuilder.buildJourney(creator, journeyData);
             journey.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {

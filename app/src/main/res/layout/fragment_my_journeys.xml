@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="listener"
-            type="com.paranoidandroid.journey.myjourneys.fragments.MyJourneysListFragment.OnJourneySelectedListener" />
+            type="com.paranoidandroid.journey.myjourneys.fragments.MyJourneysListFragment.OnJourneySelectedListener"/>
     </data>
 
     <RelativeLayout
@@ -23,33 +24,35 @@
             android:visibility="gone">
 
             <TextView
-                android:text="@string/no_journeys_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/btnCreateJourney"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="@dimen/empty_journeys_title_margin"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                android:text="@string/no_journeys_label"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
 
             <Button
                 android:id="@+id/btnCreateJourney"
-                android:text="@string/create_new_journey_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:onClick="@{v -> listener.onCreateNewJourney()}"/>
+                android:onClick="@{v -> listener.onCreateNewJourney()}"
+                android:text="@string/create_new_journey_label"/>
         </RelativeLayout>
 
-        <ProgressBar
+        <android.support.v4.widget.ContentLoadingProgressBar
             android:id="@+id/pbInitialLoad"
-            android:layout_centerInParent="true"
+            style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvJourneys"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            style="@style/ListStyle">
         </android.support.v7.widget.RecyclerView>
     </RelativeLayout>
 </layout>
