@@ -4,6 +4,7 @@ import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
+import com.parse.ParseUser;
 
 import java.util.Date;
 import java.util.List;
@@ -34,25 +35,25 @@ public class Journey extends ParseObject {
         return getString(KEY_NAME);
     }
 
-    public void setCreator(User creator) {
+    public void setCreator(ParseUser creator) {
         put(KEY_CREATOR, creator);
     }
 
-    public User getCreator() {
-        return (User) getParseUser(KEY_CREATOR);
+    public ParseUser getCreator() {
+        return getParseUser(KEY_CREATOR);
     }
 
-    public void addCollaborator(User collaborator) {
+    public void addCollaborator(ParseUser collaborator) {
         getCollaboratorsRelation().add(collaborator);
         saveInBackground();
     }
 
-    public void removeCollaborator(User collaborator) {
+    public void removeCollaborator(ParseUser collaborator) {
         getCollaboratorsRelation().remove(collaborator);
         saveInBackground();
     }
 
-    public ParseRelation<User> getCollaboratorsRelation() {
+    public ParseRelation<ParseUser> getCollaboratorsRelation() {
         return getRelation(KEY_COLLABORATORS);
     }
 
@@ -104,13 +105,21 @@ public class Journey extends ParseObject {
         return null;
     }
 
-    public static ParseQuery<Journey> createQuery() {
+    public static ParseQuery<Journey> createQuery(ParseUser creator) {
         ParseQuery<Journey> query = ParseQuery.getQuery(Journey.class);
         query.include("legs");
         query.include("legs.destination");
         query.include("legs.activities");
         query.include("legs.bookmarks");
+        query.orderByDescending("createdAt");
         query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ELSE_CACHE);
+        if (creator != null) {
+            query.whereEqualTo(KEY_CREATOR, creator);
+        }
         return query;
+    }
+
+    public static ParseQuery<Journey> createQuery() {
+        return createQuery(null);
     }
 }
