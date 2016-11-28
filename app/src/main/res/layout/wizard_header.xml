@@ -8,8 +8,8 @@
     <ImageView
         android:id="@+id/ivHeader"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:src="@drawable/wizard_gradient"
+        android:layout_height="200dp"
+        android:src="@drawable/wizard_header_gradient"
         android:layout_alignParentTop="true"
         android:scaleType="centerCrop"/>
 

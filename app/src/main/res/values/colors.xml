@@ -1,20 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimaryLight">#a2c4d6</color>
-    <color name="colorPrimary">#649cba</color>
-    <color name="colorPrimaryDark">#256486</color>
-    <color name="colorAccent">#e7ddb0</color>
-    <color name="colorAccentLight">#efede5</color>
+    <color name="colorPrimaryLight">#a2d2d9</color>
+    <color name="colorPrimary">#48bece</color>
+    <color name="colorPrimaryDark">#146a76</color>
+
+    <color name="colorAccent">#607D8B</color>
+    <color name="colorAccentLight">#e1e1e1</color>
+
+    <color name="colorTextIcons">#FFFF</color>
+    <color name="colorDivider">#BDBDBD</color>
+
+    <color name="colorPrimaryText">#212121</color>
+    <color name="colorSecondaryText">#757575</color>
+
 
     <!-- fab disabled/enabled -->
     <color name="colorFabEnabled">@color/colorAccent</color>
     <color name="colorFabDisabled">@color/colorAccentLight</color>
 
-    <color name="colorWizardPrompt">@color/colorAccentLight</color>
-    <color name="colorWizardName">#112d3d</color>
+    <color name="colorWizardPrompt">@color/colorTextIcons</color>
+    <color name="colorWizardName">@color/colorPrimaryText</color>
 
-    <color name="colorTagNotPressed">@color/colorPrimaryLight</color>
-    <color name="colorTagPressed">@color/colorPrimary</color>
+    <color name="colorTagNotPressed">@color/colorAccentLight</color>
+    <color name="colorTagPressed">@color/colorAccent</color>
 
     <!-- To support android versions < 21 -->
     <color name="textColorPrimary">?android:attr/textColorPrimary</color>

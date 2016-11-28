@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_below="@id/tvTagsPrompt"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="120dp"
         android:gravity="center_horizontal">
 
         <Button
@@ -51,7 +51,7 @@
         android:layout_width="300dp"
         android:layout_centerHorizontal="true"
         android:layout_height="2dp"
-        android:background="@color/colorPrimary"
+        android:background="@color/colorDivider"
         android:layout_marginTop="15dp"
         android:layout_below="@id/llSizeButtons"/>
 
