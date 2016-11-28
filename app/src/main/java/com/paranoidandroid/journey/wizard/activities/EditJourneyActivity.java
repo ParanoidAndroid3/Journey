@@ -10,13 +10,11 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.paranoidandroid.journey.R;
-import com.paranoidandroid.journey.models.Journey;
 import com.paranoidandroid.journey.wizard.fragments.LegsFragment;
 import com.paranoidandroid.journey.wizard.fragments.NameFragment;
 import com.paranoidandroid.journey.wizard.fragments.TagsFragment;
 import com.paranoidandroid.journey.wizard.fragments.WizardFragment;
 import com.paranoidandroid.journey.wizard.utils.JourneyBuilder;
-import com.parse.ParseQuery;
 
 import java.util.Map;
 
@@ -101,19 +99,10 @@ public class EditJourneyActivity extends BaseWizardActivity implements View.OnCl
         }
 
         if (success) {
-            loadIntoCache();
             finish();
         } else {
             Toast.makeText(this, "Missing data. Please fill out form", Toast.LENGTH_LONG).show();
         }
-    }
-
-    private void loadIntoCache() {
-        ParseQuery<Journey> query = ParseQuery.getQuery(Journey.class);
-        query.include("legs");
-        query.include("legs.destination");
-        query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ONLY);
-        query.getInBackground(journeyId);
     }
 
     private boolean handleNameChange() {
