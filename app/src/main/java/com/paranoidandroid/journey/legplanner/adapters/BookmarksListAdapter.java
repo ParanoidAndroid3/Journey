@@ -1,6 +1,7 @@
 package com.paranoidandroid.journey.legplanner.adapters;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,8 +48,8 @@ public class BookmarksListAdapter extends RecyclerView.Adapter<RecyclerView.View
             vh.photo.setHeightRatio(1);
             Glide.with(mContext)
                     .load(b.getImageUrl())
-                    .placeholder(R.drawable.ic_placeholder)
-                    .error(R.drawable.ic_placeholder)
+                    .placeholder(ContextCompat.getDrawable(mContext, R.drawable.ic_placeholder))
+                    .error(ContextCompat.getDrawable(mContext, R.drawable.ic_placeholder))
                     .into(vh.photo);
             vh.name.setText(b.getTitle());
             vh.check.setVisibility(mSelectedBookmarks.contains(b) ? View.VISIBLE : View.GONE);

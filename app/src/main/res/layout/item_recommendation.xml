@@ -42,13 +42,18 @@
             android:layout_height="wrap_content"
             android:padding="8dp">
 
+            <ImageView
+                android:id="@+id/map_marker"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentStart="true"
+                app:srcCompat="@drawable/ic_map_marker_grey"/>
             <TextView
                 android:id="@+id/tvDistance"
                 android:textSize="11sp"
+                android:layout_toRightOf="@+id/map_marker"
                 android:textColor="#aaa"
                 android:paddingTop="4dp"
-                android:drawableLeft="@drawable/ic_map_marker_grey"
-                android:layout_alignParentLeft="true"
                 android:layout_width="match_parent"
                 android:layout_height="24dp"/>
 
