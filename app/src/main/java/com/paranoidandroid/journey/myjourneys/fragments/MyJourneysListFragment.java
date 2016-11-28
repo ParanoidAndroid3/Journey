@@ -97,12 +97,12 @@ public class MyJourneysListFragment extends Fragment
         }
     }
 
-    private void showInitialLoadProgressBar() {
+    private void showProgressBar() {
         binding.pbInitialLoad.show();
         binding.rvJourneys.setVisibility(View.GONE);
     }
 
-    private void hideInitialLoadProgressBar() {
+    private void hideProgressBar() {
         binding.pbInitialLoad.hide();
     }
 
@@ -121,12 +121,12 @@ public class MyJourneysListFragment extends Fragment
     protected void fetchJourneys() {
         ParseQuery<Journey> query = Journey.createQuery(ParseUser.getCurrentUser());
 
-        showInitialLoadProgressBar();
+        showProgressBar();
         query.findInBackground(new FindCallback<Journey>() {
             @Override
             public void done(List<Journey> objects, ParseException e) {
                 adapter.clear();
-                hideInitialLoadProgressBar();
+                hideProgressBar();
 
                 if (e == null) {
                     showJourneys(objects);

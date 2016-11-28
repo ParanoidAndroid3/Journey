@@ -1,8 +1,5 @@
 package com.paranoidandroid.journey.models.ui;
 
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.paranoidandroid.journey.network.GooglePlaceSearchClient;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,18 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import cz.msebera.android.httpclient.Header;
-
 @Parcel
 public class GooglePlace extends Recommendation {
     private String photoReference;
 
-    /**
-     * Gets notified when a request for an image URL has completed.
-     */
-    public interface OnImageReferenceReadyHandler {
-        void onImageReferenceReady(String imageReference);
-        void onFailure(Throwable throwable);
+    public String getPhotoReference() {
+        return photoReference;
     }
 
     public static String makeImageUrl(String imageReference) {
@@ -37,35 +28,6 @@ public class GooglePlace extends Recommendation {
         return String.format(Locale.US,
                 "https://maps.googleapis.com/maps/api/place/photo?maxwidth=%d&photoreference=%s&key=%s",
                 maxWidth, imageReference, "AIzaSyDoES56ptzOPbwy62kw9JMT4zBgloJQD7Y");
-    }
-
-    /**
-     * Downloads an image reference for a Google Place.
-     *
-     * The image reference can be turned into an image URL with #makeImageUrl().
-     *
-     * @param googlePlaceId ID for a Google Place.
-     * @param responseHandler Notified when the image reference has been downloaded or on failure.
-     */
-    public static void getPlaceImageAsync(String googlePlaceId, OnImageReferenceReadyHandler responseHandler) {
-        final OnImageReferenceReadyHandler handler = responseHandler;
-        GooglePlaceSearchClient.findDetails(googlePlaceId, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                GooglePlace place = parsePlaceDetails(response);
-                if (place != null && place.photoReference != null) {
-                    handler.onImageReferenceReady(place.photoReference);
-                } else {
-                    handler.onFailure(new Exception("No photo found"));
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable,
-                    JSONObject errorResponse) {
-                handler.onFailure(throwable);
-            }
-        });
     }
 
     public static GooglePlace parsePlace(JSONObject jsonPlace) throws JSONException {
