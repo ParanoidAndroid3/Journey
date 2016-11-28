@@ -5,6 +5,7 @@ import com.paranoidandroid.journey.models.Destination;
 import com.paranoidandroid.journey.models.Journey;
 import com.paranoidandroid.journey.models.Leg;
 import com.paranoidandroid.journey.network.GooglePlaceSearchClient;
+import com.parse.ParseUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,12 +33,13 @@ public class JourneyBuilder {
      *
      * Returns the id of the newly generated Parse Object.
      */
-    public static Journey buildJourney(Map<String, Object> journeyParts) {
+    public static Journey buildJourney(ParseUser creator, Map<String, Object> journeyParts) {
         final Journey journey = new Journey();
 
         setName(journey, journeyParts);
         setLegs(journey, journeyParts);
         setTags(journey, journeyParts);
+        journey.setCreator(creator);
 
         return journey;
     }

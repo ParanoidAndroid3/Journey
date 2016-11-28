@@ -14,6 +14,7 @@ import com.paranoidandroid.journey.models.Journey;
 import com.paranoidandroid.journey.wizard.adapters.WizardPagerAdapter;
 import com.paranoidandroid.journey.wizard.utils.JourneyBuilder;
 import com.parse.ParseException;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 
@@ -86,7 +87,8 @@ public class WizardActivity extends BaseWizardActivity implements View.OnClickLi
         if (currentFragment < 2) {
             goToNextFragment(currentFragment);
         } else if (readyToPublish()) {
-            final Journey journey = JourneyBuilder.buildJourney(journeyData);
+            final Journey journey = JourneyBuilder.buildJourney(
+                    ParseUser.getCurrentUser(), journeyData);
             journey.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
