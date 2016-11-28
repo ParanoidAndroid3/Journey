@@ -1,6 +1,7 @@
 package com.paranoidandroid.journey.legplanner.activities;
 
 import android.app.Dialog;
+import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -11,8 +12,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -383,12 +383,10 @@ public class PlannerActivity extends AppCompatActivity implements
     public void addCustomActivityPressed(View v) {
         Day day = getDayPlannerFragment().getSelectedDay();
         Destination dest = day.getLeg().getDestination();
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentManager fragmentManager = getFragmentManager();
         CustomActivityCreatorFragment newFragment
                 = CustomActivityCreatorFragment.newInstance(new LatLng(dest.getLatitude(), dest.getLongitude()), day.getDate(), day.getCity());
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        transaction.add(android.R.id.content, newFragment).addToBackStack(null).commit();
+        newFragment.show(fragmentManager, newFragment.getTag());
         floatingMenu.close(false);
     }
 
