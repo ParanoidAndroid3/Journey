@@ -15,6 +15,8 @@ import com.paranoidandroid.journey.wizard.fragments.NameFragment;
 import com.paranoidandroid.journey.wizard.fragments.TagsFragment;
 import com.paranoidandroid.journey.wizard.fragments.WizardFragment;
 import com.paranoidandroid.journey.wizard.utils.JourneyBuilder;
+import com.parse.ParseException;
+import com.parse.SaveCallback;
 
 import java.util.Map;
 
@@ -85,68 +87,43 @@ public class EditJourneyActivity extends BaseWizardActivity implements View.OnCl
 
     @Override
     public void onClick(View view) {
+
+        if (!changed) {
+            finish();
+        }
+
         boolean success = false;
+
         switch (editMode) {
             case EDIT_MODE_TITLE:
-                success = handleNameChange();
+                if (success = nameComplete()) {
+                    JourneyBuilder.setName(journey, journeyData);
+                }
                 break;
             case EDIT_MODE_LEGS:
-                success = handleLegsChange();
+                success = legsComplete();
                 break;
             case EDIT_MODE_TAGS:
-                success = handleTagsChange();
+                if (success = tagsComplete()) {
+                    JourneyBuilder.setTags(journey, journeyData);
+                }
                 break;
         }
 
         if (success) {
-            finish();
+            journey.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e == null) {
+                        finish();
+                    } else {
+                        e.printStackTrace();
+                    }
+                }
+            });
         } else {
             Toast.makeText(this, "Missing data. Please fill out form", Toast.LENGTH_LONG).show();
         }
-    }
-
-    private boolean handleNameChange() {
-        if (!changed) {
-            return true;
-        }
-
-        if (!nameComplete()) {
-            return false;
-        }
-
-        JourneyBuilder.setName(journey, journeyData);
-        journey.saveInBackground();
-
-        return true;
-    }
-
-    private boolean handleLegsChange() {
-        if (!changed) {
-            return true;
-        }
-
-        if (!legsComplete()) {
-            return false;
-        }
-
-        journey.saveInBackground();
-
-        return true;
-    }
-
-    private boolean handleTagsChange() {
-        if (!changed) {
-            return true;
-        }
-
-        if (!tagsComplete()) {
-            return false;
-        }
-
-        JourneyBuilder.setTags(journey, journeyData);
-        journey.saveInBackground();
-
-        return true;
     }
 
     public static Intent createEditIntent(Context context, String journeyId, int editMode) {
