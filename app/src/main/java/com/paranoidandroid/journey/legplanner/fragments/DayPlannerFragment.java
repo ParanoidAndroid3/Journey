@@ -134,6 +134,10 @@ public class DayPlannerFragment extends Fragment implements
         return mDays.get(mSelectedDayIndex).getLeg();
     }
 
+    public int getSelectedLegOrder() {
+        return mDays.get(mSelectedDayIndex).getLegOrder();
+    }
+
     public Day getSelectedDay() {
         return mDays.get(mSelectedDayIndex);
     }
@@ -222,13 +226,16 @@ public class DayPlannerFragment extends Fragment implements
         // Inform the activity to change the selected leg
         if (listener != null) {
             // Leg has changed
-            if (mDays.get(position).getLegOrder() != mDays.get(mSelectedDayIndex).getLegOrder())
+            if (mDays.get(position).getLegOrder() != mDays.get(mSelectedDayIndex).getLegOrder()) {
                 listener.onLegIndexChanged(mDays.get(position).getLegOrder());
+                mSelectedDayIndex = position;
+            }
             // Same leg, different day
-            else
+            else {
+                mSelectedDayIndex = position;
                 listener.onDayChangedOnSameLeg();
+            }
         }
-        mSelectedDayIndex = position;
     }
 
     @Override

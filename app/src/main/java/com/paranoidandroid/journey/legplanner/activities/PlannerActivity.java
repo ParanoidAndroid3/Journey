@@ -148,6 +148,7 @@ public class PlannerActivity extends AppCompatActivity implements
         if (fragment.isZoomed()) {
             fragment.addMarkersFromLegs(mJourney.getLegs());
             fragment.setZoomed(false);
+            fabZoom.setImageResource(R.drawable.ic_zoom_in);
         }
         fragment.changeToMarkerPosition(legOrder);
     }
@@ -203,8 +204,10 @@ public class PlannerActivity extends AppCompatActivity implements
                             if (e == null) {
                                 // Refresh day planner
                                 dpf.refreshCurrentPage();
-                                // Refresh map markers
-                                getMapViewFragment().addMarkersFromActivities(dpf.getActivitiesForSelectedDay(), dpf.getSelectedLeg());
+                                // Refresh map markers if map is zoomed in
+                                if (getMapViewFragment().isZoomed()) {
+                                    getMapViewFragment().addMarkersFromActivities(dpf.getActivitiesForSelectedDay(), dpf.getSelectedLeg());
+                                }
                             } else {
                                 e.printStackTrace();
                             }
@@ -234,8 +237,10 @@ public class PlannerActivity extends AppCompatActivity implements
                             if (e == null) {
                                 // Refresh day planner
                                 dpf.refreshCurrentPage();
-                                // Refresh map markers
-                                getMapViewFragment().addMarkersFromActivities(dpf.getActivitiesForSelectedDay(), dpf.getSelectedLeg());
+                                // Refresh map markers if map is zoomed in
+                                if (getMapViewFragment().isZoomed()) {
+                                    getMapViewFragment().addMarkersFromActivities(dpf.getActivitiesForSelectedDay(), dpf.getSelectedLeg());
+                                }
                             } else {
                                 e.printStackTrace();
                             }
@@ -339,6 +344,7 @@ public class PlannerActivity extends AppCompatActivity implements
         if (fragment.isZoomed()) {
             fragment.addMarkersFromLegs(mJourney.getLegs());
             fragment.setZoomed(false);
+            fragment.changeToMarkerPosition(getDayPlannerFragment().getSelectedLegOrder());
         } else {
             DayPlannerFragment dayPlannerFragment = getDayPlannerFragment();
             fragment.addMarkersFromActivities(dayPlannerFragment.getActivitiesForSelectedDay(), dayPlannerFragment.getSelectedLeg());
