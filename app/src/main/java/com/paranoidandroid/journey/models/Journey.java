@@ -110,7 +110,7 @@ public class Journey extends ParseObject {
         query.include("legs.destination");
         query.include("legs.activities");
         query.include("legs.bookmarks");
-        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
+        query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ELSE_CACHE);
         return query;
     }
 }
