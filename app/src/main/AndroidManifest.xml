@@ -13,7 +13,7 @@
     <application
         android:name=".JourneyApplication"
         android:allowBackup="true"
-        android:icon="@drawable/ic_journey"
+        android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
