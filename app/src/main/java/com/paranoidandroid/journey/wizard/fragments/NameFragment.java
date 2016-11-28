@@ -77,10 +77,11 @@ public class NameFragment extends WizardFragment {
 
     private void loadJourneyName(String journeyId) {
         ParseQuery<Journey> query = ParseQuery.getQuery(Journey.class);
-        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
+        query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ONLY);
         query.getInBackground(journeyId, new GetCallback<Journey>() {
             public void done(final Journey journey, ParseException e) {
                 if (e == null) {
+                    listener.setJourney(journey);
                     etName.setText(journey.getName());
                     listener.enableFab(true);
                 } else {

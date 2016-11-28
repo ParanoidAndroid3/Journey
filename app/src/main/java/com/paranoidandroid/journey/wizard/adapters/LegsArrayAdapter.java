@@ -14,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.paranoidandroid.journey.R;
+import com.paranoidandroid.journey.models.Destination;
 import com.paranoidandroid.journey.models.Leg;
 import com.paranoidandroid.journey.wizard.fragments.WizardFragment;
 import com.paranoidandroid.journey.wizard.utils.JourneyBuilder;
@@ -36,11 +37,13 @@ public class LegsArrayAdapter extends RecyclerView.Adapter<LegsArrayAdapter.View
     private WizardFragment.OnItemUpdatedListener listener;
     private List<Leg> legs;
     private Context context;
+    private boolean forceUpdate;
 
-    public LegsArrayAdapter(Context context, List<Leg> legs, WizardFragment.OnItemUpdatedListener listener) {
+    public LegsArrayAdapter(Context context, List<Leg> legs, WizardFragment.OnItemUpdatedListener listener, boolean forcedUpdate) {
         this.context = context;
         this.listener = listener;
         this.legs = legs;
+        this.forceUpdate = forcedUpdate;
     }
 
     @Override
@@ -108,11 +111,20 @@ public class LegsArrayAdapter extends RecyclerView.Adapter<LegsArrayAdapter.View
 
     public void add(Leg item) {
         legs.add(item);
+        if (forceUpdate) {
+            listener.getJourney().addLeg(item);
+        }
         updateParent();
     }
 
     public void remove(Leg item) {
         legs.remove(item);
+        if (forceUpdate) {
+            Destination destination = item.getDestination();
+            listener.getJourney().removeLeg(item);
+            destination.deleteInBackground();
+            item.deleteInBackground();
+        }
         updateParent();
     }
 

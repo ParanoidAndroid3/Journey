@@ -26,7 +26,6 @@ public class JourneyBuilder {
     public static final String SIZE_KEY = "size";
     public static final String TAGS_KEY = "tags";
 
-
     /**
      * Uses all of the data specified in the wizard to create
      * a brand new Journey and save it to the Parse server.
@@ -35,14 +34,30 @@ public class JourneyBuilder {
      */
     public static Journey buildJourney(Map<String, Object> journeyParts) {
         final Journey journey = new Journey();
+
+        setName(journey, journeyParts);
+        setLegs(journey, journeyParts);
+        setTags(journey, journeyParts);
+
+        return journey;
+    }
+
+    public static void setName(Journey journey, Map<String, Object> journeyParts) {
         journey.setName((String) journeyParts.get(NAME_KEY));
-        journey.setTripType((String) journeyParts.get(SIZE_KEY));
-        journey.setTripTags((List<String>) journeyParts.get(TAGS_KEY));
+    }
+
+    public static void setLegs(Journey journey, Map<String, Object> journeyParts) {
         List<Leg> legs = (List<Leg>) journeyParts.get(LEGS_KEY);
+
         for (Leg leg : legs) {
             journey.addLeg(leg);
         }
-        return journey;
+
+    }
+
+    public static void setTags(Journey journey, Map<String, Object> journeyParts) {
+        journey.setTripType((String) journeyParts.get(SIZE_KEY));
+        journey.setTripTags((List<String>) journeyParts.get(TAGS_KEY));
     }
 
     public static Destination findDestination(String placeId) {
@@ -71,7 +86,6 @@ public class JourneyBuilder {
                     }
                     JSONObject location = result.getJSONObject("geometry").getJSONObject("location");
                     destination.setGeoPoint(location.getDouble("lat"), location.getDouble("lng"));
-                    //destination.saveInBackground();
 
                 } catch (JSONException e) {
                     e.printStackTrace();

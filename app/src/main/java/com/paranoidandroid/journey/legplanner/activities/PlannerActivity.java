@@ -5,35 +5,31 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v4.view.NestedScrollingChild;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.view.animation.AnimationUtils;
 
 import com.bumptech.glide.Glide;
+import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.paranoidandroid.journey.R;
-import com.github.clans.fab.FloatingActionMenu;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.model.LatLng;
+import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.legplanner.fragments.BookmarksPickerFragment;
 import com.paranoidandroid.journey.legplanner.fragments.CustomActivityCreatorFragment;
 import com.paranoidandroid.journey.legplanner.fragments.DayPlannerFragment;
@@ -42,13 +38,12 @@ import com.paranoidandroid.journey.models.Activity;
 import com.paranoidandroid.journey.models.Bookmark;
 import com.paranoidandroid.journey.models.Destination;
 import com.paranoidandroid.journey.models.Journey;
-import com.paranoidandroid.journey.myjourneys.activities.MyJourneysActivity;
-import com.paranoidandroid.journey.support.SharedPreferenceUtils;
-import com.paranoidandroid.journey.wizard.activities.WizardActivity;
-import com.paranoidandroid.journey.models.Leg;
 import com.paranoidandroid.journey.models.ui.Day;
 import com.paranoidandroid.journey.models.ui.GooglePlace;
+import com.paranoidandroid.journey.myjourneys.activities.MyJourneysActivity;
 import com.paranoidandroid.journey.recommendations.activities.RecommendationsActivity;
+import com.paranoidandroid.journey.support.SharedPreferenceUtils;
+import com.paranoidandroid.journey.wizard.activities.EditJourneyActivity;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -60,13 +55,13 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import butterknife.OnClick;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
-import static com.paranoidandroid.journey.legplanner.fragments.CustomActivityCreatorFragment.OnAddCustomActivityListener;
 import static com.paranoidandroid.journey.legplanner.fragments.BookmarksPickerFragment.OnBookmarksSelectedListener;
-import static com.paranoidandroid.journey.legplanner.fragments.MapViewFragment.MapEventListener;
+import static com.paranoidandroid.journey.legplanner.fragments.CustomActivityCreatorFragment.OnAddCustomActivityListener;
 import static com.paranoidandroid.journey.legplanner.fragments.DayPlannerFragment.DayPlannerListener;
+import static com.paranoidandroid.journey.legplanner.fragments.MapViewFragment.MapEventListener;
 
 public class PlannerActivity extends AppCompatActivity implements
         OnAddCustomActivityListener,
@@ -290,13 +285,13 @@ public class PlannerActivity extends AppCompatActivity implements
                         launchMyJourneys();
                         break;
                     case R.id.miEditTitle:
-                        launchWizard(WizardActivity.EDIT_MODE_TITLE);
+                        launchWizard(EditJourneyActivity.EDIT_MODE_TITLE);
                         break;
                     case R.id.miEditLegs:
-                        launchWizard(WizardActivity.EDIT_MODE_LEGS);
+                        launchWizard(EditJourneyActivity.EDIT_MODE_LEGS);
                         break;
                     case R.id.miEditTags:
-                        launchWizard(WizardActivity.EDIT_MODE_TAGS);
+                        launchWizard(EditJourneyActivity.EDIT_MODE_TAGS);
                         break;
                 }
                 item.setChecked(false);
@@ -313,7 +308,7 @@ public class PlannerActivity extends AppCompatActivity implements
     }
 
     private void launchWizard(int editMode) {
-        Intent intent = WizardActivity.createEditIntent(this, journeyId, editMode);
+        Intent intent = EditJourneyActivity.createEditIntent(this, journeyId, editMode);
         startActivity(intent);
     }
 

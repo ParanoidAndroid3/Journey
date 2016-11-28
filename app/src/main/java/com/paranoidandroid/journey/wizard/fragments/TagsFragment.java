@@ -61,23 +61,26 @@ public class TagsFragment extends WizardFragment {
                 loadJourneyData(journeyId);
             } else {
                 listener.enableFab(false);
+                setupStates();
             }
         } else {
             listener.enableFab(false);
+            setupStates();
         }
 
-        setupStates();
         setupListeners();
         return v;
     }
 
     private void loadJourneyData(String journeyId) {
         ParseQuery<Journey> query = ParseQuery.getQuery(Journey.class);
-        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
+        query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ONLY);
         query.getInBackground(journeyId, new GetCallback<Journey>() {
             public void done(final Journey journey, ParseException e) {
                 if (e == null) {
+                    listener.setJourney(journey);
                     populateMapsFromJourney(journey);
+                    setupStates();
                     listener.enableFab(true);
                 } else {
                     e.printStackTrace();
@@ -147,6 +150,8 @@ public class TagsFragment extends WizardFragment {
             for (Button button : tagButtons) {
                 if (tagStates.get(button.getText().toString())) {
                     turnOn(tagStates, button);
+                } else {
+                    turnOff(tagStates, button);
                 }
             }
         }
@@ -159,6 +164,8 @@ public class TagsFragment extends WizardFragment {
             for (Button button : sizeButtons) {
                 if (sizeStates.get(button.getText().toString())) {
                     turnOn(sizeStates, button);
+                } else {
+                    turnOff(sizeStates, button);
                 }
             }
         }

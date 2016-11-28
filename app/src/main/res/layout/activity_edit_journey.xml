@@ -7,11 +7,10 @@
     android:fitsSystemWindows="true"
     tools:context="com.paranoidandroid.journey.wizard.activities.WizardActivity">
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewpager"
+    <FrameLayout
+        android:id="@+id/flContent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"/>
+        android:layout_height="match_parent" />
 
     <ImageButton
         android:id="@+id/btnExit"
@@ -29,7 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_arrow_forward"
+        app:srcCompat="@drawable/ic_check"
         app:backgroundTint="?android:attr/textColorPrimaryDisableOnly" />
 
 </android.support.design.widget.CoordinatorLayout>
