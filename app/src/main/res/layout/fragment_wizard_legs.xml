@@ -17,13 +17,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="75dp"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="80dp"/>
 
     <com.paranoidandroid.journey.wizard.views.CustomAutoCompleteTextView
         android:id="@+id/atvPlaces"
+        android:textColor="@color/colorWizardName"
+        android:textSize="@dimen/wizard_legs_text_size"
         android:layout_width="match_parent"
-        android:layout_height="75dp"
+        android:layout_height="40dp"
         android:layout_marginStart="48dp"
+        android:layout_marginEnd="48dp"
         android:layout_marginTop="-65dp"
         android:layout_marginBottom="5dp"
         android:hint="@string/new_leg_hint" />
