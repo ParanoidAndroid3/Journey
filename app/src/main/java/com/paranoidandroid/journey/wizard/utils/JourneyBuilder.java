@@ -4,6 +4,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.paranoidandroid.journey.models.Destination;
 import com.paranoidandroid.journey.models.Journey;
 import com.paranoidandroid.journey.models.Leg;
+import com.paranoidandroid.journey.models.ui.GooglePlace;
 import com.paranoidandroid.journey.network.GooglePlaceSearchClient;
 import com.parse.ParseUser;
 
@@ -71,9 +72,12 @@ public class JourneyBuilder {
                             }
                         }
                     }
-                    JSONObject location = result.getJSONObject("geometry").getJSONObject("location");
-                    destination.setGeoPoint(location.getDouble("lat"), location.getDouble("lng"));
-                    //destination.saveInBackground();
+
+                    GooglePlace place = GooglePlace.parsePlace(result);
+                    if (place != null) {
+                        destination.setGeoPoint(place.getLatitude(), place.getLongitude());
+                        destination.setGoogleImageReference(place.getPhotoReference());
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();

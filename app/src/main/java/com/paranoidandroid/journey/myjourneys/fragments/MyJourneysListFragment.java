@@ -65,7 +65,6 @@ public class MyJourneysListFragment extends Fragment implements
         binding.rvJourneys.setAdapter(adapter);
         binding.rvJourneys.getItemAnimator().setChangeDuration(0);
         binding.setListener(listener);
-
         fetchJourneys();
     }
 
@@ -98,12 +97,12 @@ public class MyJourneysListFragment extends Fragment implements
         Log.e(TAG, "GoogleApiClient connection failure: " + connectionResult.toString());
     }
 
-    private void showInitialLoadProgressBar() {
+    private void showProgressBar() {
         binding.pbInitialLoad.show();
         binding.rvJourneys.setVisibility(View.GONE);
     }
 
-    private void hideInitialLoadProgressBar() {
+    private void hideProgressBar() {
         binding.pbInitialLoad.hide();
     }
 
@@ -126,13 +125,13 @@ public class MyJourneysListFragment extends Fragment implements
         // TODO(emmanuel): should journeys be protected by ACL?
         //query.whereEqualTo("creator", ParseUser.getCurrentUser());
 
-        showInitialLoadProgressBar();
+        showProgressBar();
 
         query.findInBackground(new FindCallback<Journey>() {
             @Override
             public void done(List<Journey> objects, ParseException e) {
                 adapter.clear();
-                hideInitialLoadProgressBar();
+                hideProgressBar();
 
                 if (e == null) {
                     showJourneys(objects);

@@ -36,13 +36,6 @@
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
                     tools:src="@drawable/ic_journey"/>
-
-                <ImageView
-                    android:id="@+id/ivScrim"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/scrim"
-                    android:visibility="invisible"/>
             </FrameLayout>
 
             <LinearLayout
@@ -60,13 +53,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:ellipsize="end"
-                    android:maxLines="1"
                     android:text="@{journey.name}"
-                    android:textAllCaps="true"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Inverse"
-                    android:textSize="18sp"
-                    android:textStyle="normal|bold"
+                    style="@style/TitleOverImage"
                     tools:text="Eurotrip"/>
 
                 <TextView
@@ -74,10 +62,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="end"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Inverse"
-                    android:textColor="?android:attr/textColorSecondaryInverse"
-                    android:textSize="16sp"
-                    android:textStyle="normal|bold"
+                    style="@style/SubTitleOverImage"
                     tools:text="9/12-9/19"/>
             </LinearLayout>
 
