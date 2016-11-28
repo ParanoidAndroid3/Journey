@@ -110,6 +110,8 @@ public class Journey extends ParseObject {
         query.include("legs.destination");
         query.include("legs.activities");
         query.include("legs.bookmarks");
+        // TODO(emmanuel): sort descending based on journey date.
+        query.orderByDescending("createdAt");
         query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
         return query;
     }

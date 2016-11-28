@@ -107,27 +107,9 @@ public class JourneyAdapter extends RecyclerView.Adapter<JourneyAdapter.ViewHold
             return;
         }
 
-        final Destination destination = journey.getLegs().get(0).getDestination();
-        String imageReference = destination.getCachedImageReference();
-
-        if (imageReference == null) {
-            String placeId = destination.getGooglePlaceId();
-            GooglePlace.getPlaceImageAsync(placeId, new GooglePlace.OnImageReferenceReadyHandler() {
-                @Override
-                public void onImageReferenceReady(String imageReference) {
-                    destination.setCachedImageReference(imageReference);
-                    destination.saveEventually();
-                    notifyItemChanged(holder.getAdapterPosition());
-                }
-
-                @Override
-                public void onFailure(Throwable throwable) {
-                    Log.e(TAG, "Unable to get backdrop image", throwable);
-                }
-            });
-
-        } else {
-            // We can use the cached URL.
+        Destination destination = journey.getLegs().get(0).getDestination();
+        String imageReference = destination.getGoogleImageReference();
+        if (imageReference != null) {
             // TODO: screenWidth should be the current screen width.
             String imageUrl = GooglePlace.makeImageUrl(imageReference, screenWidth);
             Glide.with(context).load(imageUrl).into(holder.binding.ivBackdrop);
