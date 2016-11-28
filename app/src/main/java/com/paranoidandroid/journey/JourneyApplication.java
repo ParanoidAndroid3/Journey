@@ -1,6 +1,7 @@
 package com.paranoidandroid.journey;
 
 import android.app.Application;
+import android.support.v7.app.AppCompatDelegate;
 
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.stetho.Stetho;
@@ -20,6 +21,11 @@ import com.parse.interceptors.ParseStethoInterceptor;
  * Application entry point.
  */
 public class JourneyApplication extends Application {
+
+    // Enable support for vector drawables in all activities
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
 
     private static final String PARSE_APP_ID = "com.github.paranoidandroid3.journey";
     private static final String PARSE_MOUNT = "/parse/";

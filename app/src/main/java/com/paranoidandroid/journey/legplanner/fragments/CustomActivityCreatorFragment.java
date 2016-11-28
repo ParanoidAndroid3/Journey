@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -133,8 +134,8 @@ public class CustomActivityCreatorFragment extends DialogFragment implements
             return;
         Glide.with(getContext())
                 .load(googlePlace.getImageUrl())
-                .placeholder(R.drawable.ic_map_marker_placeholder)
-                .error(R.drawable.ic_map_marker_placeholder)
+                .placeholder(ContextCompat.getDrawable(getContext(), R.drawable.ic_map_marker_placeholder))
+                .error(ContextCompat.getDrawable(getContext(), R.drawable.ic_map_marker_placeholder))
                 .into(ivPhoto);
     }
 

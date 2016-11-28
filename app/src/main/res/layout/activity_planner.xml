@@ -108,8 +108,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/ic_add_custom"
-                android:src="@drawable/ic_add_custom"
-                tools:ignore="VectorDrawableCompat"
                 fab:fab_label="Add Custom"
                 style="@style/MenuButtonsStyle" />
             <com.github.clans.fab.FloatingActionButton
@@ -117,8 +115,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/ic_add_bookmark"
-                android:src="@drawable/ic_add_bookmark"
-                tools:ignore="VectorDrawableCompat"
                 fab:fab_label="Add From Bookmarks"
                 style="@style/MenuButtonsStyle" />
             <com.github.clans.fab.FloatingActionButton
@@ -126,8 +122,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/ic_star"
-                android:src="@drawable/ic_star"
-                tools:ignore="VectorDrawableCompat"
                 fab:fab_label="Explore Recommendations"
                 style="@style/MenuButtonsStyle" />
 
