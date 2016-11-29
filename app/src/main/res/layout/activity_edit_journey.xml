@@ -24,28 +24,19 @@
         android:background="@android:color/transparent"
         app:srcCompat="@drawable/ic_exit"/>
 
-
-    <com.dmitrymalkovich.android.ProgressFloatingActionButton
+    <com.github.clans.fab.FloatingActionButton
+        android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
-        android:layout_gravity="bottom|end"
-        android:clickable="true">
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_check" />
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="@style/Widget.AppCompat.ProgressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"/>
-
-    </com.dmitrymalkovich.android.ProgressFloatingActionButton>
-
+        app:srcCompat="@drawable/ic_check"
+        app:fab_colorNormal="@color/colorAccent"
+        app:fab_colorPressed="@color/colorAccentLight"
+        app:fab_colorRipple="@color/colorAccentLight"
+        app:fab_progress_color="@color/colorAccentLight"
+        app:fab_progress_backgroundColor="@color/colorFabProgress"
+        app:layout_anchorGravity="bottom|right"
+        android:layout_gravity="bottom|right"
+        android:clickable="true"/>
 
 </android.support.design.widget.CoordinatorLayout>

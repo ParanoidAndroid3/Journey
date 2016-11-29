@@ -3,13 +3,12 @@ package com.paranoidandroid.journey.wizard.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.github.clans.fab.FloatingActionButton;
 import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.wizard.fragments.LegsFragment;
 import com.paranoidandroid.journey.wizard.fragments.NameFragment;
@@ -46,9 +45,8 @@ public class EditJourneyActivity extends BaseWizardActivity implements View.OnCl
         setContentView(R.layout.activity_edit_journey);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setImageResource(R.drawable.ic_check);
         fab.setOnClickListener(this);
-
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         changed = false;
 
@@ -121,7 +119,7 @@ public class EditJourneyActivity extends BaseWizardActivity implements View.OnCl
                     public void done(ParseException e) {
                         if (e == null) {
                             finish();
-                            hideProgressBar();
+                            //hideProgressBar();
                         } else {
                             e.printStackTrace();
                         }

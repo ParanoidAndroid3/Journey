@@ -1,12 +1,10 @@
 package com.paranoidandroid.journey.wizard.activities;
 
-import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ProgressBar;
 
+import com.github.clans.fab.FloatingActionButton;
 import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.models.Journey;
 import com.paranoidandroid.journey.models.Leg;
@@ -28,7 +26,6 @@ public abstract class BaseWizardActivity extends AppCompatActivity implements Wi
     protected FloatingActionButton fab;
 
     protected Journey journey;
-    protected ProgressBar progressBar;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -75,12 +72,13 @@ public abstract class BaseWizardActivity extends AppCompatActivity implements Wi
     }
 
     protected void showProgressBar() {
-        progressBar.setVisibility(View.VISIBLE);
+        fab.setShowProgressBackground(true);
+        fab.setIndeterminate(true);
         enableFab(false);
     }
 
     protected void hideProgressBar() {
-        progressBar.setVisibility(View.GONE);
+        fab.hideProgress();
         enableFab(true);
     }
 
@@ -97,7 +95,7 @@ public abstract class BaseWizardActivity extends AppCompatActivity implements Wi
         fab.setClickable(enable);
         int resource = enable ? R.color.colorFabEnabled : R.color.colorFabDisabled;
         int color = getResources().getColor(resource);
-        fab.setBackgroundTintList(ColorStateList.valueOf(color));
+        fab.setColorNormal(color);
     }
 
     @Override

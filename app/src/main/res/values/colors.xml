@@ -18,6 +18,7 @@
     <!-- fab disabled/enabled -->
     <color name="colorFabEnabled">@color/colorAccent</color>
     <color name="colorFabDisabled">@color/colorAccentLight</color>
+    <color name="colorFabProgress">#2a4350</color>
 
     <color name="colorWizardPrompt">@color/colorTextIcons</color>
     <color name="colorWizardName">@color/colorPrimaryText</color>

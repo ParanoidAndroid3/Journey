@@ -2,13 +2,12 @@ package com.paranoidandroid.journey.wizard.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.github.clans.fab.FloatingActionButton;
 import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.legplanner.activities.PlannerActivity;
 import com.paranoidandroid.journey.models.Journey;
@@ -36,10 +35,9 @@ public class WizardActivity extends BaseWizardActivity implements View.OnClickLi
         setContentView(R.layout.activity_wizard);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setImageResource(R.drawable.ic_arrow_forward);
         enableFab(false);
         fab.setOnClickListener(this);
-
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         pagerAdapter = new WizardPagerAdapter(getSupportFragmentManager());
         viewpager = (ViewPager) findViewById(R.id.viewpager);
@@ -106,7 +104,7 @@ public class WizardActivity extends BaseWizardActivity implements View.OnClickLi
                         Intent intent = new Intent(getApplicationContext(), PlannerActivity.class);
                         intent.putExtra("journey_id", journeyId);
                         startActivity(intent);
-                        hideProgressBar();
+                        //hideProgressBar();
                     } else {
                         // The save failed.
                         Log.e(TAG, "Error saving Journey: " + e);
