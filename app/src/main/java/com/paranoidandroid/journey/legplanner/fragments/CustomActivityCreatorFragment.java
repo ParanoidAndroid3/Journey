@@ -78,7 +78,6 @@ public class CustomActivityCreatorFragment extends DialogFragment implements
     // For compatibility we should include the deprecated method too
     @Override
     public void onAttach(Activity context) {
-        System.out.println("context is "+context);
         super.onAttach(context);
         if (context instanceof OnAddCustomActivityListener){
             this.listener = (OnAddCustomActivityListener) context;
@@ -87,7 +86,6 @@ public class CustomActivityCreatorFragment extends DialogFragment implements
 
     @Override
     public void onAttach(Context context) {
-        System.out.println("context is "+context);
         super.onAttach(context);
         if (context instanceof OnAddCustomActivityListener){
             this.listener = (OnAddCustomActivityListener) context;
