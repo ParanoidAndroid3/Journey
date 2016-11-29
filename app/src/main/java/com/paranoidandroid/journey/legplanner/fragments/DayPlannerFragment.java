@@ -146,7 +146,7 @@ public class DayPlannerFragment extends Fragment implements
         List<Day> days = new ArrayList<>();
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(leg.getStartDate());
-        while (calendar.getTime().before(leg.getEndDate()) || calendar.getTime().equals(leg.getEndDate()))
+        while (!calendar.getTime().after(leg.getEndDate()))
         {
             Date dayDate = calendar.getTime();
             days.add(new Day(dayOrder.addAndGet(1), dayDate, leg, legOrder));
