@@ -63,10 +63,10 @@ dependencies {
     compile 'jp.wasabeef:glide-transformations:2.0.1'
 
     // Google Play Services
-    compile 'com.google.android.gms:play-services-gcm:10.0.0'
-    compile 'com.google.android.gms:play-services-location:10.0.0'
-    compile 'com.google.android.gms:play-services-maps:10.0.0'
-    compile 'com.google.android.gms:play-services-places:10.0.0'
+    compile 'com.google.android.gms:play-services-gcm:9.8.0'
+    compile 'com.google.android.gms:play-services-location:9.8.0'
+    compile 'com.google.android.gms:play-services-maps:9.8.0'
+    compile 'com.google.android.gms:play-services-places:9.8.0'
     compile 'com.google.maps.android:android-maps-utils:0.4+'
 
     compile 'com.facebook.stetho:stetho:1.4.1'
