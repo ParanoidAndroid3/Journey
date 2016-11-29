@@ -5,6 +5,7 @@ import com.paranoidandroid.journey.models.Destination;
 import com.paranoidandroid.journey.models.Journey;
 import com.paranoidandroid.journey.models.Leg;
 import com.paranoidandroid.journey.network.GooglePlaceSearchClient;
+import com.paranoidandroid.journey.support.GooglePlaceInfo;
 import com.parse.ParseUser;
 
 import org.json.JSONArray;
@@ -96,8 +97,13 @@ public class JourneyBuilder {
                         destination.setCityName(components[0]);
                     }
 
-                    JSONObject location = result.getJSONObject("geometry").getJSONObject("location");
-                    destination.setGeoPoint(location.getDouble("lat"), location.getDouble("lng"));
+                    GooglePlaceInfo placeInfo = GooglePlaceInfo.parseFromJson(result);
+                    if (placeInfo != null) {
+                        destination.setGeoPoint(placeInfo.getLatitude(), placeInfo.getLongitude());
+                        if (placeInfo.getPhotoReference() != null) {
+                            destination.setGoogleImageReference(placeInfo.getPhotoReference());
+                        }
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
