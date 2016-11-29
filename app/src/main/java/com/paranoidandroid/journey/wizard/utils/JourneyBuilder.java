@@ -62,9 +62,11 @@ public class JourneyBuilder {
         journey.setTripTags((List<String>) journeyParts.get(TAGS_KEY));
     }
 
-    public static Destination findDestination(String placeId) {
+    public static Destination findDestination(String placeId, String displayName) {
 
         final Destination destination = new Destination();
+        destination.setGooglePlaceId(placeId);
+        destination.setDisplayName(generateDisplayName(displayName));
 
         GooglePlaceSearchClient.getPlaceDetails(placeId, new JsonHttpResponseHandler(){
             @Override
@@ -107,6 +109,17 @@ public class JourneyBuilder {
         });
 
         return destination;
+    }
+    
+    private static String generateDisplayName(String destination) {
+        String[] components = destination.split(",");
+        if (components.length <= 2) {
+            return destination;
+        } else if (components[2].equals(" United States")) {
+            return components[0] + "," + components[1];
+        } else {
+            return components[0] + "," + components[components.length -1];
+        }
     }
 
 }
