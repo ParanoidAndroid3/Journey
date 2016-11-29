@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.paranoidandroid.journey.databinding.FragmentMyJourneysBinding;
 import com.paranoidandroid.journey.models.Journey;
 import com.paranoidandroid.journey.myjourneys.adapters.JourneyAdapter;
 import com.paranoidandroid.journey.support.ui.ItemClickSupport;
@@ -32,14 +33,15 @@ public class MyJourneysListFragment extends Fragment implements
     private static final String TAG = "MyJourneysListFragment";
     private static final int REQUEST_CODE = 300;
 
-    public interface OnJourneySelectedListener {
+    public interface OnJourneyActionListener {
         void onJourneySelected(Journey journey);
+        void onJourneyDeleted(String journeyId);
         void onCreateNewJourney();
     }
 
-    private com.paranoidandroid.journey.databinding.FragmentMyJourneysBinding binding;
+    private FragmentMyJourneysBinding binding;
     private JourneyAdapter adapter;
-    private OnJourneySelectedListener listener;
+    private OnJourneyActionListener listener;
 
     public static MyJourneysListFragment newInstance() {
         return new MyJourneysListFragment();
@@ -56,7 +58,7 @@ public class MyJourneysListFragment extends Fragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
-        binding = com.paranoidandroid.journey.databinding.FragmentMyJourneysBinding.inflate(inflater, container, false);
+        binding = FragmentMyJourneysBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -88,11 +90,11 @@ public class MyJourneysListFragment extends Fragment implements
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnJourneySelectedListener) {
-            listener = (OnJourneySelectedListener) context;
+        if (context instanceof OnJourneyActionListener) {
+            listener = (OnJourneyActionListener) context;
         } else {
             throw new IllegalArgumentException(
-                    "context must implement " + OnJourneySelectedListener.class);
+                    "context must implement " + OnJourneyActionListener.class);
         }
     }
 
@@ -124,6 +126,8 @@ public class MyJourneysListFragment extends Fragment implements
         if (position != -1) {
             Journey journey = adapter.remove(position);
             journey.deleteEventually();
+            showEmptyView(adapter.getItemCount() == 0);
+            listener.onJourneyDeleted(journeyId);
         } else {
             Log.e(TAG, "Tried to delete non-existent Journey(" + journeyId + ")");
         }
@@ -139,14 +143,21 @@ public class MyJourneysListFragment extends Fragment implements
     }
 
     private void showJourneys(List<Journey> journeys) {
-        if (journeys.size() == 0) {
-            // Show empty journey view.
+        boolean isEmpty = journeys.size() == 0;
+        showEmptyView(isEmpty);
+        adapter.clear();
+        if (!isEmpty) {
+            adapter.addAll(journeys);
+        }
+    }
+
+    private void showEmptyView(boolean isEmpty) {
+        if (isEmpty) {
             binding.rlEmptyView.setVisibility(View.VISIBLE);
             binding.rvJourneys.setVisibility(View.GONE);
         } else {
             binding.rlEmptyView.setVisibility(View.GONE);
             binding.rvJourneys.setVisibility(View.VISIBLE);
-            adapter.addAll(journeys);
         }
     }
 
@@ -157,7 +168,6 @@ public class MyJourneysListFragment extends Fragment implements
         query.findInBackground(new FindCallback<Journey>() {
             @Override
             public void done(List<Journey> objects, ParseException e) {
-                adapter.clear();
                 hideProgressBar();
 
                 if (e == null) {

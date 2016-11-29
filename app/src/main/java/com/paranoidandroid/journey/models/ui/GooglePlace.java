@@ -1,5 +1,7 @@
 package com.paranoidandroid.journey.models.ui;
 
+import com.paranoidandroid.journey.support.GooglePlaceInfo;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -7,28 +9,9 @@ import org.parceler.Parcel;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 @Parcel
 public class GooglePlace extends Recommendation {
-    private String photoReference;
-
-    public String getPhotoReference() {
-        return photoReference;
-    }
-
-    public static String makeImageUrl(String imageReference) {
-        return makeImageUrl(imageReference, 400);
-    }
-
-    public static String makeImageUrl(String imageReference, int maxWidth) {
-        if (imageReference == null) {
-            return null;
-        }
-        return String.format(Locale.US,
-                "https://maps.googleapis.com/maps/api/place/photo?maxwidth=%d&photoreference=%s&key=%s",
-                maxWidth, imageReference, "AIzaSyDoES56ptzOPbwy62kw9JMT4zBgloJQD7Y");
-    }
 
     public static GooglePlace parsePlace(JSONObject jsonPlace) throws JSONException {
         GooglePlace gp = new GooglePlace();
@@ -41,8 +24,8 @@ public class GooglePlace extends Recommendation {
             gp.address = jsonPlace.getString("vicinity");
         gp.rating = (!jsonPlace.isNull("rating")) ? jsonPlace.getDouble("rating") : -1.;
         if (!jsonPlace.isNull("photos")) {
-            gp.photoReference = jsonPlace.getJSONArray("photos").getJSONObject(0).getString("photo_reference");
-            gp.imageUrl = makeImageUrl(gp.photoReference);
+            String photoReference = jsonPlace.getJSONArray("photos").getJSONObject(0).getString("photo_reference");
+            gp.imageUrl = GooglePlaceInfo.makeImageUrl(photoReference);
         }
         return gp;
     }

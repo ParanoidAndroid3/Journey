@@ -23,7 +23,7 @@ import com.parse.ParseUser;
 
 public class MyJourneysActivity extends AppCompatActivity implements
         LogoutConfirmationDialogFragment.OnLogoutListener,
-        MyJourneysListFragment.OnJourneySelectedListener {
+        MyJourneysListFragment.OnJourneyActionListener {
 
     private ActivityMyJourneysBinding binding;
 
@@ -91,6 +91,13 @@ public class MyJourneysActivity extends AppCompatActivity implements
         Intent intent = new Intent(this, PlannerActivity.class);
         intent.putExtra("journey_id", journey.getObjectId());
         startActivity(intent);
+    }
+
+    @Override
+    public void onJourneyDeleted(String journeyId) {
+        // Hack to ensure that FAB is visible if it has been hidden but there aren't enough items
+        // remaining in the list to allow scrolling (which would show the FAB again).
+        binding.fab.show();
     }
 
     @Override

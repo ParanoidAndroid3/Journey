@@ -20,8 +20,8 @@ import com.paranoidandroid.journey.databinding.ItemJourneyBinding;
 import com.paranoidandroid.journey.models.Destination;
 import com.paranoidandroid.journey.models.Journey;
 import com.paranoidandroid.journey.models.Leg;
-import com.paranoidandroid.journey.models.ui.GooglePlace;
 import com.paranoidandroid.journey.support.DateFormattingUtils;
+import com.paranoidandroid.journey.support.GooglePlaceInfo;
 
 import java.util.Collection;
 import java.util.List;
@@ -114,15 +114,16 @@ public class JourneyAdapter extends RecyclerView.Adapter<JourneyAdapter.ViewHold
         }
 
         Destination destination = journey.getLegs().get(0).getDestination();
+        double lat = destination.getLatitude();
+        double lng = destination.getLongitude();
         String imageReference = destination.getGoogleImageReference();
-        if (imageReference != null) {
-            SimpleTarget<GlideDrawable> target = new BackdropTarget(
-                    holder.binding.ivBackdrop, holder.binding.ivScrim);
 
-            // TODO: screenWidth should be the current screen width.
-            String imageUrl = GooglePlace.makeImageUrl(imageReference, screenWidth);
-            Glide.with(context).load(imageUrl).into(target);
-        }
+        // TODO: screenWidth should be the current screen width.
+        String imageUrl = new GooglePlaceInfo(imageReference, lat, lng).getImageUrl(screenWidth);
+
+        SimpleTarget<GlideDrawable> target = new BackdropTarget(
+                holder.binding.ivBackdrop, holder.binding.ivScrim);
+        Glide.with(context).load(imageUrl).into(target);
     }
 
     public void addAll(Collection<? extends Journey> collection) {

@@ -4,8 +4,8 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.paranoidandroid.journey.models.Destination;
 import com.paranoidandroid.journey.models.Journey;
 import com.paranoidandroid.journey.models.Leg;
-import com.paranoidandroid.journey.models.ui.GooglePlace;
 import com.paranoidandroid.journey.network.GooglePlaceSearchClient;
+import com.paranoidandroid.journey.support.GooglePlaceInfo;
 import com.parse.ParseUser;
 
 import org.json.JSONArray;
@@ -88,10 +88,12 @@ public class JourneyBuilder {
                         }
                     }
 
-                    GooglePlace place = GooglePlace.parsePlace(result);
-                    if (place != null) {
-                        destination.setGeoPoint(place.getLatitude(), place.getLongitude());
-                        destination.setGoogleImageReference(place.getPhotoReference());
+                    GooglePlaceInfo placeInfo = GooglePlaceInfo.parseFromJson(result);
+                    if (placeInfo != null) {
+                        destination.setGeoPoint(placeInfo.getLatitude(), placeInfo.getLongitude());
+                        if (placeInfo.getPhotoReference() != null) {
+                            destination.setGoogleImageReference(placeInfo.getPhotoReference());
+                        }
                     }
 
                 } catch (JSONException e) {

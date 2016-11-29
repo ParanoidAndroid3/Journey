@@ -7,7 +7,7 @@
 
         <variable
             name="listener"
-            type="com.paranoidandroid.journey.myjourneys.fragments.MyJourneysListFragment.OnJourneySelectedListener"/>
+            type="com.paranoidandroid.journey.myjourneys.fragments.MyJourneysListFragment.OnJourneyActionListener"/>
     </data>
 
     <RelativeLayout
