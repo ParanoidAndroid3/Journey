@@ -17,6 +17,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatDrawableManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -78,6 +79,9 @@ public class PlannerActivity extends AppCompatActivity implements
     @BindView(R.id.nestedScrollView) NestedScrollView nestedScrollView;
     @BindView(R.id.drawer) DrawerLayout drawer;
     @BindView(R.id.navigationView) NavigationView navigationView;
+    @BindView(R.id.fabAddCustom) com.github.clans.fab.FloatingActionButton fabAddCustom;
+    @BindView(R.id.fabAddFromBookmarks) com.github.clans.fab.FloatingActionButton fabAddFromBookmarks;
+    @BindView(R.id.fabAddRecommendation) com.github.clans.fab.FloatingActionButton fabAddRecommendation;
 
     private ActionBarDrawerToggle drawerToggle;
     private String journeyId;
@@ -318,6 +322,9 @@ public class PlannerActivity extends AppCompatActivity implements
     }
 
     private void setupFabs() {
+        fabAddCustom.setImageDrawable(AppCompatDrawableManager.get().getDrawable(this, R.drawable.ic_add_custom));
+        fabAddFromBookmarks.setImageDrawable(AppCompatDrawableManager.get().getDrawable(this, R.drawable.ic_add_bookmark));
+        fabAddRecommendation.setImageDrawable(AppCompatDrawableManager.get().getDrawable(this, R.drawable.ic_star));
         floatingMenu.hideMenu(false);
         floatingMenu.setClosedOnTouchOutside(true);
         floatingMenu.setMenuButtonShowAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_from_down));
