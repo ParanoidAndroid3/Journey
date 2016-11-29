@@ -111,7 +111,8 @@ public class LegsFragment extends WizardFragment {
                         input.setText("");
                         LegItem item = acAdapter.getItem(i);
                         Destination destination = JourneyBuilder.findDestination(item.getPlacesId());
-                        destination.setDisplayName(item.getDestination());
+                        String displayName = generateDisplayName(item.getDestination());
+                        destination.setDisplayName(displayName);
                         destination.setGooglePlaceId(item.getPlacesId());
                         Leg leg = new Leg();
                         leg.setDestination(destination);
@@ -121,6 +122,17 @@ public class LegsFragment extends WizardFragment {
             }
         });
 
+    }
+
+    private String generateDisplayName(String destination) {
+        String[] components = destination.split(",");
+        if (components.length == 2) {
+            return destination;
+        } else if (components[2].equals(" United States")) {
+            return components[0] + "," + components[1];
+        } else {
+            return components[0] + "," + components[components.length -1];
+        }
     }
 
     private void loadJourneyLegs(String journeyId) {

@@ -85,6 +85,12 @@ public class JourneyBuilder {
                                 break;
                             }
                         }
+
+                        // use first part of display name if no city is present
+                        if (destination.getCityName() == null) {
+                            String[] components = destination.getDisplayName().replaceAll("\\s+","").split(",");
+                            destination.setCityName(components[0]);
+                        }
                     }
                     JSONObject location = result.getJSONObject("geometry").getJSONObject("location");
                     destination.setGeoPoint(location.getDouble("lat"), location.getDouble("lng"));
