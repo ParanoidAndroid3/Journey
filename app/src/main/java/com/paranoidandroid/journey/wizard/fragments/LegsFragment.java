@@ -110,9 +110,7 @@ public class LegsFragment extends WizardFragment {
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         input.setText("");
                         LegItem item = acAdapter.getItem(i);
-                        Destination destination = JourneyBuilder.findDestination(item.getPlacesId());
-                        destination.setDisplayName(item.getDestination());
-                        destination.setGooglePlaceId(item.getPlacesId());
+                        Destination destination = JourneyBuilder.findDestination(item.getPlacesId(), item.getDestination());
                         Leg leg = new Leg();
                         leg.setDestination(destination);
                         adapter.add(leg);
