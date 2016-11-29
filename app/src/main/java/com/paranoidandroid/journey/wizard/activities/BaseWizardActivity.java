@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.models.Journey;
@@ -27,6 +28,7 @@ public abstract class BaseWizardActivity extends AppCompatActivity implements Wi
     protected FloatingActionButton fab;
 
     protected Journey journey;
+    protected ProgressBar progressBar;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -70,6 +72,16 @@ public abstract class BaseWizardActivity extends AppCompatActivity implements Wi
             return false;
         }
         return !((String) journeyData.get(JourneyBuilder.SIZE_KEY)).isEmpty();
+    }
+
+    protected void showProgressBar() {
+        progressBar.setVisibility(View.VISIBLE);
+        enableFab(false);
+    }
+
+    protected void hideProgressBar() {
+        progressBar.setVisibility(View.GONE);
+        enableFab(true);
     }
 
 
