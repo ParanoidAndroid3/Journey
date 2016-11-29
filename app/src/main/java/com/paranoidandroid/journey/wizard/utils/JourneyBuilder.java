@@ -88,12 +88,14 @@ public class JourneyBuilder {
                             }
                         }
 
-                        // use first part of display name if no city is present
-                        if (destination.getCityName() == null) {
-                            String[] components = destination.getDisplayName().replaceAll("\\s+","").split(",");
-                            destination.setCityName(components[0]);
-                        }
                     }
+
+                    // use first part of display name if no city is present
+                    if (destination.getCityName() == null) {
+                        String[] components = destination.getDisplayName().replaceAll("\\s+","").split(",");
+                        destination.setCityName(components[0]);
+                    }
+
                     JSONObject location = result.getJSONObject("geometry").getJSONObject("location");
                     destination.setGeoPoint(location.getDouble("lat"), location.getDouble("lng"));
 
@@ -110,7 +112,7 @@ public class JourneyBuilder {
 
         return destination;
     }
-    
+
     private static String generateDisplayName(String destination) {
         String[] components = destination.split(",");
         if (components.length <= 2) {
