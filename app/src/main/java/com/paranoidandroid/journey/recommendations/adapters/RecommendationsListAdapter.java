@@ -1,6 +1,7 @@
 package com.paranoidandroid.journey.recommendations.adapters;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -106,8 +107,8 @@ public class RecommendationsListAdapter extends RecyclerView.Adapter<RecyclerVie
             vh.photo.setHeightRatio(1);
             Glide.with(context)
                     .load(place.getImageUrl())
-                    .placeholder(R.drawable.ic_placeholder)
-                    .error(R.drawable.ic_placeholder)
+                    .placeholder(ContextCompat.getDrawable(context, R.drawable.ic_placeholder))
+                    .error(ContextCompat.getDrawable(context, R.drawable.ic_placeholder))
                     .into(vh.photo);
             vh.name.setText(place.getName());
             vh.distance.setText(distFormat.format(
@@ -123,8 +124,8 @@ public class RecommendationsListAdapter extends RecyclerView.Adapter<RecyclerVie
             vh.photo.setHeightRatio(1);
             Glide.with(context)
                     .load(place.getImageUrl())
-                    .placeholder(R.drawable.ic_placeholder)
-                    .error(R.drawable.ic_placeholder)
+                    .placeholder(ContextCompat.getDrawable(context, R.drawable.ic_placeholder))
+                    .error(ContextCompat.getDrawable(context, R.drawable.ic_placeholder))
                     .into(vh.photo);
             vh.name.setText(place.getName());
             vh.distance.setText(distFormat.format(

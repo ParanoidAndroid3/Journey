@@ -105,12 +105,12 @@
 
     <style name="RecommendationsTabLayout" parent="Widget.Design.TabLayout">
         <item name="tabTextAppearance">@style/RecommendationsTabTextAppearance</item>
-        <item name="tabSelectedTextColor">?android:colorPrimaryDark</item>
+        <item name="tabSelectedTextColor">#5D4037</item>
         <item name="android:background">#D7CCC8</item>
     </style>
 
     <style name="RecommendationsTabTextAppearance" parent="TextAppearance.Design.Tab">
-        <item name="android:textColor">?android:colorPrimaryDark</item>
+        <item name="android:textColor">#5D4037</item>
         <item name="textAllCaps">true</item>
     </style>
 

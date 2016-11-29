@@ -7,7 +7,7 @@ The following **required** functionality is completed:
 
 * [X] User can log into the app using a Google or Facebook account
 * [X] Users can view a list of all Journeys created by them with general information about the legs.
-* [ ] User can create a new Journey by specifying the following:
+* [X] User can create a new Journey by specifying the following:
    * [X] Journey name
    * [X] Journey legs - destination and start/end dates (partial)
    * [X] Journey tags - {solo, couple, group, family} & {adventure, relaxation, budget, luxury, foodie, culture}

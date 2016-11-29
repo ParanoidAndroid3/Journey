@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.paranoidandroid.journey.R;
@@ -14,6 +15,7 @@ import com.paranoidandroid.journey.models.Journey;
 import com.paranoidandroid.journey.wizard.adapters.WizardPagerAdapter;
 import com.paranoidandroid.journey.wizard.utils.JourneyBuilder;
 import com.parse.ParseException;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 
@@ -34,8 +36,10 @@ public class WizardActivity extends BaseWizardActivity implements View.OnClickLi
         setContentView(R.layout.activity_wizard);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setClickable(false);
+        enableFab(false);
         fab.setOnClickListener(this);
+
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         pagerAdapter = new WizardPagerAdapter(getSupportFragmentManager());
         viewpager = (ViewPager) findViewById(R.id.viewpager);
@@ -86,7 +90,11 @@ public class WizardActivity extends BaseWizardActivity implements View.OnClickLi
         if (currentFragment < 2) {
             goToNextFragment(currentFragment);
         } else if (readyToPublish()) {
-            final Journey journey = JourneyBuilder.buildJourney(journeyData);
+
+            showProgressBar();
+
+            final Journey journey = JourneyBuilder.buildJourney(
+                    ParseUser.getCurrentUser(), journeyData);
             journey.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
@@ -97,8 +105,8 @@ public class WizardActivity extends BaseWizardActivity implements View.OnClickLi
                         String journeyId = journey.getObjectId();
                         Intent intent = new Intent(getApplicationContext(), PlannerActivity.class);
                         intent.putExtra("journey_id", journeyId);
-
                         startActivity(intent);
+                        hideProgressBar();
                     } else {
                         // The save failed.
                         Log.e(TAG, "Error saving Journey: " + e);

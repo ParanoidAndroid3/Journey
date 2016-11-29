@@ -2,6 +2,7 @@ package com.paranoidandroid.journey.legplanner.adapters;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -62,8 +63,8 @@ public class ActivitiesListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             vh.tvType.setText(activity.getEventType());
             Glide.with(mContext)
                     .load(activity.getImageUrl())
-                    .placeholder(R.drawable.ic_map_marker_placeholder)
-                    .error(R.drawable.ic_map_marker_placeholder)
+                    .placeholder(ContextCompat.getDrawable(mContext, R.drawable.ic_map_marker_placeholder))
+                    .error(ContextCompat.getDrawable(mContext, R.drawable.ic_map_marker_placeholder))
                     .into(vh.ivPhoto);
         }
     }

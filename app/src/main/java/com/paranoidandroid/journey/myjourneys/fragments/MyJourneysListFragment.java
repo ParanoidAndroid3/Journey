@@ -16,6 +16,7 @@ import com.paranoidandroid.journey.models.Journey;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +62,11 @@ public class MyJourneysListFragment extends Fragment
         binding.rvJourneys.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.rvJourneys.setAdapter(adapter);
         binding.setListener(listener);
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
         fetchJourneys();
     }
 
@@ -111,18 +116,13 @@ public class MyJourneysListFragment extends Fragment
     }
 
     protected void fetchJourneys() {
-        ParseQuery<Journey> query = ParseQuery.getQuery(Journey.class);
-        query.include("legs");
-        query.include("legs.destination");
-
-        // TODO(emmanuel): think about security settings so users can't view all other users' data by default.
-        //query.whereEqualTo("creator", ParseUser.getCurrentUser());
+        ParseQuery<Journey> query = Journey.createQuery(ParseUser.getCurrentUser());
 
         showInitialLoadProgressBar();
-
         query.findInBackground(new FindCallback<Journey>() {
             @Override
             public void done(List<Journey> objects, ParseException e) {
+                adapter.clear();
                 hideInitialLoadProgressBar();
 
                 if (e == null) {
