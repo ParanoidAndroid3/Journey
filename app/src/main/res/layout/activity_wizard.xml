@@ -7,6 +7,8 @@
     android:fitsSystemWindows="true"
     tools:context="com.paranoidandroid.journey.wizard.activities.WizardActivity">
 
+    <include layout="@layout/wizard_header"/>
+
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
@@ -23,13 +25,21 @@
         android:background="@android:color/transparent"
         app:srcCompat="@drawable/ic_exit"/>
 
-    <android.support.design.widget.FloatingActionButton
+
+    <com.github.clans.fab.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/ic_arrow_forward"
-        app:backgroundTint="?android:attr/textColorPrimaryDisableOnly" />
+        app:fab_colorNormal="@color/colorAccent"
+        app:fab_colorPressed="@color/colorAccentLight"
+        app:fab_colorRipple="@color/colorAccentLight"
+        app:fab_progress_color="@color/colorAccentLight"
+        app:fab_progress_backgroundColor="@color/colorFabProgress"
+        android:clickable="true"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:layout_marginRight="@dimen/fab_margin"
+        app:layout_anchorGravity="bottom|right"
+        android:layout_gravity="bottom|right" />
 
 </android.support.design.widget.CoordinatorLayout>

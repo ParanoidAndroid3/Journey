@@ -3,12 +3,12 @@ package com.paranoidandroid.journey.wizard.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.github.clans.fab.FloatingActionButton;
 import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.wizard.fragments.LegsFragment;
 import com.paranoidandroid.journey.wizard.fragments.NameFragment;
@@ -45,6 +45,7 @@ public class EditJourneyActivity extends BaseWizardActivity implements View.OnCl
         setContentView(R.layout.activity_edit_journey);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setImageResource(R.drawable.ic_check);
         fab.setOnClickListener(this);
 
         changed = false;
@@ -88,41 +89,46 @@ public class EditJourneyActivity extends BaseWizardActivity implements View.OnCl
     @Override
     public void onClick(View view) {
 
+        showProgressBar();
+
         if (!changed) {
             finish();
-        }
-
-        boolean success = false;
-
-        switch (editMode) {
-            case EDIT_MODE_TITLE:
-                if (success = nameComplete()) {
-                    JourneyBuilder.setName(journey, journeyData);
-                }
-                break;
-            case EDIT_MODE_LEGS:
-                success = legsComplete();
-                break;
-            case EDIT_MODE_TAGS:
-                if (success = tagsComplete()) {
-                    JourneyBuilder.setTags(journey, journeyData);
-                }
-                break;
-        }
-
-        if (success) {
-            journey.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    if (e == null) {
-                        finish();
-                    } else {
-                        e.printStackTrace();
-                    }
-                }
-            });
         } else {
-            Toast.makeText(this, "Missing data. Please fill out form", Toast.LENGTH_LONG).show();
+
+            boolean success = false;
+
+            switch (editMode) {
+                case EDIT_MODE_TITLE:
+                    if (success = nameComplete()) {
+                        JourneyBuilder.setName(journey, journeyData);
+                    }
+                    break;
+                case EDIT_MODE_LEGS:
+                    success = legsComplete();
+                    break;
+                case EDIT_MODE_TAGS:
+                    if (success = tagsComplete()) {
+                        JourneyBuilder.setTags(journey, journeyData);
+                    }
+                    break;
+            }
+
+            if (success) {
+                journey.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e == null) {
+                            finish();
+                            //hideProgressBar();
+                        } else {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            } else {
+                hideProgressBar();
+                Toast.makeText(this, "Missing data. Please fill out form", Toast.LENGTH_LONG).show();
+            }
         }
     }
 

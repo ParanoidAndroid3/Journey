@@ -2,12 +2,12 @@ package com.paranoidandroid.journey.wizard.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.github.clans.fab.FloatingActionButton;
 import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.legplanner.activities.PlannerActivity;
 import com.paranoidandroid.journey.models.Journey;
@@ -35,7 +35,8 @@ public class WizardActivity extends BaseWizardActivity implements View.OnClickLi
         setContentView(R.layout.activity_wizard);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setClickable(false);
+        fab.setImageResource(R.drawable.ic_arrow_forward);
+        enableFab(false);
         fab.setOnClickListener(this);
 
         pagerAdapter = new WizardPagerAdapter(getSupportFragmentManager());
@@ -87,6 +88,9 @@ public class WizardActivity extends BaseWizardActivity implements View.OnClickLi
         if (currentFragment < 2) {
             goToNextFragment(currentFragment);
         } else if (readyToPublish()) {
+
+            showProgressBar();
+
             final Journey journey = JourneyBuilder.buildJourney(
                     ParseUser.getCurrentUser(), journeyData);
             journey.saveInBackground(new SaveCallback() {
@@ -99,8 +103,8 @@ public class WizardActivity extends BaseWizardActivity implements View.OnClickLi
                         String journeyId = journey.getObjectId();
                         Intent intent = new Intent(getApplicationContext(), PlannerActivity.class);
                         intent.putExtra("journey_id", journeyId);
-
                         startActivity(intent);
+                        //hideProgressBar();
                     } else {
                         // The save failed.
                         Log.e(TAG, "Error saving Journey: " + e);
