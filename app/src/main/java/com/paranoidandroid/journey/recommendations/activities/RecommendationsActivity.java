@@ -21,15 +21,15 @@ import com.paranoidandroid.journey.models.ui.Recommendation;
 import com.paranoidandroid.journey.network.GooglePlaceSearchClient;
 import com.paranoidandroid.journey.recommendations.adapters.RecommendationsPagerAdapter;
 import com.paranoidandroid.journey.recommendations.interfaces.RecommendationActivityListener;
+import com.paranoidandroid.journey.support.RecommendationCategory;
+import com.paranoidandroid.journey.support.TagCategoryMapper;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
 import org.json.JSONObject;
-import org.parceler.Parcel;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -51,7 +51,7 @@ public class RecommendationsActivity extends AppCompatActivity implements
     private Leg leg;
     String legId;
 
-    List<Keyword> keywords;
+    TagCategoryMapper tagCategoryMapper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,11 +62,8 @@ public class RecommendationsActivity extends AppCompatActivity implements
         setupToolbar();
 
         legId = getIntent().getStringExtra("leg_id");
-
-        keywords = Arrays.asList(
-                new Keyword("google_id", "Museums", "museum"),
-                new Keyword("foursquare_id", "Food", "4d4b7105d754a06374d81259")
-        );
+        List<String> tags = getIntent().getStringArrayListExtra("tags");
+        tagCategoryMapper = new TagCategoryMapper(tags);
     }
 
     @Override
@@ -144,7 +141,10 @@ public class RecommendationsActivity extends AppCompatActivity implements
     // Create a Bookmark object from the Recommendation attributes and save it to Parse
 
     @Override
-    public void onBookmarkRecommendation(Recommendation rec, Keyword keyword, final OnRecommendationSaveListener listener) {
+    public void onBookmarkRecommendation(
+            Recommendation rec,
+            RecommendationCategory category,
+            final OnRecommendationSaveListener listener) {
         if (listener == null) {
             Snackbar.make(tabLayout, "Error adding bookmark!", Snackbar.LENGTH_SHORT).show();
             return;
@@ -153,7 +153,7 @@ public class RecommendationsActivity extends AppCompatActivity implements
             listener.onError();
             return;
         }
-        final Bookmark bookmark = Bookmark.createFromRecommendation(rec, keyword);
+        final Bookmark bookmark = Bookmark.createFromRecommendation(rec, category);
         bookmark.saveInBackground(new SaveCallback() {
             @Override
             public void done(final ParseException e) {
@@ -181,7 +181,10 @@ public class RecommendationsActivity extends AppCompatActivity implements
     // Find the Bookmark in the Leg and remove it
 
     @Override
-    public void onUnBookmarkRecommendation(Recommendation rec, Keyword keyword, final OnRecommendationSaveListener listener) {
+    public void onUnBookmarkRecommendation(
+            Recommendation rec,
+            RecommendationCategory category,
+            final OnRecommendationSaveListener listener) {
         if (listener == null) {
             Snackbar.make(tabLayout, "Error adding bookmark!", Snackbar.LENGTH_SHORT).show();
             return;
@@ -194,7 +197,7 @@ public class RecommendationsActivity extends AppCompatActivity implements
             // Need to call this synchronously to avoid 'Object not found' error
             Bookmark.fetchAllIfNeeded(leg.getBookmarks());
             for (Bookmark bookmark : leg.getBookmarks()) {
-                if (rec.getId().equals(bookmark.get(keyword.sourceId))) {
+                if (rec.getId().equals(bookmark.get(category.source.getSourceId()))) {
                     leg.removeBookmark(bookmark);
                     leg.saveInBackground(new SaveCallback() {
                         @Override
@@ -214,22 +217,6 @@ public class RecommendationsActivity extends AppCompatActivity implements
         } catch (ParseException e) {
             e.printStackTrace();
             listener.onError();
-        }
-    }
-
-    // Temp stub to map activity categories to keywords for the different APIs
-
-    @Parcel
-    public static class Keyword {
-        public String title;
-        public String keyword;
-        public String sourceId;
-
-        public Keyword() {}
-        public Keyword(String sourceId, String title, String keyword) {
-            this.sourceId = sourceId;
-            this.title = title;
-            this.keyword = keyword;
         }
     }
 
@@ -257,7 +244,7 @@ public class RecommendationsActivity extends AppCompatActivity implements
 
     private void setupTabs() {
         LatLng source = new LatLng(leg.getDestination().getLatitude(), leg.getDestination().getLongitude());
-        adapter = RecommendationsPagerAdapter.newInstance(getSupportFragmentManager(), keywords, source);
+        adapter = RecommendationsPagerAdapter.newInstance(getSupportFragmentManager(), tagCategoryMapper.getCategories(), source);
         pager.setAdapter(adapter);
         tabLayout.setupWithViewPager(pager);
     }

@@ -25,6 +25,12 @@ public abstract class WizardFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        listener = null;
+    }
+
     /**
      * This interface allows WizardFragments to
      * communicate with parent activities.
