@@ -13,19 +13,17 @@ import android.view.ViewGroup;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.paranoidandroid.journey.R;
-import com.paranoidandroid.journey.models.ui.Day;
 import com.paranoidandroid.journey.models.ui.Recommendation;
-import com.paranoidandroid.journey.recommendations.activities.RecommendationsActivity;
 import com.paranoidandroid.journey.recommendations.adapters.RecommendationsListAdapter;
 import com.paranoidandroid.journey.recommendations.interfaces.RecommendationActivityListener;
 import com.paranoidandroid.journey.recommendations.interfaces.RecommendationsListAdapterClickListener;
+import com.paranoidandroid.journey.support.RecommendationCategory;
 import com.paranoidandroid.journey.support.ui.EndlessRecyclerViewScrollListener;
 import com.paranoidandroid.journey.support.ui.SpacesItemDecoration;
 
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -38,7 +36,7 @@ public abstract class BaseRecommendationsFragment extends Fragment implements
     @BindView(R.id.rvRecommendations) RecyclerView rvRecommendations;
     @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeRefreshLayout;
     protected LatLng coordinates;
-    protected RecommendationsActivity.Keyword keyword;
+    protected RecommendationCategory category;
     protected StaggeredGridLayoutManager layoutManager;
     private ArrayList<Recommendation> items;
     private RecommendationsListAdapter adapter;
@@ -63,7 +61,7 @@ public abstract class BaseRecommendationsFragment extends Fragment implements
         super.onCreate(savedInstanceState);
         items = new ArrayList<>();
         coordinates = getArguments().getParcelable("coordinates");
-        keyword = Parcels.unwrap(getArguments().getParcelable("keyword"));
+        category = Parcels.unwrap(getArguments().getParcelable("category"));
         adapter = new RecommendationsListAdapter(getActivity(), items, coordinates);
     }
 
@@ -100,7 +98,7 @@ public abstract class BaseRecommendationsFragment extends Fragment implements
 
     protected void appendItems(List<? extends Recommendation> places, boolean clearExisting) {
         if (listener != null) {
-            listener.decorateRecommendations(places, keyword.sourceId);
+            listener.decorateRecommendations(places, category.source.getSourceId());
         }
 
         if (clearExisting) {
@@ -119,7 +117,7 @@ public abstract class BaseRecommendationsFragment extends Fragment implements
 
     @Override
     public void onAddBookmarkClicked(Recommendation r, final int position) {
-        listener.onBookmarkRecommendation(r, keyword, new RecommendationActivityListener.OnRecommendationSaveListener() {
+        listener.onBookmarkRecommendation(r, category, new RecommendationActivityListener.OnRecommendationSaveListener() {
             @Override
             public void onSaved() {
                 items.get(position).setBookmarked(true);
@@ -135,7 +133,7 @@ public abstract class BaseRecommendationsFragment extends Fragment implements
 
     @Override
     public void onRemoveBookmarkClicked(Recommendation r, final int position) {
-        listener.onUnBookmarkRecommendation(r, keyword, new RecommendationActivityListener.OnRecommendationSaveListener() {
+        listener.onUnBookmarkRecommendation(r, category, new RecommendationActivityListener.OnRecommendationSaveListener() {
             @Override
             public void onSaved() {
                 items.get(position).setBookmarked(false);

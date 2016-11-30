@@ -23,7 +23,8 @@ public final class DateFormattingUtils {
         if (start != null &&  end != null) {
             // TODO(emmanuel): maybe there is a way to do this that accounts for current locale?
             long days = getDateDiff(start, end, TimeUnit.DAYS);
-            return days + "d";
+            // Add 1 since the trip starts at day zero.
+            return (days + 1) + "d";
         }
         return "";
     }

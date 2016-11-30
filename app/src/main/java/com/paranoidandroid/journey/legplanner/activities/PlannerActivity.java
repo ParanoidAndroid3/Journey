@@ -12,7 +12,6 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -366,6 +365,7 @@ public class PlannerActivity extends AppCompatActivity implements
     public void exploreRecommendationsPressed(View v) {
         Intent intent = new Intent(PlannerActivity.this, RecommendationsActivity.class);
         intent.putExtra("leg_id", getDayPlannerFragment().getSelectedDay().getLeg().getObjectId());
+        intent.putStringArrayListExtra("tags", new ArrayList<>(mJourney.getTripTags()));
         startActivity(intent);
         floatingMenu.close(false);
     }

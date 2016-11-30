@@ -1,7 +1,7 @@
 package com.paranoidandroid.journey.models;
 
 import com.paranoidandroid.journey.models.ui.Recommendation;
-import com.paranoidandroid.journey.recommendations.activities.RecommendationsActivity;
+import com.paranoidandroid.journey.support.RecommendationCategory;
 import com.parse.ParseClassName;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
@@ -94,14 +94,14 @@ public class Bookmark extends ParseObject {
 
     public String getImageUrl() { return getString(KEY_IMAGE_URL); }
 
-    public static Bookmark createFromRecommendation(Recommendation rec, RecommendationsActivity.Keyword keyword) {
+    public static Bookmark createFromRecommendation(Recommendation rec, RecommendationCategory category) {
         Bookmark bookmark = new Bookmark();
         if (rec.getImageUrl() != null)
             bookmark.setImageUrl(rec.getImageUrl());
         bookmark.put("title", rec.getName());
-        bookmark.put("eventType", keyword.title);
+        bookmark.put("eventType", category.title);
         bookmark.put("geoPoint", new ParseGeoPoint(rec.getLatitude(), rec.getLongitude()));
-        bookmark.put(keyword.sourceId, rec.getId());
+        bookmark.put(category.source.getSourceId(), rec.getId());
         return bookmark;
     }
 }
