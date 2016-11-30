@@ -1,18 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+
+    <color name="colorPrimaryLight">#a17869</color>
+    <color name="colorPrimary">#795548</color>
+    <color name="colorPrimaryDark">#5D4037</color>
+
+    <color name="colorAccent">#03A9F4</color>
+    <color name="colorAccentLight">#8ec0d7</color>
+
+    <color name="colorTextIcons">#FFFF</color>
+    <color name="colorDivider">#BDBDBD</color>
+
+    <color name="colorPrimaryText">#212121</color>
+    <color name="colorSecondaryText">#757575</color>
+
 
     <!-- fab disabled/enabled -->
     <color name="colorFabEnabled">@color/colorAccent</color>
-    <color name="colorFabDisabled">#c7c0c2</color>
+    <color name="colorFabDisabled">@color/colorAccentLight</color>
+    <color name="colorFabProgress">#2a4350</color>
 
-    <color name="colorWizardPrompt">#6b6b6b</color>
-    <color name="colorWizardName">#8f8f8f</color>
+    <color name="colorWizardPrompt">@color/colorTextIcons</color>
+    <color name="colorWizardName">@color/colorPrimaryText</color>
 
-    <color name="colorTagNotPressed">#94d4bf</color>
-    <color name="colorTagPressed">#649182</color>
+    <color name="colorTagNotPressed">@color/colorAccentLight</color>
+    <color name="colorTagPressed">@color/colorAccent</color>
 
     <color name="listBackgroundColor">#EFEFEF</color>
     <color name="darkTranslucent">#BB000000</color>

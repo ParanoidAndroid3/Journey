@@ -2,14 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/tvPlace"
-        android:layout_width="wrap_content"
-        android:layout_height="25dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:textSize="@dimen/wizard_legs_text_size"
+        android:textColor="@color/colorWizardName"
         android:layout_gravity="center_vertical"
+        android:maxLines="1"
         tools:text="Athens, Greece"/>
 
 </LinearLayout>

@@ -11,20 +11,20 @@
     <ImageButton
         android:id="@+id/btnDeleteLeg"
         android:layout_width="10dp"
-        android:layout_height="10dp"
+        android:layout_height="match_parent"
         app:srcCompat="@drawable/ic_remove"
         android:layout_marginStart="10dp"
-        android:background="@android:color/transparent"
-        android:layout_gravity="center"/>
+        android:background="@android:color/transparent"/>
 
     <TextView
         android:id="@+id/tvDestination"
+        android:textColor="@color/colorWizardName"
         android:layout_width="200dp"
-        android:layout_height="fill_parent"
+        android:layout_height="match_parent"
         android:layout_marginStart="18dp"
         android:gravity="center_vertical"
         android:maxLines="1"
-        android:textSize="18sp"
+        android:textSize="@dimen/wizard_legs_text_size"
         tools:text="Paris, France"/>
 
     <Button
