@@ -41,8 +41,11 @@ The following **bonus** features are implemented:
 
 ## Walkthrough
 
-* Week 1 Sprint - http://i.imgur.com/keJhu8T.gif
-* Week 2 Sprint - http://i.imgur.com/zBOWX6J.gif
+* Week 1 Sprint
+  - http://i.imgur.com/keJhu8T.gif
+* Week 2 Sprint
+  - http://i.imgur.com/zBOWX6J.gif
+  - http://i.imgur.com/M0mQxTJ.gif (shows recommendations)
 
 ## Wireframes
 
