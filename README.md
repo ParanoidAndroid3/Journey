@@ -15,7 +15,7 @@ The following **required** functionality is completed:
 * [X] User can *swipe off* the map view to see a calendar view of the trip.
 * [X] User can view a view pager for days with all activities that have been added. The user will be able to select the day to view by selecting it.
 * [X] A Drawer will contain items to navigate to the list of all journeys, edit legs, edit tags, and edit the current journey's name.
-* [ ] User can add / remove a leg of the trip. Information will be saved on the server.
+* [X] User can add / remove a leg of the trip. Information will be saved on the server.
 * [X] User can add / remove custom activities to/from a specific day. Information will be saved on the server.
 * [X] User can add / remove an activity from the recommendation page to/from a specific day. Information will be saved on the server.
 * [X] The recommendations page will contain tabs with several activity categories that the user can navigate, and a grid of suggestions below. Suggestions will be populated using popular related APIs (like Google Places)
@@ -42,6 +42,7 @@ The following **bonus** features are implemented:
 ## Walkthrough
 
 * Week 1 Sprint - http://i.imgur.com/keJhu8T.gif
+* Week 2 Sprint - http://i.imgur.com/zBOWX6J.gif
 
 ## Wireframes
 
