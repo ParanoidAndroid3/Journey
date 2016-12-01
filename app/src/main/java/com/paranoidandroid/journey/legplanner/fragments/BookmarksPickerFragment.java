@@ -1,14 +1,17 @@
 package com.paranoidandroid.journey.legplanner.fragments;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -36,6 +39,7 @@ public class BookmarksPickerFragment extends BottomSheetDialogFragment {
     private OnBookmarksSelectedListener listener;
     private Date date;
     private String city;
+    private int screenWidth;
 
     ArrayList<Bookmark> mBookmarks;
     ArrayList<Bookmark> mSelectedBookmarks;
@@ -76,6 +80,7 @@ public class BookmarksPickerFragment extends BottomSheetDialogFragment {
         mBookmarks = new ArrayList<>();
         mSelectedBookmarks = new ArrayList<>();
         mBookmarksAdapter = new BookmarksListAdapter(getActivity(), mBookmarks, mSelectedBookmarks);
+        findScreenWidth();
     }
 
     @Override
@@ -93,6 +98,8 @@ public class BookmarksPickerFragment extends BottomSheetDialogFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         setupBookmarksList(view);
+        placeRecyclerViewOffScreen();
+        slideInRecyclerView();
     }
 
     private void setupBookmarksList(View view) {
@@ -107,7 +114,6 @@ public class BookmarksPickerFragment extends BottomSheetDialogFragment {
                 }
                 mBookmarksAdapter.notifyItemChanged(pos);
                 showHideAddButton();
-
             }
         });
         rvBookmarks.setAdapter(mBookmarksAdapter);
@@ -117,9 +123,32 @@ public class BookmarksPickerFragment extends BottomSheetDialogFragment {
         showHideAddButton();
     }
 
+    private void slideInRecyclerView() {
+        ObjectAnimator animX = ObjectAnimator.ofFloat(rvBookmarks,
+                View.TRANSLATION_X, screenWidth, 0);
+        animX.setDuration(900);
+        animX.setInterpolator(new DecelerateInterpolator());
+        animX.setStartDelay(500);
+        animX.start();
+    }
+
     private void showHideAddButton() {
         btAdd.setVisibility(mSelectedBookmarks.size() > 0 ? View.VISIBLE : View.GONE);
         btAdd.setText("Add " + mSelectedBookmarks.size() + " bookmark" + (mSelectedBookmarks.size() > 1 ? "s" : ""));
+    }
+
+    // Find the width of the screen
+
+    private void findScreenWidth() {
+        DisplayMetrics dm = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
+        screenWidth = dm.widthPixels;
+    }
+
+    // Set translationX of recyclerView to screen width
+
+    private void placeRecyclerViewOffScreen() {
+        rvBookmarks.setTranslationX(screenWidth);
     }
 
     public void populateBookmarks() {
