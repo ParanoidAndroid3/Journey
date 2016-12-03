@@ -226,12 +226,12 @@ public class TagsFragment extends WizardFragment {
 
     private void turnOff(Map<String, Boolean> source, Button button) {
        source.put(button.getText().toString(), false);
-       button.setBackgroundResource(R.color.colorTagNotPressed);
+       button.setBackgroundResource(R.drawable.rounded_button);
     }
 
     private void turnOn(Map<String, Boolean> source, Button button) {
         source.put(button.getText().toString(), true);
-        button.setBackgroundResource(R.color.colorTagPressed);
+        button.setBackgroundResource(R.drawable.rounded_button_pressed);
     }
 
     /**

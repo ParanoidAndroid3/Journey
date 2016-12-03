@@ -73,6 +73,7 @@ dependencies {
     compile 'com.github.rubensousa:gravitysnaphelper:1.0'
     compile 'com.github.hotchemi:permissionsdispatcher:2.2.0'
     apt 'com.github.hotchemi:permissionsdispatcher-processor:2.2.0'
+    compile 'jp.wasabeef:recyclerview-animators:2.2.5'
     compile 'com.loopj.android:android-async-http:1.4.9'
     compile 'com.google.code.gson:gson:2.6.2'
     compile 'com.jakewharton:butterknife:8.4.0'
