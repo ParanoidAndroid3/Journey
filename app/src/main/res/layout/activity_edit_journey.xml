@@ -8,6 +8,7 @@
     tools:context="com.paranoidandroid.journey.wizard.activities.WizardActivity">
 
     <ImageView
+        android:id="@+id/iveader"
         android:src="@drawable/travel_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -43,5 +44,22 @@
         android:id="@+id/flContent"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+
+    <RelativeLayout
+        android:id="@+id/rlProgress"
+        android:layout_width="match_parent"
+        android:layout_height="360dp"
+        android:background="@android:color/white"
+        android:layout_marginTop="260dp">
+
+        <android.support.v4.widget.ContentLoadingProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:id="@+id/pbEditJourney"
+            style="?android:attr/progressBarStyle"/>
+
+    </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

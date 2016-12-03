@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.ContentLoadingProgressBar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -24,7 +25,7 @@ import java.util.Map;
  * Created by epushkarskaya on 11/27/16.
  */
 
-public class EditJourneyActivity extends BaseWizardActivity implements View.OnClickListener {
+public class EditJourneyActivity extends BaseWizardActivity implements View.OnClickListener, WizardFragment.LoadingListener {
 
     private static final String TAG = "EditJourneyActivity";
 
@@ -38,11 +39,14 @@ public class EditJourneyActivity extends BaseWizardActivity implements View.OnCl
     private String journeyId;
     private int editMode;
     private boolean changed;
+    private ContentLoadingProgressBar progressBar;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_journey);
+
+        progressBar = (ContentLoadingProgressBar) findViewById(R.id.pbEditJourney);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setImageResource(R.drawable.ic_check);
@@ -139,4 +143,17 @@ public class EditJourneyActivity extends BaseWizardActivity implements View.OnCl
         return intent;
     }
 
+    // ------ WizardFragment.LoadingListener implementation ------- //
+
+    @Override
+    public void hideLoading() {
+        progressBar.hide();
+        findViewById(R.id.rlProgress).setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showLoading() {
+        findViewById(R.id.rlProgress).setVisibility(View.VISIBLE);
+        progressBar.show();
+    }
 }

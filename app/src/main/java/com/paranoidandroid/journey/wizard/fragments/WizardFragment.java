@@ -13,13 +13,18 @@ import java.util.Map;
 
 public abstract class WizardFragment extends Fragment {
 
-    protected OnItemUpdatedListener listener;
+    protected OnItemUpdatedListener updateListener;
+    protected LoadingListener loadingListener;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnItemUpdatedListener) {
-            listener = (OnItemUpdatedListener) context;
+        if (context instanceof  LoadingListener && context instanceof OnItemUpdatedListener) {
+            updateListener = (OnItemUpdatedListener) context;
+            loadingListener = (LoadingListener) context;
+        }
+        else if (context instanceof OnItemUpdatedListener) {
+            updateListener = (OnItemUpdatedListener) context;
         } else {
             throw new ClassCastException(context.toString() + " must implement MyListFragment.OnItemSelectedListener");
         }
@@ -28,7 +33,7 @@ public abstract class WizardFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        listener = null;
+        updateListener = null;
     }
 
     /**
@@ -44,6 +49,18 @@ public abstract class WizardFragment extends Fragment {
         void setJourney(Journey journey);
 
         Journey getJourney();
+
+    }
+
+    /**
+     * This interface allows WizardFragments to
+     * turn on/off loading bars
+     */
+    public interface LoadingListener {
+
+        void hideLoading();
+
+        void showLoading();
 
     }
 

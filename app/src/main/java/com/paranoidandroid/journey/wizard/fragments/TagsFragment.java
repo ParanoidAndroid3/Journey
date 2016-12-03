@@ -60,11 +60,11 @@ public class TagsFragment extends WizardFragment {
             if (journeyId != null) {
                 loadJourneyData(journeyId);
             } else {
-                listener.enableFab(false);
+                updateListener.enableFab(false);
                 setupStates();
             }
         } else {
-            listener.enableFab(false);
+            updateListener.enableFab(false);
             setupStates();
         }
 
@@ -73,15 +73,17 @@ public class TagsFragment extends WizardFragment {
     }
 
     private void loadJourneyData(String journeyId) {
+        loadingListener.showLoading();
         ParseQuery<Journey> query = ParseQuery.getQuery(Journey.class);
         query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ONLY);
         query.getInBackground(journeyId, new GetCallback<Journey>() {
             public void done(final Journey journey, ParseException e) {
                 if (e == null) {
-                    listener.setJourney(journey);
+                    updateListener.setJourney(journey);
                     populateMapsFromJourney(journey);
                     setupStates();
-                    listener.enableFab(true);
+                    updateListener.enableFab(true);
+                    loadingListener.hideLoading();
                 } else {
                     e.printStackTrace();
                 }
@@ -201,13 +203,13 @@ public class TagsFragment extends WizardFragment {
 
         if (sizeStates.get(clickedButton.getText().toString())) {
             turnOff(sizeStates, clickedButton);
-            listener.enableFab(false);
+            updateListener.enableFab(false);
         } else {
             for (Button button : sizeButtons) {
                 turnOff(sizeStates, button);
             }
             turnOn(sizeStates, clickedButton);
-            listener.enableFab(true);
+            updateListener.enableFab(true);
         }
     }
 
@@ -252,7 +254,7 @@ public class TagsFragment extends WizardFragment {
             }
         }
         result.put(JourneyBuilder.TAGS_KEY, tags);
-        listener.updateJourneyData(result);
+        updateListener.updateJourneyData(result);
     }
 
 }

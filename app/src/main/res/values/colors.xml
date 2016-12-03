@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="colorPrimaryLight">#a17869</color>
+    <color name="colorPrimaryLight">#af8b7e</color>
     <color name="colorPrimary">#795548</color>
-    <color name="colorPrimaryDark">#5D4037</color>
+    <color name="colorPrimaryDark">#432c25</color>
 
     <color name="colorAccent">#03A9F4</color>
     <color name="colorAccentLight">#a0daf5</color>
@@ -23,8 +23,8 @@
     <color name="colorWizardPrompt">@color/colorPrimaryText</color>
     <color name="colorWizardName">@color/colorPrimaryText</color>
 
-    <color name="colorTagNotPressed">@color/colorAccent</color>
-    <color name="colorTagPressed">@color/colorAccentLight</color>
+    <color name="colorTagNotPressed">@color/colorPrimaryLight</color>
+    <color name="colorTagPressed">@color/colorPrimary</color>
 
     <color name="colorLegCardColor">@android:color/white</color>
 
