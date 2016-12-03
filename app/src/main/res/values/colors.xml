@@ -6,7 +6,7 @@
     <color name="colorPrimaryDark">#5D4037</color>
 
     <color name="colorAccent">#03A9F4</color>
-    <color name="colorAccentLight">#8ec0d7</color>
+    <color name="colorAccentLight">#a0daf5</color>
 
     <color name="colorTextIcons">#FFFF</color>
     <color name="colorDivider">#BDBDBD</color>
@@ -20,7 +20,7 @@
     <color name="colorFabDisabled">@color/colorAccentLight</color>
     <color name="colorFabProgress">#2a4350</color>
 
-    <color name="colorWizardPrompt">@color/colorTextIcons</color>
+    <color name="colorWizardPrompt">@color/colorPrimaryText</color>
     <color name="colorWizardName">@color/colorPrimaryText</color>
 
     <color name="colorTagNotPressed">@color/colorAccentLight</color>

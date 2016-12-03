@@ -7,12 +7,12 @@
     android:fitsSystemWindows="true"
     tools:context="com.paranoidandroid.journey.wizard.activities.WizardActivity">
 
-    <include layout="@layout/wizard_header"/>
-
-    <FrameLayout
-        android:id="@+id/flContent"
+    <ImageView
+        android:src="@drawable/travel_1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true" />
 
     <ImageButton
         android:id="@+id/btnExit"
@@ -38,5 +38,10 @@
         app:layout_anchorGravity="bottom|right"
         android:layout_gravity="bottom|right"
         android:clickable="true"/>
+
+    <FrameLayout
+        android:id="@+id/flContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </android.support.design.widget.CoordinatorLayout>
