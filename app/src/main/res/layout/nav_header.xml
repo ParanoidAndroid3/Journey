@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="200dp"
-    android:background="@drawable/travel_3"
+    android:background="@drawable/travel_2"
     android:fitsSystemWindows="true">
 
     <RelativeLayout
