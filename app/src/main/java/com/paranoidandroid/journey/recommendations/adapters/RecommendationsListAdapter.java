@@ -1,7 +1,9 @@
 package com.paranoidandroid.journey.recommendations.adapters;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.maps.model.LatLng;
 import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.models.ui.FoursquareVenue;
@@ -115,6 +118,11 @@ public class RecommendationsListAdapter extends RecyclerView.Adapter<RecyclerVie
                     MapUtils.haversine(place.getLatitude(), place.getLongitude(), this.headCoordinates.latitude, this.headCoordinates.longitude)
                     ) + "km");
             vh.save.setImageResource(place.isBookmarked() ? R.drawable.ic_bookmark_activity_selected : R.drawable.ic_bookmark_activity_normal);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                ViewCompat.setTransitionName(vh.name, "T"+place.getId());
+                ViewCompat.setTransitionName(vh.photo, "P"+place.getId());
+            }
         }
     }
 
@@ -124,6 +132,7 @@ public class RecommendationsListAdapter extends RecyclerView.Adapter<RecyclerVie
             vh.photo.setHeightRatio(1);
             Glide.with(context)
                     .load(place.getImageUrl())
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .placeholder(ContextCompat.getDrawable(context, R.drawable.ic_placeholder))
                     .error(ContextCompat.getDrawable(context, R.drawable.ic_placeholder))
                     .into(vh.photo);
@@ -132,6 +141,11 @@ public class RecommendationsListAdapter extends RecyclerView.Adapter<RecyclerVie
                     MapUtils.haversine(place.getLatitude(), place.getLongitude(), this.headCoordinates.latitude, this.headCoordinates.longitude)
             ) + "km");
             vh.save.setImageResource(place.isBookmarked() ? R.drawable.ic_bookmark_activity_selected : R.drawable.ic_bookmark_activity_normal);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                ViewCompat.setTransitionName(vh.name, "T"+place.getId());
+                ViewCompat.setTransitionName(vh.photo, "P"+place.getId());
+            }
         }
     }
 

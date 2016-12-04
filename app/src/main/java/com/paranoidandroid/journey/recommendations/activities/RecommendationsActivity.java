@@ -1,12 +1,15 @@
 package com.paranoidandroid.journey.recommendations.activities;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.transition.Explode;
 import android.view.MenuItem;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -64,11 +67,6 @@ public class RecommendationsActivity extends AppCompatActivity implements
         legId = getIntent().getStringExtra("leg_id");
         List<String> tags = getIntent().getStringArrayListExtra("tags");
         tagCategoryMapper = new TagCategoryMapper(tags);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         fetchLeg(legId);
     }
 

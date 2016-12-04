@@ -320,7 +320,7 @@ public class PlannerActivity extends AppCompatActivity implements
         startActivity(intent);
     }
 
-    private void setupFabs() {
+    private void    setupFabs() {
         fabAddCustom.setImageDrawable(AppCompatDrawableManager.get().getDrawable(this, R.drawable.ic_add_custom));
         fabAddFromBookmarks.setImageDrawable(AppCompatDrawableManager.get().getDrawable(this, R.drawable.ic_add_bookmark));
         fabAddRecommendation.setImageDrawable(AppCompatDrawableManager.get().getDrawable(this, R.drawable.ic_star));

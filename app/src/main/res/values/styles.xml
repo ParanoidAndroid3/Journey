@@ -79,9 +79,11 @@
     </style>
 
     <style name="PlannerTitleStyle" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">normal|bold</item>
         <item name="android:shadowDy">1</item>
         <item name="android:shadowDx">1</item>
-        <item name="android:shadowRadius">2</item>
+        <item name="android:shadowRadius">0</item>
         <item name="android:shadowColor">@android:color/black</item>
     </style>
 
@@ -129,6 +131,11 @@
     <style name="SubTitleOverImage" parent="TitleOverImage">
         <item name="android:textColor">?android:attr/textColorSecondaryInverse</item>
         <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="RatingBar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">#FFEB3B</item>
+        <item name="colorControlActivated">#F5F5F5</item>
     </style>
 
 </resources>

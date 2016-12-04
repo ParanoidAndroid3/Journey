@@ -36,6 +36,8 @@ public class FoursquareVenue extends Recommendation{
         JSONArray items = group.getJSONArray("items");
         JSONObject item = items.getJSONObject(0); // assume we have at least one item
         fv.imageUrl = makeImageUrl(item.getString("prefix"), item.getString("suffix"));
+        // Extract tips
+        if (!jsonPlace.isNull("tips")) fv.tips = Tip.parseJSON(jsonPlace.getJSONArray("tips"));
         return fv;
     }
 
