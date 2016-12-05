@@ -70,9 +70,23 @@ public class DayPlannerFragment extends Fragment implements
         frag.scrollToActivityPosition(position);
     }
 
-    public void refreshCurrentPage() {
+    // Called from Planner Activity when activities are added
+
+    public void notifyItemAdded(Activity activity) {
         DayActivitiesFragment frag = (DayActivitiesFragment) adapterViewPager.getRegisteredFragment(mSelectedDayIndex);
-        frag.refreshList();
+        frag.notifyItemAdded(activity);
+    }
+
+    public void notifyItemsAdded(List<Activity> activities) {
+        DayActivitiesFragment frag = (DayActivitiesFragment) adapterViewPager.getRegisteredFragment(mSelectedDayIndex);
+        frag.notifyItemsAdded(activities);
+    }
+
+    // Called from this when an activity is deleted
+
+    public void notifyItemDeleted(int position) {
+        DayActivitiesFragment frag = (DayActivitiesFragment) adapterViewPager.getRegisteredFragment(mSelectedDayIndex);
+        frag.notifyItemDeleted(position);
     }
 
     // Called from Planner Activity when legs are fetched
@@ -87,7 +101,6 @@ public class DayPlannerFragment extends Fragment implements
                 allJourneyDays.addAll(extractDaysFromLeg(leg, dayOrder, legOrder++));
             }
             showDays(allJourneyDays);
-
         }
     }
 
@@ -112,7 +125,7 @@ public class DayPlannerFragment extends Fragment implements
     // ActivitiesListAdapter's ActivityAdapterClickListener implementation
 
     @Override
-    public void onDeleteActivityRequested(Activity activity) {
+    public void onDeleteActivityRequested(Activity activity, final int adapterIndex) {
         Leg leg = getSelectedLeg();
         final int activityIndex = leg.getActivities().indexOf(activity);
         leg.removeActivity(activity);
@@ -120,7 +133,7 @@ public class DayPlannerFragment extends Fragment implements
             @Override
             public void done(ParseException e) {
                 if (e == null) {
-                    refreshCurrentPage();
+                    notifyItemDeleted(adapterIndex);
                     if (listener != null) {
                         listener.onActivityRemovedAtIndex(activityIndex);
                     }

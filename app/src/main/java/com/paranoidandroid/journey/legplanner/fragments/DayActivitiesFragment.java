@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.legplanner.adapters.ActivitiesListAdapter;
-import com.paranoidandroid.journey.legplanner.interfaces.Updateable;
 import com.paranoidandroid.journey.models.Activity;
 import com.paranoidandroid.journey.support.ui.SimpleDividerItemDecoration;
 
@@ -22,10 +21,10 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import jp.wasabeef.recyclerview.animators.LandingAnimator;
 
 public class DayActivitiesFragment extends Fragment implements
-        ActivitiesListAdapter.ActivityAdapterClickListener,
-        Updateable {
+        ActivitiesListAdapter.ActivityAdapterClickListener {
 
     @BindView(R.id.rvActivities) RecyclerView rvActivities;
     @BindView(R.id.tvNoActivities) TextView tvNoActivities;
@@ -40,7 +39,7 @@ public class DayActivitiesFragment extends Fragment implements
     @Override
     public void onDeleteActivityAtAdapterIndex(int position) {
         if (this.listener != null) {
-            this.listener.onDeleteActivityRequested(items.get(position));
+            this.listener.onDeleteActivityRequested(items.get(position), position);
         }
     }
 
@@ -51,14 +50,9 @@ public class DayActivitiesFragment extends Fragment implements
         }
     }
 
-    @Override
-    public void update() {
-        loadActivities();
-    }
-
     public interface OnActivitySelectedListener {
         void onActivitySelected(Activity activity);
-        void onDeleteActivityRequested(Activity activity);
+        void onDeleteActivityRequested(Activity activity, int adapterIndex);
         List<Activity> getActivitiesListForDay(int dayOrder);
     }
 
@@ -91,6 +85,7 @@ public class DayActivitiesFragment extends Fragment implements
     public void onViewCreated(View view, Bundle savedInstanceState) {
         rvActivities.setAdapter(adapter);
         rvActivities.addItemDecoration(new SimpleDividerItemDecoration(getContext()));
+        rvActivities.setItemAnimator(new LandingAnimator());
         activitiesLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvActivities.setLayoutManager(activitiesLayoutManager);
         registerForContextMenu(rvActivities);
@@ -112,8 +107,26 @@ public class DayActivitiesFragment extends Fragment implements
         }
     }
 
-    public void refreshList() {
-        loadActivities();
+    public void notifyItemAdded(Activity activity) {
+        items.add(activity);
+        adapter.notifyItemInserted(items.size() - 1);
+        tvNoActivities.setVisibility(View.GONE);
+        scrollToActivityPosition(items.size() - 1);
+    }
+
+    public void notifyItemsAdded(List<Activity> activities) {
+        int addCount = activities.size();
+        int prevCount = items.size();
+        items.addAll(activities);
+        adapter.notifyItemRangeInserted(prevCount, addCount);
+        tvNoActivities.setVisibility(View.GONE);
+        scrollToActivityPosition(prevCount + addCount - 1);
+    }
+
+    public void notifyItemDeleted(int position) {
+        items.remove(position);
+        adapter.notifyItemRemoved(position);
+        tvNoActivities.setVisibility(items.size() > 0 ? View.GONE : View.VISIBLE);
     }
 
     public void scrollToActivityPosition(int position) {
