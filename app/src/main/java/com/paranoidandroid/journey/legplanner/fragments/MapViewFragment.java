@@ -37,7 +37,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
     Marker selectedMarker;
     int selectedPosition;
     boolean zoomed = false;
-    private Bundle mBundle;
+    //private Bundle mBundle;
     public void setZoomed(boolean zoomed) { this.zoomed = zoomed; }
     public boolean isZoomed() { return this.zoomed; }
 
@@ -53,7 +53,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
         MapsInitializer.initialize(getActivity());
 
         mMapView = (MapView) view.findViewById(R.id.map_view);
-        mMapView.onCreate(mBundle);
+        mMapView.onCreate(savedInstanceState);
         mMapView.getMapAsync(this);
         return view;
     }
@@ -276,7 +276,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBundle = savedInstanceState;
+        //mBundle = savedInstanceState;
     }
 
     @Override

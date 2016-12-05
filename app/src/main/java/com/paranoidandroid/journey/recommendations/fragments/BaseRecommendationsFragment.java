@@ -1,24 +1,37 @@
 package com.paranoidandroid.journey.recommendations.fragments;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.models.ui.Recommendation;
+import com.paranoidandroid.journey.recommendations.activities.RecommendationDetailActivity;
 import com.paranoidandroid.journey.recommendations.adapters.RecommendationsListAdapter;
 import com.paranoidandroid.journey.recommendations.interfaces.RecommendationActivityListener;
 import com.paranoidandroid.journey.recommendations.interfaces.RecommendationsListAdapterClickListener;
 import com.paranoidandroid.journey.support.RecommendationCategory;
 import com.paranoidandroid.journey.support.ui.EndlessRecyclerViewScrollListener;
+import com.paranoidandroid.journey.support.ui.ItemClickSupport;
 import com.paranoidandroid.journey.support.ui.SpacesItemDecoration;
 
 import org.parceler.Parcels;
@@ -30,15 +43,18 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+import static com.paranoidandroid.journey.R.id.tvName;
+
 public abstract class BaseRecommendationsFragment extends Fragment implements
         RecommendationsListAdapterClickListener {
 
     @BindView(R.id.rvRecommendations) RecyclerView rvRecommendations;
-    @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.ivProgress) ImageView ivProgress;
+
     protected LatLng coordinates;
     protected RecommendationCategory category;
     protected StaggeredGridLayoutManager layoutManager;
-    private ArrayList<Recommendation> items;
+    protected ArrayList<Recommendation> items;
     private RecommendationsListAdapter adapter;
     private Unbinder unbinder;
     private RecommendationActivityListener listener;
@@ -67,31 +83,62 @@ public abstract class BaseRecommendationsFragment extends Fragment implements
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                search();
-            }
-        });
-        swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright);
         adapter.setRecommendationsListAdapterClickListener(this);
         rvRecommendations.setAdapter(adapter);
         rvRecommendations.addItemDecoration(new SpacesItemDecoration(16));
         layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         rvRecommendations.setLayoutManager(layoutManager);
         rvRecommendations.addOnScrollListener(getScrollListener());
+        ItemClickSupport.addTo(rvRecommendations).setOnItemClickListener(
+                new ItemClickSupport.OnItemClickListener() {
+                    @Override
+                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                        showRecommendationDetailForItem(v, position);
+                    }
+                }
+        );
 
         loadRecommendations();
     }
 
+    // Create a shared transition of the recommendation image and open the details activity
+
+    protected void showRecommendationDetailForItem(View v, int position) {
+        Intent intent = new Intent(getActivity(), RecommendationDetailActivity.class);
+        intent.putExtra(RecommendationDetailActivity.EXTRA_REC, Parcels.wrap(items.get(position)));
+        ImageView photoView = (ImageView) v.findViewById(R.id.ivPhoto);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Pair<View, String> p1 = Pair.create((View) photoView, "P"+items.get(position).getId());
+            ActivityOptionsCompat options = ActivityOptionsCompat.
+                    makeSceneTransitionAnimation(getActivity(), p1);
+            startActivity(intent, options.toBundle());
+        } else {
+            startActivity(intent);
+        }
+    }
+
+    // Initial loading of recommendations data
+
     private void loadRecommendations() {
-        swipeRefreshLayout.post(new Runnable() {
+        ivProgress.post(new Runnable() {
             @Override
             public void run() {
-                swipeRefreshLayout.setRefreshing(true);
+                startProgress();
                 search();
             }
         });
+    }
+
+    // Start a spinning logo animation
+
+    private void startProgress() {
+        RotateAnimation anim = new RotateAnimation(0.0f, 360.0f ,
+                Animation.RELATIVE_TO_SELF, .5f, Animation.RELATIVE_TO_SELF, .5f);
+        anim.setInterpolator(new LinearInterpolator());
+        anim.setRepeatCount(Animation.INFINITE);
+        anim.setDuration(1000);
+        ivProgress.setAnimation(anim);
+        ivProgress.startAnimation(anim);
     }
 
     // Called from descendants when new Recommendations are received
@@ -110,7 +157,8 @@ public abstract class BaseRecommendationsFragment extends Fragment implements
             items.addAll(places);
             adapter.notifyItemRangeInserted(currentItemCount, places.size());
         }
-        swipeRefreshLayout.setRefreshing(false);
+        ivProgress.clearAnimation();
+        ivProgress.setVisibility(View.GONE);
     }
 
     // RecommendationsListAdapterClickListener implementation
@@ -126,7 +174,7 @@ public abstract class BaseRecommendationsFragment extends Fragment implements
 
             @Override
             public void onError() {
-                Snackbar.make(swipeRefreshLayout, "Error adding bookmark!", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(rvRecommendations, "Error adding bookmark!", Snackbar.LENGTH_SHORT).show();
             }
         });
     }
@@ -142,7 +190,7 @@ public abstract class BaseRecommendationsFragment extends Fragment implements
 
             @Override
             public void onError() {
-                Snackbar.make(swipeRefreshLayout, "Error removing bookmark!", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(rvRecommendations, "Error removing bookmark!", Snackbar.LENGTH_SHORT).show();
             }
         });
     }

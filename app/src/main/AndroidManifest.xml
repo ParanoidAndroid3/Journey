@@ -34,6 +34,11 @@
         </activity>
 
         <activity
+            android:name=".recommendations.activities.RecommendationDetailActivity"
+            android:theme="@style/Theme.DesignDemo">
+        </activity>
+
+        <activity
             android:name=".myjourneys.activities.MyJourneysActivity"
             android:label="@string/title_my_journeys"
             android:theme="@style/AppTheme.NoActionBar">

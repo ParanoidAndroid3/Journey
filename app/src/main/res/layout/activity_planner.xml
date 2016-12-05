@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:contentScrim="?attr/colorPrimary"
-            app:statusBarScrim="?attr/colorAccent"
+            app:statusBarScrim="?attr/colorPrimaryDark"
             android:fitsSystemWindows="true"
             app:expandedTitleTextAppearance="@style/PlannerTitleStyle"
             app:titleEnabled="false"
