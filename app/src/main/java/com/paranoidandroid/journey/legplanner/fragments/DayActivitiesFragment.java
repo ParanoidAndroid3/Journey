@@ -3,28 +3,18 @@ package com.paranoidandroid.journey.legplanner.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.legplanner.adapters.ActivitiesListAdapter;
+import com.paranoidandroid.journey.legplanner.interfaces.Updateable;
 import com.paranoidandroid.journey.models.Activity;
-import com.paranoidandroid.journey.models.Bookmark;
-import com.paranoidandroid.journey.recommendations.activities.RecommendationsActivity;
-import com.paranoidandroid.journey.recommendations.adapters.RecommendationsListAdapter;
-import com.paranoidandroid.journey.recommendations.fragments.FoursquareRecommendationsFragment;
 import com.paranoidandroid.journey.support.ui.SimpleDividerItemDecoration;
-import com.paranoidandroid.journey.support.ui.SpacesItemDecoration;
-
-import org.parceler.Parcel;
-import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +24,8 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 public class DayActivitiesFragment extends Fragment implements
-        ActivitiesListAdapter.ActivityAdapterClickListener {
+        ActivitiesListAdapter.ActivityAdapterClickListener,
+        Updateable {
 
     @BindView(R.id.rvActivities) RecyclerView rvActivities;
     @BindView(R.id.tvNoActivities) TextView tvNoActivities;
@@ -58,6 +49,11 @@ public class DayActivitiesFragment extends Fragment implements
         if (this.listener != null) {
             this.listener.onActivitySelected(items.get(position));
         }
+    }
+
+    @Override
+    public void update() {
+        loadActivities();
     }
 
     public interface OnActivitySelectedListener {
@@ -98,7 +94,11 @@ public class DayActivitiesFragment extends Fragment implements
         activitiesLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvActivities.setLayoutManager(activitiesLayoutManager);
         registerForContextMenu(rvActivities);
+    }
 
+    @Override
+    public void onActivityCreated (Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         loadActivities();
     }
 

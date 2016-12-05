@@ -38,6 +38,7 @@ import com.paranoidandroid.journey.recommendations.adapters.TipsListAdapter;
 
 import org.parceler.Parcels;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -106,6 +107,10 @@ public class RecommendationDetailActivity extends AppCompatActivity {
     }
 
     private void setupTipsRecyclerView(List<Tip> tips) {
+        // Bug fix for the null tips case
+        if (tips == null) {
+            tips = new ArrayList<Tip>();
+        }
         rvTips.setHasFixedSize(true);
         rvTips.setLayoutManager(new LinearLayoutManager(this));
         rvTips.setAdapter(new TipsListAdapter(this, tips));
