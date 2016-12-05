@@ -3,6 +3,7 @@ package com.paranoidandroid.journey.myjourneys.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.databinding.FragmentMyJourneysBinding;
 import com.paranoidandroid.journey.models.Journey;
 import com.paranoidandroid.journey.myjourneys.adapters.JourneyAdapter;
@@ -35,7 +37,7 @@ public class MyJourneysListFragment extends Fragment implements
 
     public interface OnJourneyActionListener {
         void onJourneySelected(Journey journey);
-        void onJourneyDeleted(String journeyId);
+        void onJourneyDeleted(Journey journey);
         void onCreateNewJourney();
     }
 
@@ -125,12 +127,35 @@ public class MyJourneysListFragment extends Fragment implements
         int position = adapter.indexOf(journeyId);
         if (position != -1) {
             Journey journey = adapter.remove(position);
-            journey.deleteEventually();
             showEmptyView(adapter.getItemCount() == 0);
-            listener.onJourneyDeleted(journeyId);
+            listener.onJourneyDeleted(journey);
+            showUndo(journey);
         } else {
             Log.e(TAG, "Tried to delete non-existent Journey(" + journeyId + ")");
         }
+    }
+
+    private void showUndo(final Journey journey) {
+        String name = journey.getName();
+        String title = getString(R.string.deleted_title, name);
+        Snackbar.make(binding.rvJourneys, title, Snackbar.LENGTH_LONG)
+                .setCallback(new Snackbar.Callback() {
+                    @Override
+                    public void onDismissed(Snackbar snackbar, int event) {
+                        super.onDismissed(snackbar, event);
+                        if (event != DISMISS_EVENT_ACTION) {
+                            journey.deleteEventually();
+                        }
+                    }
+                })
+                .setAction(R.string.undo, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        adapter.add(0, journey);
+                        binding.rvJourneys.scrollToPosition(0);
+                    }
+                })
+                .show();
     }
 
     private void showProgressBar() {
@@ -140,6 +165,7 @@ public class MyJourneysListFragment extends Fragment implements
 
     private void hideProgressBar() {
         binding.pbInitialLoad.hide();
+        binding.rvJourneys.setVisibility(View.VISIBLE);
     }
 
     private void showJourneys(List<Journey> journeys) {
@@ -164,18 +190,41 @@ public class MyJourneysListFragment extends Fragment implements
     protected void fetchJourneys() {
         ParseQuery<Journey> query = Journey.createQuery(ParseUser.getCurrentUser());
 
-        showProgressBar();
+        // Only show progress bar if the user has nothing to look at.
+        if (adapter.size() == 0) {
+            showProgressBar();
+        }
+
         query.findInBackground(new FindCallback<Journey>() {
             @Override
             public void done(List<Journey> objects, ParseException e) {
                 hideProgressBar();
 
                 if (e == null) {
-                    showJourneys(objects);
+                    // Show the new journeys if the list was changed.
+                    if (hasChanges(adapter.getAll(), objects)) {
+                        showJourneys(objects);
+                    }
                 } else {
                     Log.e(TAG, "Failed to fetch journeys:", e);
                 }
             }
         });
+    }
+
+    // TODO: this method should be somewhere else.
+    private static boolean hasChanges(List<Journey> a, List<Journey> b) {
+        if (a.size() != b.size()) {
+            return true;
+        }
+
+        for (int i = 0; i < a.size(); i++) {
+            Journey ai = a.get(i);
+            Journey bi = a.get(i);
+            if (!ai.getObjectId().equals(bi.getObjectId())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

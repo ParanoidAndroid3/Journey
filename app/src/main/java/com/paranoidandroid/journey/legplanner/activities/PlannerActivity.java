@@ -5,10 +5,12 @@ import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -81,8 +83,10 @@ public class PlannerActivity extends AppCompatActivity implements
     @BindView(R.id.fabAddCustom) com.github.clans.fab.FloatingActionButton fabAddCustom;
     @BindView(R.id.fabAddFromBookmarks) com.github.clans.fab.FloatingActionButton fabAddFromBookmarks;
     @BindView(R.id.fabAddRecommendation) com.github.clans.fab.FloatingActionButton fabAddRecommendation;
+    @BindView(R.id.scrimView) View scrimView;
 
     private ActionBarDrawerToggle drawerToggle;
+    private boolean isAppBarCollapsed;
     private String journeyId;
     private Journey mJourney;
 
@@ -271,6 +275,30 @@ public class PlannerActivity extends AppCompatActivity implements
     private void setupToolbar() {
         toolbar.inflateMenu(R.menu.menu_planner);
         setSupportActionBar(toolbar);
+
+        // Hack to make scrim extend from top of screen to end of app bar.
+        int height = getStatusBarHeight() + getActionBarHeight();
+        CollapsingToolbarLayout.LayoutParams params =
+                (CollapsingToolbarLayout.LayoutParams) scrimView.getLayoutParams();
+        params.height = height;
+        scrimView.setLayoutParams(params);
+    }
+
+    private int getActionBarHeight() {
+        TypedArray styledAttributes = getTheme().obtainStyledAttributes(
+                new int[] { android.R.attr.actionBarSize });
+        int height = (int) styledAttributes.getDimension(0, 0);
+        styledAttributes.recycle();
+        return height;
+    }
+
+    private int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
     }
 
     private void setupDrawer() {
@@ -333,8 +361,10 @@ public class PlannerActivity extends AppCompatActivity implements
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 if(toolbar.getHeight() + Math.abs(verticalOffset) >= appBarLayout.getTotalScrollRange()) { // collapsed
                     floatingMenu.showMenu(true);
-                } else  { // expanded
+                    isAppBarCollapsed = true;
+                } else { // expanded
                     floatingMenu.hideMenu(true);
+                    isAppBarCollapsed = false;
                 }
             }
         });
@@ -464,5 +494,15 @@ public class PlannerActivity extends AppCompatActivity implements
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Only go back to My Journeys if the map is visible.
+        if (isAppBarCollapsed) {
+            appBar.setExpanded(true);
+        } else {
+            super.onBackPressed();
+        }
     }
 }

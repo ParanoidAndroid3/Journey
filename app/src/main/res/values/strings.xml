@@ -41,4 +41,6 @@
     <string name="formatted_place_data">
         Name: %1$s\nAddress: %2$s\nPhone: %3$s\nWebsite: %4$s\nRating: %5$s\nId: %6$s\n
     </string>
+    <string name="deleted_title">%1$s journey deleted</string>
+    <string name="undo">Undo</string>
 </resources>
