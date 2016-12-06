@@ -6,6 +6,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -71,11 +72,12 @@ public class Journey extends ParseObject {
     }
 
     public List<String> getTripTags() {
-        return (List<String>) get(KEY_TRIP_TAGS);
+        return getList(KEY_TRIP_TAGS);
     }
 
     public void addLeg(Leg leg) {
         add(KEY_LEGS, leg);
+        saveEventually();
     }
 
     public List<Leg> getLegs() {
@@ -83,11 +85,8 @@ public class Journey extends ParseObject {
     }
 
     public void removeLeg(Leg leg) {
-        // TODO: test me!!! Equals probably doesn't work as expected.
-        List<Leg> legs = getLegs();
-        if (legs.remove(leg)) {
-            put(KEY_LEGS, legs);
-        }
+        removeAll(KEY_LEGS, Arrays.asList(leg));
+        saveEventually();
     }
 
     public Date getStartDate() {

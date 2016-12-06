@@ -3,6 +3,7 @@ package com.paranoidandroid.journey.models;
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -55,9 +56,12 @@ public class Leg extends ParseObject {
 
     public void addActivity(Activity activity) {
         add(KEY_ACTIVITIES, activity);
+        saveEventually();
     }
+
     public void addBookmark(Bookmark bookmark) {
         add(KEY_BOOKMARKS, bookmark);
+        saveEventually();
     }
 
     public void addAllActivities(List<Activity> activities) {
@@ -65,17 +69,13 @@ public class Leg extends ParseObject {
     }
 
     public void removeActivity(Activity activity) {
-        List<Activity> activities = getActivities();
-        if (activities.remove(activity)) {
-            put(KEY_ACTIVITIES, activities);
-        }
+        removeAll(KEY_ACTIVITIES, Arrays.asList(activity));
+        saveEventually();
     }
 
     public void removeBookmark(Bookmark bookmark) {
-        List<Bookmark> bookmarks = getBookmarks();
-        if (bookmarks.remove(bookmark)) {
-            put(KEY_BOOKMARKS, bookmarks);
-        }
+        removeAll(KEY_BOOKMARKS, Arrays.asList(bookmark));
+        saveEventually();
     }
 
     public List<Activity> getActivities() {
