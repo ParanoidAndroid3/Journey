@@ -48,6 +48,8 @@ public class DayPlannerFragment extends Fragment implements
         void onLegIndexChanged(int legOrder);
         void onDayChangedOnSameLeg();
         void onActivityRemovedAtIndex(int activityIndex);
+        void onActivityRemoveStarted();
+        void onActivityRemoveEnded();
     }
 
     // Called from Planner Activity when a leg marker is pressed
@@ -126,6 +128,7 @@ public class DayPlannerFragment extends Fragment implements
 
     @Override
     public void onDeleteActivityRequested(Activity activity, final int adapterIndex) {
+        if (listener != null) listener.onActivityRemoveStarted();
         Leg leg = getSelectedLeg();
         final int activityIndex = leg.getActivities().indexOf(activity);
         leg.removeActivity(activity);
@@ -141,6 +144,7 @@ public class DayPlannerFragment extends Fragment implements
                 } else {
                     e.printStackTrace();
                 }
+                listener.onActivityRemoveEnded();
             }
         });
     }
@@ -221,12 +225,12 @@ public class DayPlannerFragment extends Fragment implements
         }
         Leg leg = mDays.get(dayOrder).getLeg();
         try {
-            // Need to call this synchronously to avoid 'Object not found' error
-            Activity.fetchAllIfNeeded(leg.getActivities());
             if (leg.getActivities() == null) {
                 return result;
             }
 
+            // Need to call this synchronously to avoid 'Object not found' error
+            Activity.fetchAllIfNeeded(leg.getActivities());
             for (Activity activity : leg.getActivities()) {
                 Date activityDate = activity.getDate("date");
                 if (activityDate != null && datesOnSameDay(activityDate, mDays.get(dayOrder).getDate()))

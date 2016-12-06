@@ -10,6 +10,7 @@
     android:layout_height="match_parent"
     tools:context="com.paranoidandroid.journey.legplanner.activities.PlannerActivity">
     <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/coordinator"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
@@ -60,7 +61,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
                 app:layout_collapseMode="pin"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
+
+                <ProgressBar
+                    android:id="@+id/pbLoading"
+                    style="@style/ProgressBar"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="16dp"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"/>
+
+            </android.support.v7.widget.Toolbar>
         </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
@@ -143,6 +154,18 @@
         app:layout_anchorGravity="bottom|right|end"
         app:srcCompat="@drawable/ic_zoom_in"
         android:layout_margin="@dimen/fab_margin"
+        android:clickable="true"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabDirections"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:backgroundTint="@android:color/white"
+        app:srcCompat="@drawable/ic_directions"
+        app:layout_anchor="@id/fabZoom"
+        app:layout_anchorGravity="top|right|end"
+        android:layout_marginBottom="90dp"
+        android:layout_marginEnd="@dimen/fab_margin"
         android:clickable="true"/>
 
 </android.support.design.widget.CoordinatorLayout>

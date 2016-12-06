@@ -1,29 +1,37 @@
 package com.paranoidandroid.journey.legplanner.activities;
 
+import android.animation.ValueAnimator;
 import android.app.Dialog;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatDrawableManager;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -77,6 +85,7 @@ public class PlannerActivity extends AppCompatActivity implements
     @BindView(R.id.appbar) AppBarLayout appBar;
     @BindView(R.id.menu_yellow) FloatingActionMenu floatingMenu;
     @BindView(R.id.fabZoom) FloatingActionButton fabZoom;
+    @BindView(R.id.fabDirections) FloatingActionButton fabDirections;
     @BindView(R.id.nestedScrollView) NestedScrollView nestedScrollView;
     @BindView(R.id.drawer) DrawerLayout drawer;
     @BindView(R.id.navigationView) NavigationView navigationView;
@@ -84,11 +93,15 @@ public class PlannerActivity extends AppCompatActivity implements
     @BindView(R.id.fabAddFromBookmarks) com.github.clans.fab.FloatingActionButton fabAddFromBookmarks;
     @BindView(R.id.fabAddRecommendation) com.github.clans.fab.FloatingActionButton fabAddRecommendation;
     @BindView(R.id.scrimView) View scrimView;
+    @BindView(R.id.collapsing_toolbar) CollapsingToolbarLayout collapsingToolbarLayout;
+    @BindView(R.id.coordinator) CoordinatorLayout coordinator;
+    @BindView(R.id.pbLoading) ProgressBar pbLoading;
 
     private ActionBarDrawerToggle drawerToggle;
     private boolean isAppBarCollapsed;
     private String journeyId;
     private Journey mJourney;
+    private int screenHeight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +111,7 @@ public class PlannerActivity extends AppCompatActivity implements
 
         journeyId = getIntent().getExtras().getString("journey_id", "");
 
+        findScreenHeight();
         setupToolbar();
         setupDrawer();
         setupFabs();
@@ -153,7 +167,7 @@ public class PlannerActivity extends AppCompatActivity implements
         // and then change the highlighted marker
         MapViewFragment fragment = getMapViewFragment();
         if (fragment.isZoomed()) {
-            fragment.addMarkersFromLegs(mJourney.getLegs());
+            fragment.addMarkersFromLegs(mJourney.getLegs(), legOrder);
             fragment.setZoomed(false);
             fabZoom.setImageResource(R.drawable.ic_zoom_in);
         }
@@ -180,24 +194,49 @@ public class PlannerActivity extends AppCompatActivity implements
         }
     }
 
+    @Override
+    public void onActivityRemoveStarted() {
+        pbLoading.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onActivityRemoveEnded() {
+        pbLoading.setVisibility(View.GONE);
+    }
+
+
     // MapViewFragment's MapEventListener implementation
 
     @Override
     public void onLegMarkerPressedAtIndex(int position) {
-        appBar.setExpanded(false);
         getDayPlannerFragment().setSelectedLegPosition(position);
+        animateAppBarToMiddleOfScreen();
+    }
+
+    // Find the height of the screen
+
+    private void findScreenHeight() {
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        screenHeight = dm.heightPixels;
     }
 
     @Override
     public void onActivityMarkerPressedAtIndex(int position) {
-        appBar.setExpanded(false);
         getDayPlannerFragment().scrollToActivityAtIndex(position);
+        animateAppBarToMiddleOfScreen();
+    }
+
+    @Override
+    public void onCameraHasSettled() {
+        pbLoading.setVisibility(View.GONE);
     }
 
     // CustomActivityCreatorFragment's OnAddCustomActivityListener implementation
 
     @Override
     public void onAddCustomActivity(String title, Date date, GooglePlace place) {
+        pbLoading.setVisibility(View.VISIBLE);
         final Activity customActivity = Activity.createCustom(title, date, place);
         customActivity.saveInBackground(new SaveCallback() {
             @Override
@@ -218,10 +257,12 @@ public class PlannerActivity extends AppCompatActivity implements
                             } else {
                                 e.printStackTrace();
                             }
+                            pbLoading.setVisibility(View.GONE);
                         }
                     });
                 } else {
                     e.printStackTrace();
+                    pbLoading.setVisibility(View.GONE);
                 }
             }
         });
@@ -231,6 +272,7 @@ public class PlannerActivity extends AppCompatActivity implements
 
     @Override
     public void onBookmarksSelected(List<Bookmark> bookmarks) {
+        pbLoading.setVisibility(View.VISIBLE);
         final List<Activity> activities = Activity.createFromBookmarksForDate(bookmarks, getDayPlannerFragment().getSelectedDay().getDate());
         Activity.saveAllInBackground(activities, new SaveCallback() {
             @Override
@@ -251,10 +293,12 @@ public class PlannerActivity extends AppCompatActivity implements
                             } else {
                                 e.printStackTrace();
                             }
+                            pbLoading.setVisibility(View.GONE);
                         }
                     });
                 } else {
                     e.printStackTrace();
+                    pbLoading.setVisibility(View.GONE);
                 }
             }
         });
@@ -348,7 +392,7 @@ public class PlannerActivity extends AppCompatActivity implements
         startActivity(intent);
     }
 
-    private void    setupFabs() {
+    private void setupFabs() {
         fabAddCustom.setImageDrawable(AppCompatDrawableManager.get().getDrawable(this, R.drawable.ic_add_custom));
         fabAddFromBookmarks.setImageDrawable(AppCompatDrawableManager.get().getDrawable(this, R.drawable.ic_add_bookmark));
         fabAddRecommendation.setImageDrawable(AppCompatDrawableManager.get().getDrawable(this, R.drawable.ic_star));
@@ -366,6 +410,11 @@ public class PlannerActivity extends AppCompatActivity implements
                     floatingMenu.hideMenu(true);
                     isAppBarCollapsed = false;
                 }
+                if (verticalOffset == 0) { // fully expanded
+                    fabDirections.show();
+                } else {
+                    fabDirections.hide();
+                }
             }
         });
     }
@@ -378,9 +427,10 @@ public class PlannerActivity extends AppCompatActivity implements
     public void onZoom(View v) {
         MapViewFragment fragment = getMapViewFragment();
         if (fragment.isZoomed()) {
-            fragment.addMarkersFromLegs(mJourney.getLegs());
+            int legOrder = getDayPlannerFragment().getSelectedLegOrder();
+            fragment.addMarkersFromLegs(mJourney.getLegs(), legOrder);
             fragment.setZoomed(false);
-            fragment.changeToMarkerPosition(getDayPlannerFragment().getSelectedLegOrder());
+            fragment.changeToMarkerPosition(legOrder);
         } else {
             DayPlannerFragment dayPlannerFragment = getDayPlannerFragment();
             fragment.addMarkersFromActivities(dayPlannerFragment.getActivitiesForSelectedDay(), dayPlannerFragment.getSelectedLeg());
@@ -427,7 +477,37 @@ public class PlannerActivity extends AppCompatActivity implements
         floatingMenu.close(false);
     }
 
+    // Open google maps for directions
+
+    @OnClick(R.id.fabDirections)
+    public void onDirectionsPressed(View v) {
+        LatLng coordinates = getMapViewFragment().getSelectedMarkerCoordinates();
+        Uri gmmIntentUri = Uri.parse("google.navigation:q=" + coordinates.latitude + "," + coordinates.longitude);
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        startActivity(mapIntent);
+    }
+
     // Helper methods
+
+    private void animateAppBarToMiddleOfScreen() {
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) appBar.getLayoutParams();
+        final AppBarLayout.Behavior behavior = (AppBarLayout.Behavior) params.getBehavior();
+        if (behavior != null) {
+            ValueAnimator valueAnimator = ValueAnimator.ofInt();
+            valueAnimator.setInterpolator(new DecelerateInterpolator());
+            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    behavior.setTopAndBottomOffset((Integer) animation.getAnimatedValue());
+                    appBar.requestLayout();
+                }
+            });
+            valueAnimator.setIntValues(nestedScrollView.getTop() - screenHeight, -screenHeight / 2);
+            valueAnimator.setDuration(300);
+            valueAnimator.start();
+        }
+    }
 
     private void showJourney(Journey journey) {
         toolbar.setTitle(journey.getName());
@@ -459,7 +539,7 @@ public class PlannerActivity extends AppCompatActivity implements
     }
 
     private void addMarkersToMap(Journey journey) {
-        getMapViewFragment().addMarkersFromLegs(journey.getLegs());
+        getMapViewFragment().addMarkersFromLegs(journey.getLegs(), 0);
     }
 
     private void addDaysToPlanner(Journey journey) {
