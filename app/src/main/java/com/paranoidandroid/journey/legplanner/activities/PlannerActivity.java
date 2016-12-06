@@ -206,7 +206,7 @@ public class PlannerActivity extends AppCompatActivity implements
                         public void done(ParseException e) {
                             if (e == null) {
                                 // Refresh day planner
-                                dpf.refreshCurrentPage();
+                                dpf.notifyItemAdded(customActivity);
                                 // Refresh map markers if map is zoomed in
                                 if (getMapViewFragment().isZoomed()) {
                                     getMapViewFragment().addMarkersFromActivities(dpf.getActivitiesForSelectedDay(), dpf.getSelectedLeg());
@@ -239,7 +239,7 @@ public class PlannerActivity extends AppCompatActivity implements
                         public void done(ParseException e) {
                             if (e == null) {
                                 // Refresh day planner
-                                dpf.refreshCurrentPage();
+                                dpf.notifyItemsAdded(activities);
                                 // Refresh map markers if map is zoomed in
                                 if (getMapViewFragment().isZoomed()) {
                                     getMapViewFragment().addMarkersFromActivities(dpf.getActivitiesForSelectedDay(), dpf.getSelectedLeg());
