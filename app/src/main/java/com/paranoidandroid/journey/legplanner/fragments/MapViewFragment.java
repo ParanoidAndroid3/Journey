@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +29,13 @@ import com.paranoidandroid.journey.models.Leg;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapViewFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+public class MapViewFragment extends Fragment implements
+        OnMapReadyCallback,
+        GoogleMap.OnMarkerClickListener,
+        GoogleMap.OnCameraIdleListener {
+
+    private static final String TAG = "MapViewFragment";
+
     MapView mMapView;
     GoogleMap mGoogleMap;
     MapEventListener listener;
@@ -44,6 +51,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
     public interface MapEventListener {
         void onLegMarkerPressedAtIndex(int position);
         void onActivityMarkerPressedAtIndex(int position);
+        void onCameraHasSettled();
     }
 
     @Override
@@ -66,6 +74,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
         mGoogleMap.getUiSettings().setAllGesturesEnabled(false);
         mGoogleMap.getUiSettings().setMapToolbarEnabled(false);
         mGoogleMap.setOnMarkerClickListener(this);
+        mGoogleMap.setOnCameraIdleListener(this);
 
         boolean success = mGoogleMap.setMapStyle(
                 MapStyleOptions.loadRawResourceStyle(
@@ -75,8 +84,9 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
     // Called from parent activity on the zoom out (legs view) case
     // Basic login to avoid overlapping markers TODO improve
 
-    public void addMarkersFromLegs(List<Leg> legs) {
+    public void addMarkersFromLegs(List<Leg> legs, int highlightPosition) {
         markerInfos = new ArrayList<>();
+        selectedPosition = highlightPosition;
 
         LatLng prev = null;
         int index = 0;
@@ -216,6 +226,12 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
         selectMarker(markerPosition);
     }
 
+    // Called from to quickly return selected marker coordinates
+
+    public LatLng getSelectedMarkerCoordinates() {
+        return selectedMarker.getPosition();
+    }
+
     // Remove and recreate marker taking into account selection
 
     private void recreateMarker(Marker marker, int markerPosition, boolean selected) {
@@ -247,36 +263,56 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
         markers.add(mGoogleMap.addMarker(markerOptions));
     }
 
+    // When the camera has settled, notify listener to hide progress bar
+
+    @Override
+    public void onCameraIdle() {
+        if (this.listener != null) {
+            this.listener.onCameraHasSettled();
+        }
+    }
+
     // Forward fragment lifecycle methods to map view
 
     @Override
     public void onResume() {
         super.onResume();
-        mMapView.onResume();
+        if (mMapView != null) {
+            mMapView.onResume();
+        }
     }
 
     @Override
     public void onPause() {
+        if (mMapView != null) {
+            mMapView.onPause();
+        }
         super.onPause();
-        mMapView.onPause();
     }
 
     @Override
     public void onDestroy() {
+        if (mMapView != null) {
+            try {
+                mMapView.onDestroy();
+            } catch (NullPointerException e) {
+                Log.e(TAG, "Error while attempting MapView.onDestroy(), ignoring exception", e);
+            }
+        }
         super.onDestroy();
-        mMapView.onDestroy();
     }
 
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-        mMapView.onLowMemory();
+        if (mMapView != null) {
+            mMapView.onLowMemory();
+        }
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //mBundle = savedInstanceState;
     }
 
     @Override
@@ -287,7 +323,9 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
     @Override
     public void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
-        mMapView.onSaveInstanceState(outState);
+        if (mMapView != null) {
+            mMapView.onSaveInstanceState(outState);
+        }
         if (!isZoomed()) {
             // save marker position only when showing legs
             outState.putInt("selected", selectedPosition);
@@ -297,7 +335,6 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         if (savedInstanceState != null) {
             selectedPosition = savedInstanceState.getInt("selected");
         }

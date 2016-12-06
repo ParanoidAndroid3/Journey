@@ -38,7 +38,7 @@
                 android:layout_gravity="bottom"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                app:layout_collapseMode="pin">
+                app:layout_collapseMode="parallax">
 
                 <View
                     android:id="@+id/scrimView"

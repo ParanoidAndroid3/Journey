@@ -28,6 +28,7 @@
                 android:id="@+id/tvName"
                 android:textSize="18sp"
                 android:textColor="@android:color/white"
+                android:background="@drawable/toolbar_scrim"
                 android:shadowColor="#666"
                 android:shadowDx="1"
                 android:shadowRadius="1"
