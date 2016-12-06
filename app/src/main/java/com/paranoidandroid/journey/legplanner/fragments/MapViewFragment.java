@@ -35,9 +35,9 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
     List<MarkerInfo> markerInfos;
     List<Marker> markers;
     Marker selectedMarker;
-    int selectedPosition;
+    int selectedPosition = 0;
     boolean zoomed = false;
-    private Bundle mBundle;
+    //private Bundle mBundle;
     public void setZoomed(boolean zoomed) { this.zoomed = zoomed; }
     public boolean isZoomed() { return this.zoomed; }
 
@@ -53,7 +53,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
         MapsInitializer.initialize(getActivity());
 
         mMapView = (MapView) view.findViewById(R.id.map_view);
-        mMapView.onCreate(mBundle);
+        mMapView.onCreate(savedInstanceState);
         mMapView.getMapAsync(this);
         return view;
     }
@@ -77,17 +77,20 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
 
     public void addMarkersFromLegs(List<Leg> legs) {
         markerInfos = new ArrayList<>();
+
         LatLng prev = null;
+        int index = 0;
         for (Leg leg : legs) {
             LatLng latLng = new LatLng(leg.getDestination().getLatitude(), leg.getDestination().getLongitude());
-            if (prev == null) {
+            if (index == selectedPosition) {
                 markerInfos.add(new MarkerInfo(90, -90, IconGenerator.STYLE_BLUE, leg.getDestination().getCityName(), latLng));
-            } else if (prev.longitude < latLng.longitude) {
+            } else if (prev != null && prev.longitude < latLng.longitude) {
                 markerInfos.add(new MarkerInfo(90, -90, IconGenerator.STYLE_DEFAULT, leg.getDestination().getCityName(), latLng));
             } else {
                 markerInfos.add(new MarkerInfo(-90, 90, IconGenerator.STYLE_DEFAULT, leg.getDestination().getCityName(), latLng));
             }
             prev = latLng;
+            index++;
         }
         placeMarkersOnMap();
     }
@@ -97,6 +100,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
 
     public void addMarkersFromActivities(List<Activity> activities, Leg leg) {
         markerInfos = new ArrayList<>();
+        selectedPosition = 0; // On resume, ignore selectedPosition
 
         // No activities for selected leg, just zoom to city center (level 10)
         if (activities.size() == 0) {
@@ -107,17 +111,19 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
         }
 
         LatLng prev = null;
+        int index = 0;
         for (Activity activity : activities) {
             LatLng latLng = new LatLng(activity.getLatitude(), activity.getLongitude());
             String title = activity.getTitle().length() > 10 ? activity.getTitle().substring(0,10) + "..." : activity.getTitle();
-            if (prev == null) {
+            if (index == selectedPosition) {
                 markerInfos.add(new MarkerInfo(90, -90, IconGenerator.STYLE_BLUE, title, latLng));
-            } else if (prev.longitude < latLng.longitude) {
+            } else if (prev != null && prev.longitude < latLng.longitude) {
                 markerInfos.add(new MarkerInfo(90, -90, IconGenerator.STYLE_DEFAULT, title, latLng));
             } else {
                 markerInfos.add(new MarkerInfo(-90, 90, IconGenerator.STYLE_DEFAULT, title, latLng));
             }
             prev = latLng;
+            index++;
         }
         placeMarkersOnMap();
     }
@@ -148,7 +154,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
         }
 
         final LatLngBounds bounds = builder.build();
-        selectMarker(0);
+        selectMarker(selectedPosition);
 
         // HACK!! The map may not be loaded when we request to animate
         // If we get an exception, try again after when we get the OnMapLoaded event
@@ -262,12 +268,6 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        mMapView.onSaveInstanceState(outState);
-    }
-
-    @Override
     public void onLowMemory() {
         super.onLowMemory();
         mMapView.onLowMemory();
@@ -276,7 +276,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBundle = savedInstanceState;
+        //mBundle = savedInstanceState;
     }
 
     @Override
@@ -285,8 +285,22 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
     }
 
     @Override
+    public void onSaveInstanceState(final Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mMapView.onSaveInstanceState(outState);
+        if (!isZoomed()) {
+            // save marker position only when showing legs
+            outState.putInt("selected", selectedPosition);
+        }
+    }
+
+    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            selectedPosition = savedInstanceState.getInt("selected");
+        }
     }
 
     @Override

@@ -40,7 +40,7 @@ public class DayPlannerFragment extends Fragment implements
     @BindView(R.id.sliding_tabs) TabLayout tabLayout;
     private SmartFragmentStatePagerAdapter adapterViewPager;
     private DayPlannerListener listener;
-    private int mSelectedDayIndex;
+    private int mSelectedDayIndex = 0;
     private ArrayList<Day> mDays;
     private Unbinder unbinder;
 
@@ -70,9 +70,23 @@ public class DayPlannerFragment extends Fragment implements
         frag.scrollToActivityPosition(position);
     }
 
-    public void refreshCurrentPage() {
+    // Called from Planner Activity when activities are added
+
+    public void notifyItemAdded(Activity activity) {
         DayActivitiesFragment frag = (DayActivitiesFragment) adapterViewPager.getRegisteredFragment(mSelectedDayIndex);
-        frag.refreshList();
+        frag.notifyItemAdded(activity);
+    }
+
+    public void notifyItemsAdded(List<Activity> activities) {
+        DayActivitiesFragment frag = (DayActivitiesFragment) adapterViewPager.getRegisteredFragment(mSelectedDayIndex);
+        frag.notifyItemsAdded(activities);
+    }
+
+    // Called from this when an activity is deleted
+
+    public void notifyItemDeleted(int position) {
+        DayActivitiesFragment frag = (DayActivitiesFragment) adapterViewPager.getRegisteredFragment(mSelectedDayIndex);
+        frag.notifyItemDeleted(position);
     }
 
     // Called from Planner Activity when legs are fetched
@@ -93,11 +107,14 @@ public class DayPlannerFragment extends Fragment implements
     private void showDays(List<Day> days) {
         mDays.clear();
         mDays.addAll(days);
-        mSelectedDayIndex = 0;
-        adapterViewPager = new DaysPagerAdapter(getChildFragmentManager(), getContext(), days);
+        adapterViewPager = new DaysPagerAdapter(getChildFragmentManager(), getContext(), mDays);
         viewpager.setAdapter(adapterViewPager);
         viewpager.addOnPageChangeListener(this);
         tabLayout.setupWithViewPager(viewpager);
+        // Set the page to the selected index in case the fragment was resumed
+        if (days.size() > mSelectedDayIndex) {
+            viewpager.setCurrentItem(mSelectedDayIndex);
+        }
         // Iterate over all tabs and set the custom view
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
             TabLayout.Tab tab = tabLayout.getTabAt(i);
@@ -108,7 +125,7 @@ public class DayPlannerFragment extends Fragment implements
     // ActivitiesListAdapter's ActivityAdapterClickListener implementation
 
     @Override
-    public void onDeleteActivityRequested(Activity activity) {
+    public void onDeleteActivityRequested(Activity activity, final int adapterIndex) {
         Leg leg = getSelectedLeg();
         final int activityIndex = leg.getActivities().indexOf(activity);
         leg.removeActivity(activity);
@@ -116,7 +133,7 @@ public class DayPlannerFragment extends Fragment implements
             @Override
             public void done(ParseException e) {
                 if (e == null) {
-                    refreshCurrentPage();
+                    notifyItemDeleted(adapterIndex);
                     if (listener != null) {
                         listener.onActivityRemovedAtIndex(activityIndex);
                     }
@@ -184,7 +201,6 @@ public class DayPlannerFragment extends Fragment implements
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         if (savedInstanceState != null) {
             mSelectedDayIndex = savedInstanceState.getInt("selected");
         }
@@ -197,14 +213,20 @@ public class DayPlannerFragment extends Fragment implements
 
     @Override
     public List<Activity> getActivitiesListForDay(int dayOrder) {
-        Leg leg = mDays.get(dayOrder).getLeg();
         final List<Activity> result = new ArrayList<>();
-        if (leg.getActivities() == null) {
+        // Days may not be set when DayActivitiesFragment requests this on resume
+        // Return empty list for now and TODO: refresh the fragment when parent activity is ready
+        if (mDays.size() <= dayOrder) {
             return result;
         }
+        Leg leg = mDays.get(dayOrder).getLeg();
         try {
             // Need to call this synchronously to avoid 'Object not found' error
             Activity.fetchAllIfNeeded(leg.getActivities());
+            if (leg.getActivities() == null) {
+                return result;
+            }
+
             for (Activity activity : leg.getActivities()) {
                 Date activityDate = activity.getDate("date");
                 if (activityDate != null && datesOnSameDay(activityDate, mDays.get(dayOrder).getDate()))

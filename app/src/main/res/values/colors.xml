@@ -31,8 +31,7 @@
     <color name="listBackgroundColor">#EFEFEF</color>
     <color name="darkTranslucent">#BB000000</color>
 
-    <!-- To support android versions < 21 -->
-    <color name="textColorPrimary">?android:attr/textColorPrimary</color>
-    <color name="textColorPrimaryInverse">?android:attr/textColorPrimaryInverse</color>
+    <color name="toolbarScrimStartColor">#4C000000</color>
+    <color name="toolbarScrimCenterColor">#26000000</color>
 
 </resources>

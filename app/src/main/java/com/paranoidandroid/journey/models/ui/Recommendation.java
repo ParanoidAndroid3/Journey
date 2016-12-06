@@ -2,6 +2,8 @@ package com.paranoidandroid.journey.models.ui;
 
 import org.parceler.Parcel;
 
+import java.util.List;
+
 @Parcel
 public class Recommendation {
 
@@ -12,9 +14,14 @@ public class Recommendation {
     String name;
     String id;
     String imageUrl;
+    List<Tip> tips;
 
     boolean added;
     boolean bookmarked;
+
+    public List<Tip> getTips() {
+        return tips;
+    }
 
     public boolean isAdded() {
         return added;

@@ -102,6 +102,12 @@ public class BookmarksPickerFragment extends BottomSheetDialogFragment {
         slideInRecyclerView();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        slideInRecyclerView();
+    }
+
     private void setupBookmarksList(View view) {
         ItemClickSupport.addTo(rvBookmarks).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
@@ -126,9 +132,9 @@ public class BookmarksPickerFragment extends BottomSheetDialogFragment {
     private void slideInRecyclerView() {
         ObjectAnimator animX = ObjectAnimator.ofFloat(rvBookmarks,
                 View.TRANSLATION_X, screenWidth, 0);
-        animX.setDuration(900);
+        animX.setDuration(750);
         animX.setInterpolator(new DecelerateInterpolator());
-        animX.setStartDelay(500);
+        animX.setStartDelay(250);
         animX.start();
     }
 
