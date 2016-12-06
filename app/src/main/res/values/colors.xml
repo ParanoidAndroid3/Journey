@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="colorPrimaryLight">#F2EDE8</color>
-    <color name="colorPrimary">#BAA7A0</color>
-    <color name="colorPrimaryDark">#947B6E</color>
+    <color name="colorPrimaryLight">#ffe1cb</color>
+    <color name="colorPrimary">#df8a5a</color>
+    <color name="colorPrimaryDark">#b65d2b</color>
 
-    <color name="colorAccent">#0079FF</color>
-    <color name="colorAccentLight">#9bc8fa</color>
+    <color name="colorAccentDark">#036db3</color>
+    <color name="colorAccent">#44aff5</color>
+    <color name="colorAccentLight">#a6def9</color>
 
     <color name="colorTextIcons">#FFFF</color>
     <color name="colorDivider">#BDBDBD</color>
@@ -18,7 +19,7 @@
     <!-- fab disabled/enabled -->
     <color name="colorFabEnabled">@color/colorAccent</color>
     <color name="colorFabDisabled">@color/colorAccentLight</color>
-    <color name="colorFabProgress">#2a4350</color>
+    <color name="colorFabProgress">@color/colorAccentDark</color>
 
     <color name="colorWizardPrompt">@color/colorPrimaryText</color>
     <color name="colorWizardName">@color/colorPrimaryText</color>
