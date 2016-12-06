@@ -1,7 +1,9 @@
 package com.paranoidandroid.journey.recommendations.activities;
 
+import android.content.res.TypedArray;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -9,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.transition.Explode;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -49,6 +52,7 @@ public class RecommendationsActivity extends AppCompatActivity implements
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.tvCity) TextView tvCity;
     @BindView(R.id.ivBackdrop) ImageView ivBackdrop;
+    @BindView(R.id.scrimView) View scrimView;
 
     private RecommendationsPagerAdapter adapter;
     private Leg leg;
@@ -238,6 +242,30 @@ public class RecommendationsActivity extends AppCompatActivity implements
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        // Hack to make scrim extend from top of screen to end of app bar.
+        int height = getStatusBarHeight() + getActionBarHeight();
+        CollapsingToolbarLayout.LayoutParams params =
+                (CollapsingToolbarLayout.LayoutParams) scrimView.getLayoutParams();
+        params.height = height;
+        scrimView.setLayoutParams(params);
+    }
+
+    private int getActionBarHeight() {
+        TypedArray styledAttributes = getTheme().obtainStyledAttributes(
+                new int[] { android.R.attr.actionBarSize });
+        int height = (int) styledAttributes.getDimension(0, 0);
+        styledAttributes.recycle();
+        return height;
+    }
+
+    private int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
     }
 
     private void setupTabs() {
