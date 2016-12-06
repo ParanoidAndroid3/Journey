@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="colorPrimaryLight">#af8b7e</color>
-    <color name="colorPrimary">#795548</color>
-    <color name="colorPrimaryDark">#432c25</color>
+    <color name="colorPrimaryLight">#F2EDE8</color>
+    <color name="colorPrimary">#BAA7A0</color>
+    <color name="colorPrimaryDark">#947B6E</color>
 
-    <color name="colorAccent">#03A9F4</color>
-    <color name="colorAccentLight">#a0daf5</color>
+    <color name="colorAccent">#0079FF</color>
+    <color name="colorAccentLight">#9bc8fa</color>
 
     <color name="colorTextIcons">#FFFF</color>
     <color name="colorDivider">#BDBDBD</color>
@@ -26,7 +26,7 @@
     <color name="colorTagNotPressed">@color/colorPrimaryLight</color>
     <color name="colorTagPressed">@color/colorPrimary</color>
 
-    <color name="colorLegCardColor">@android:color/white</color>
+    <color name="colorLegCardColor">@color/colorPrimaryLight</color>
 
     <color name="listBackgroundColor">#EFEFEF</color>
     <color name="darkTranslucent">#BB000000</color>
