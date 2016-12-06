@@ -94,7 +94,7 @@ public class MyJourneysActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onJourneyDeleted(String journeyId) {
+    public void onJourneyDeleted(Journey journey) {
         // Hack to ensure that FAB is visible if it has been hidden but there aren't enough items
         // remaining in the list to allow scrolling (which would show the FAB again).
         binding.fab.show();

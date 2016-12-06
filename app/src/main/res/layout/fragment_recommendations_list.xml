@@ -12,13 +12,12 @@
         android:clipToPadding="false"
         android:layout_height="match_parent"/>
 
-    <ImageView
-        android:id="@+id/ivProgress"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
-        app:srcCompat="@drawable/ic_journey"
-        android:contentDescription="@string/app_name"
+    <ProgressBar
+        android:id="@+id/pbLoading"
+        style="@style/ProgressBar"
         android:layout_width="36dp"
-        android:layout_height="36dp" />
+        android:layout_height="36dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"/>
 
 </RelativeLayout>

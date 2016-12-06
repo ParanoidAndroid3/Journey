@@ -7,20 +7,14 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.util.Pair;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.LinearInterpolator;
-import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.ProgressBar;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.paranoidandroid.journey.R;
@@ -43,13 +37,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-import static com.paranoidandroid.journey.R.id.tvName;
-
 public abstract class BaseRecommendationsFragment extends Fragment implements
         RecommendationsListAdapterClickListener {
 
     @BindView(R.id.rvRecommendations) RecyclerView rvRecommendations;
-    @BindView(R.id.ivProgress) ImageView ivProgress;
+    @BindView(R.id.pbLoading) ProgressBar progressBar;
 
     protected LatLng coordinates;
     protected RecommendationCategory category;
@@ -58,6 +50,15 @@ public abstract class BaseRecommendationsFragment extends Fragment implements
     private RecommendationsListAdapter adapter;
     private Unbinder unbinder;
     private RecommendationActivityListener listener;
+
+    private final Runnable delayedShow = new Runnable() {
+        @Override
+        public void run() {
+            if (progressBar != null) {
+                progressBar.setVisibility(View.VISIBLE);
+            }
+        }
+    };
 
     // Abstract method to search for items on the API
     protected abstract void search();
@@ -120,25 +121,9 @@ public abstract class BaseRecommendationsFragment extends Fragment implements
     // Initial loading of recommendations data
 
     private void loadRecommendations() {
-        ivProgress.post(new Runnable() {
-            @Override
-            public void run() {
-                startProgress();
-                search();
-            }
-        });
-    }
-
-    // Start a spinning logo animation
-
-    private void startProgress() {
-        RotateAnimation anim = new RotateAnimation(0.0f, 360.0f ,
-                Animation.RELATIVE_TO_SELF, .5f, Animation.RELATIVE_TO_SELF, .5f);
-        anim.setInterpolator(new LinearInterpolator());
-        anim.setRepeatCount(Animation.INFINITE);
-        anim.setDuration(1000);
-        ivProgress.setAnimation(anim);
-        ivProgress.startAnimation(anim);
+        // Only show progress bar if loading takes more than threshold time.
+        progressBar.postDelayed(delayedShow, 500);
+        search();
     }
 
     // Called from descendants when new Recommendations are received
@@ -157,8 +142,10 @@ public abstract class BaseRecommendationsFragment extends Fragment implements
             items.addAll(places);
             adapter.notifyItemRangeInserted(currentItemCount, places.size());
         }
-        ivProgress.clearAnimation();
-        ivProgress.setVisibility(View.GONE);
+
+        // Remove any pending show callbacks.
+        progressBar.removeCallbacks(delayedShow);
+        progressBar.setVisibility(View.GONE);
     }
 
     // RecommendationsListAdapterClickListener implementation

@@ -126,6 +126,11 @@ public class JourneyAdapter extends RecyclerView.Adapter<JourneyAdapter.ViewHold
         Glide.with(context).load(imageUrl).into(target);
     }
 
+    public void add(int position, Journey journey) {
+        items.add(position, journey);
+        notifyItemInserted(position);
+    }
+
     public void addAll(Collection<? extends Journey> collection) {
         int insertionIndex = items.size();
         items.addAll(collection);
@@ -156,6 +161,14 @@ public class JourneyAdapter extends RecyclerView.Adapter<JourneyAdapter.ViewHold
         return oldValue;
     }
 
+    public int size() {
+        return items.size();
+    }
+
+    public List<Journey> getAll() {
+        return items;
+    }
+
     public void setOnJourneySelectedListener(OnItemSelectedListener listener) {
         this.listener = listener;
     }
@@ -168,7 +181,7 @@ public class JourneyAdapter extends RecyclerView.Adapter<JourneyAdapter.ViewHold
     }
 
     /**
-     * Loads the scrim at the same when an Glide finishes loading an image.
+     * Loads the scrim when an image finishes loading an image.
      */
     private static class BackdropTarget extends SimpleTarget<GlideDrawable> {
         ImageView backdrop;

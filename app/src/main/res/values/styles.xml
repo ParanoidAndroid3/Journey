@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:progressBarStyle">@style/ProgressBar</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -99,6 +100,7 @@
 
     <style name="Theme.DesignDemo" parent="Base.Theme.DesignDemo">
     </style>
+
     <style name="Base.Theme.DesignDemo" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="colorPrimary">#795548</item>
         <item name="colorPrimaryDark">#5D4037</item>
@@ -136,6 +138,10 @@
     <style name="RatingBar" parent="Theme.AppCompat">
         <item name="colorControlNormal">#FFEB3B</item>
         <item name="colorControlActivated">#F5F5F5</item>
+    </style>
+
+    <style name="ProgressBar" parent="Widget.AppCompat.ProgressBar">
+        <item name="android:indeterminateDrawable">@drawable/progressbar</item>
     </style>
 
 </resources>
