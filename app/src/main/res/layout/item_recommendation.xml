@@ -28,7 +28,7 @@
                 android:id="@+id/tvName"
                 android:textSize="18sp"
                 android:textColor="@android:color/white"
-                android:background="@drawable/toolbar_scrim"
+                android:background="@drawable/scrim"
                 android:shadowColor="#666"
                 android:shadowDx="1"
                 android:shadowRadius="1"
@@ -46,26 +46,31 @@
             <ImageView
                 android:id="@+id/map_marker"
                 android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_height="40dp"
+                android:scaleType="center"
                 android:layout_alignParentStart="true"
                 app:srcCompat="@drawable/ic_map_marker_grey"/>
             <TextView
                 android:id="@+id/tvDistance"
-                android:textSize="11sp"
-                android:layout_toRightOf="@+id/map_marker"
+                android:textSize="12sp"
+                android:layout_toEndOf="@+id/map_marker"
+                android:gravity="center_vertical"
                 android:textColor="#aaa"
-                android:paddingTop="4dp"
                 android:layout_width="match_parent"
-                android:layout_height="24dp"/>
+                android:layout_height="40dp"/>
 
-            <ImageButton
+            <com.varunest.sparkbutton.SparkButton
                 android:id="@+id/ibSave"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_alignParentEnd="true"
                 android:background="@android:color/white"
-                app:srcCompat="@drawable/ic_bookmark_activity_normal" />
-
+                app:sparkbutton_activeImage="@drawable/ic_bookmark_activity_selected"
+                app:sparkbutton_inActiveImage="@drawable/ic_bookmark_activity_normal"
+                app:sparkbutton_primaryColor="@color/sparkPrimary"
+                app:sparkbutton_secondaryColor="@color/sparkSecondary"
+                app:sparkbutton_iconSize="24dp"
+                app:sparkbutton_animationSpeed="1.2" />
         </RelativeLayout>
 
     </LinearLayout>
