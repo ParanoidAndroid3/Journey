@@ -5,8 +5,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="200dp"
-    android:background="@drawable/travel_2"
     android:fitsSystemWindows="true">
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:src="@drawable/travel_2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true" />
+
+        <ImageView
+            android:src="@drawable/scrim"
+            android:layout_width="match_parent"
+            android:layout_height="100dp" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"

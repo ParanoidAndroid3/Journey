@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="95dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:scrollbars="vertical"/>
 
     <com.paranoidandroid.journey.wizard.views.CustomAutoCompleteTextView

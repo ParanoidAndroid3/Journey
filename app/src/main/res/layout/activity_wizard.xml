@@ -7,12 +7,24 @@
     android:fitsSystemWindows="true"
     tools:context="com.paranoidandroid.journey.wizard.activities.WizardActivity">
 
-    <ImageView
-        android:src="@drawable/travel_1"
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scaleType="fitCenter"
-        android:adjustViewBounds="true" />
+        android:layout_height="250dp">
+
+        <ImageView
+            android:src="@drawable/travel_1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true" />
+
+        <ImageView
+            android:src="@drawable/scrim"
+            android:layout_width="match_parent"
+            android:layout_marginTop="140dp"
+            android:layout_height="110dp" />
+    </RelativeLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"

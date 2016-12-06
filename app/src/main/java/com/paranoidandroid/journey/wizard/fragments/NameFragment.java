@@ -39,6 +39,10 @@ public class NameFragment extends WizardFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_wizard_name, parent, false);
+
+        animatePrompt(v.findViewById(R.id.tvNamePrompt));
+
+
         etName = (EditText) v.findViewById(R.id.etName);
 
         if (getArguments() != null) {

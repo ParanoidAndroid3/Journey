@@ -2,7 +2,10 @@ package com.paranoidandroid.journey.wizard.fragments;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
+import android.view.View;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.paranoidandroid.journey.models.Journey;
 
 import java.util.Map;
@@ -34,6 +37,12 @@ public abstract class WizardFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         updateListener = null;
+    }
+
+    void animatePrompt(View view) {
+        YoYo.with(Techniques.BounceInDown)
+                .duration(700)
+                .playOn(view);
     }
 
     /**

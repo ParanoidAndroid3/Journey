@@ -51,6 +51,9 @@ public class TagsFragment extends WizardFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_wizard_tags, parent, false);
+
+        animatePrompt(v.findViewById(R.id.tvTagsPrompt));
+
         sizeButtons = new ArrayList<>();
         tagButtons = new ArrayList<>();
         setupButtons(v);
