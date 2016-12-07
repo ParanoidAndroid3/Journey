@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.github.clans.fab.FloatingActionButton;
 import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.models.Journey;
@@ -108,4 +110,9 @@ public abstract class BaseWizardActivity extends AppCompatActivity implements Wi
         return this.journey;
     }
 
+    void animatePrompt(View view) {
+        YoYo.with(Techniques.BounceInUp)
+                .duration(700)
+                .playOn(view);
+    }
 }

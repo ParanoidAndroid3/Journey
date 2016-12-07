@@ -39,6 +39,7 @@ public class NameFragment extends WizardFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_wizard_name, parent, false);
+
         etName = (EditText) v.findViewById(R.id.etName);
 
         if (getArguments() != null) {
@@ -46,10 +47,10 @@ public class NameFragment extends WizardFragment {
             if (journeyId != null) {
                 loadJourneyName(journeyId);
             } else {
-                listener.enableFab(false);
+                updateListener.enableFab(false);
             }
         } else {
-           listener.enableFab(false);
+           updateListener.enableFab(false);
         }
 
         etName.addTextChangedListener(new TextWatcher() {
@@ -61,14 +62,14 @@ public class NameFragment extends WizardFragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                listener.enableFab(charSequence.length() > 0);
+                updateListener.enableFab(charSequence.length() > 0);
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
                 Map<String, Object> result = new HashMap<>();
                 result.put(JourneyBuilder.NAME_KEY, editable.toString());
-                listener.updateJourneyData(result);
+                updateListener.updateJourneyData(result);
             }
 
         });
@@ -76,14 +77,16 @@ public class NameFragment extends WizardFragment {
     }
 
     private void loadJourneyName(String journeyId) {
+        loadingListener.showLoading();
         ParseQuery<Journey> query = ParseQuery.getQuery(Journey.class);
         query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ONLY);
         query.getInBackground(journeyId, new GetCallback<Journey>() {
             public void done(final Journey journey, ParseException e) {
                 if (e == null) {
-                    listener.setJourney(journey);
+                    updateListener.setJourney(journey);
                     etName.setText(journey.getName());
-                    listener.enableFab(true);
+                    updateListener.enableFab(true);
+                    loadingListener.hideLoading();
                 } else {
                     e.printStackTrace();
                 }

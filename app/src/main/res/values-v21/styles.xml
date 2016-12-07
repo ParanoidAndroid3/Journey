@@ -11,4 +11,8 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
+    <style name="Theme.Wizard" parent="Base.Theme.DesignDemo">
+        <item name="colorPrimaryDark">#44aff5</item>
+    </style>
+
 </resources>

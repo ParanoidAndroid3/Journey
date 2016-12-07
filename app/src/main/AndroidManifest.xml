@@ -46,14 +46,16 @@
 
         <activity
             android:name=".wizard.activities.WizardActivity"
+            android:windowSoftInputMode="adjustPan"
             android:noHistory="true"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/Theme.DesignDemo">
         </activity>
 
         <activity
             android:name=".wizard.activities.EditJourneyActivity"
+            android:windowSoftInputMode="adjustPan"
             android:noHistory="true"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/Theme.DesignDemo">
         </activity>
 
         <activity

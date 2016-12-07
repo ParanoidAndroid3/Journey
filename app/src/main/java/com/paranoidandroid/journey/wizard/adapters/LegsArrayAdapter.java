@@ -177,7 +177,7 @@ public class LegsArrayAdapter extends RecyclerView.Adapter<LegsArrayAdapter.View
         } else {
             String str = new SimpleDateFormat("MM/dd", Locale.US).format(date.getTime());
             button.setText(str);
-            button.setTextColor(getContext().getResources().getColor(R.color.colorWizardName));
+            //button.setTextColor(getContext().getResources().getColor(R.color.colorWizardName));
             button.setBackgroundResource(0);
         }
     }
