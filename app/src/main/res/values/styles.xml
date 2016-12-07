@@ -85,7 +85,7 @@
         <item name="fab_showAnimation">@anim/jump_from_down</item>
         <item name="fab_hideAnimation">@anim/jump_to_down</item>
         <item name="fab_shadowColor">#bbb</item>
-        <item name="fab_colorNormal">#03A9F4</item>
+        <item name="fab_colorNormal">@color/colorAccent</item>
         <item name="fab_colorPressed">#03A9F4</item>
         <item name="fab_colorRipple">#0099ee</item>
     </style>
@@ -94,24 +94,21 @@
 
     </style>
 
-    <style name="Theme.Wizard" parent="Base.Theme.DesignDemo">
-        <item name="colorPrimaryDark">#44aff5</item>
-    </style>
-
     <style name="Base.Theme.DesignDemo" parent="Theme.AppCompat.DayNight.NoActionBar">
-        <item name="colorPrimary">#795548</item>
-        <item name="colorPrimaryDark">#5D4037</item>
-        <item name="colorAccent">#03A9F4</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
 
     <style name="RecommendationsTabLayout" parent="Widget.Design.TabLayout">
         <item name="tabTextAppearance">@style/RecommendationsTabTextAppearance</item>
-        <item name="tabSelectedTextColor">#5D4037</item>
-        <item name="android:background">#D7CCC8</item>
+        <item name="tabSelectedTextColor">@color/colorPrimaryDark</item>
+        <item name="android:background">@color/colorPrimaryLight</item>
     </style>
 
     <style name="RecommendationsTabTextAppearance" parent="TextAppearance.Design.Tab">
-        <item name="android:textColor">#5D4037</item>
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="android:textStyle">normal|bold</item>
         <item name="textAllCaps">true</item>
     </style>
 
