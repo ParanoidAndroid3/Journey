@@ -9,7 +9,7 @@ import android.view.View;
 import com.crashlytics.android.Crashlytics;
 import com.facebook.Profile;
 import com.paranoidandroid.journey.R;
-import com.paranoidandroid.journey.myjourneys.activities.MyJourneysActivity;
+import com.paranoidandroid.journey.journeys.activities.JourneysActivity;
 import com.paranoidandroid.journey.support.SharedPreferenceUtils;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
@@ -78,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void navigateToNextActivity() {
-        Intent intent = new Intent(this, MyJourneysActivity.class);
+        Intent intent = new Intent(this, JourneysActivity.class);
         startActivity(intent);
         finish();
     }

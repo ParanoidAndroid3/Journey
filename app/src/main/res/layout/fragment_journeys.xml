@@ -7,15 +7,15 @@
 
         <variable
             name="listener"
-            type="com.paranoidandroid.journey.myjourneys.fragments.MyJourneysListFragment.OnJourneyActionListener"/>
+            type="com.paranoidandroid.journey.journeys.fragments.MyJourneysListFragment.OnJourneyActionListener"/>
     </data>
 
     <RelativeLayout
-        android:id="@+id/content_my_journeys"
+        android:id="@+id/content_journeys"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.paranoidandroid.journey.myjourneys.activities.MyJourneysActivity"
-        tools:showIn="@layout/activity_my_journeys">
+        tools:context="com.paranoidandroid.journey.journeys.activities.JourneysActivity"
+        tools:showIn="@layout/activity_journeys">
 
         <RelativeLayout
             android:id="@+id/rlEmptyView"

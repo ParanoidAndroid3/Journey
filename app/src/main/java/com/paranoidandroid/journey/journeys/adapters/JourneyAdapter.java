@@ -1,4 +1,4 @@
-package com.paranoidandroid.journey.myjourneys.adapters;
+package com.paranoidandroid.journey.journeys.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

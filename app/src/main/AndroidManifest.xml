@@ -39,7 +39,7 @@
         </activity>
 
         <activity
-            android:name=".myjourneys.activities.MyJourneysActivity"
+            android:name=".journeys.activities.JourneysActivity"
             android:label="@string/title_my_journeys"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>

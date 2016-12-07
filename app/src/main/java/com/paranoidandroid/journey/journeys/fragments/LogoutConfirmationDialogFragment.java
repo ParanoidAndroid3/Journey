@@ -1,4 +1,4 @@
-package com.paranoidandroid.journey.myjourneys.fragments;
+package com.paranoidandroid.journey.journeys.fragments;
 
 import android.app.Dialog;
 import android.content.Context;
