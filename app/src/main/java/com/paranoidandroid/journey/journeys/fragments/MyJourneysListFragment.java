@@ -16,7 +16,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 /**
- * Load and display a list of the user's journey's.
+ * Load and display a list of the user's journeys.
  */
 public class MyJourneysListFragment extends JourneysListFragment implements DeleteConfirmationDialogFragment.OnDeleteListener {
 
@@ -51,11 +51,6 @@ public class MyJourneysListFragment extends JourneysListFragment implements Dele
     }
 
     @Override
-    protected ParseQuery<Journey> generateQueryForJourneys() {
-        return Journey.createQuery(ParseUser.getCurrentUser());
-    }
-
-    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnJourneyActionListener) {
@@ -72,13 +67,6 @@ public class MyJourneysListFragment extends JourneysListFragment implements Dele
         listener = null;
     }
 
-    @Override
-    public void onItemSelected(Journey journey) {
-        if (listener != null) {
-            listener.onJourneySelected(journey);
-        }
-    }
-
     private void deleteJourneyAtPosition(int position) {
         Journey item = adapter.get(position);
         FragmentManager fm = getFragmentManager();
@@ -86,19 +74,6 @@ public class MyJourneysListFragment extends JourneysListFragment implements Dele
                 .newInstance(item.getName(), item.getObjectId());
         fragment.setTargetFragment(this, REQUEST_CODE);
         fragment.show(fm, "delete_confirmation");
-    }
-
-    @Override
-    public void onDelete(String journeyId) {
-        int position = adapter.indexOf(journeyId);
-        if (position != -1) {
-            Journey journey = adapter.remove(position);
-            showEmptyView(adapter.getItemCount() == 0);
-            listener.onJourneyDeleted(journey);
-            showUndo(journey);
-        } else {
-            Log.e(TAG, "Tried to delete non-existent Journey(" + journeyId + ")");
-        }
     }
 
     private void showUndo(final Journey journey) {
@@ -122,6 +97,47 @@ public class MyJourneysListFragment extends JourneysListFragment implements Dele
                     }
                 })
                 .show();
+    }
+
+    // --- Necessary to extend JourneysListFragment  --- //
+
+    @Override
+    protected ParseQuery<Journey> generateQueryForJourneys() {
+        return Journey.createQuery(ParseUser.getCurrentUser());
+    }
+
+    @Override
+    protected void showEmptyView(boolean isEmpty) {
+        binding.rlIcon.setVisibility(View.GONE);
+        if (isEmpty) {
+            binding.rlEmptyView.setVisibility(View.VISIBLE);
+            binding.rvJourneys.setVisibility(View.GONE);
+        } else {
+            binding.rlEmptyView.setVisibility(View.GONE);
+            binding.rvJourneys.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void onItemSelected(Journey journey) {
+        if (listener != null) {
+            listener.onJourneySelected(journey);
+        }
+    }
+
+    // --- Necessary to implement DeleteConfirmationDialogFragment.OnDeleteListener  --- //
+
+    @Override
+    public void onDelete(String journeyId) {
+        int position = adapter.indexOf(journeyId);
+        if (position != -1) {
+            Journey journey = adapter.remove(position);
+            showEmptyView(adapter.getItemCount() == 0);
+            listener.onJourneyDeleted(journey);
+            showUndo(journey);
+        } else {
+            Log.e(TAG, "Tried to delete non-existent Journey(" + journeyId + ")");
+        }
     }
 
 }

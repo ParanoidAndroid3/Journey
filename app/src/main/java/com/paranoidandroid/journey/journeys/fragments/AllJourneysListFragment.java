@@ -1,5 +1,7 @@
 package com.paranoidandroid.journey.journeys.fragments;
 
+import android.view.View;
+
 import com.paranoidandroid.journey.models.Journey;
 import com.parse.ParseQuery;
 
@@ -18,8 +20,20 @@ public class AllJourneysListFragment extends JourneysListFragment {
     }
 
     @Override
+    protected void showEmptyView(boolean isEmpty) {
+        binding.rlEmptyView.setVisibility(View.GONE);
+        if (isEmpty) {
+            binding.rlIcon.setVisibility(View.VISIBLE);
+            binding.rvJourneys.setVisibility(View.GONE);
+        } else {
+            binding.rlIcon.setVisibility(View.GONE);
+            binding.rvJourneys.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
     public void onItemSelected(Journey journey) {
-     // todo: add some functionality if we want other peoples' journeys to be clickable.
+        // nothing right now
     }
 
 }

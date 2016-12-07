@@ -4,13 +4,16 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.astuetz.PagerSlidingTabStrip;
 import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.databinding.ActivityJourneysBinding;
+import com.paranoidandroid.journey.journeys.adapters.JourneysPagerAdapter;
 import com.paranoidandroid.journey.journeys.fragments.LogoutConfirmationDialogFragment;
 import com.paranoidandroid.journey.journeys.fragments.MyJourneysListFragment;
 import com.paranoidandroid.journey.legplanner.activities.PlannerActivity;
@@ -25,12 +28,15 @@ public class JourneysActivity extends AppCompatActivity implements
         LogoutConfirmationDialogFragment.OnLogoutListener,
         MyJourneysListFragment.OnJourneyActionListener {
 
+    public final static int ALWAYS_HIDE_KEY = 20;
+
     private ActivityJourneysBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupViews();
+        setupTabs();
         setupListeners();
 
         // todo: add view pager and change out fragments programmatically
@@ -44,6 +50,40 @@ public class JourneysActivity extends AppCompatActivity implements
     private void setupViews() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_journeys);
         setSupportActionBar(binding.toolbar);
+    }
+
+    private void setupTabs() {
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager.setAdapter(new JourneysPagerAdapter(getSupportFragmentManager()));
+
+        PagerSlidingTabStrip tabsStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+
+        tabsStrip.setViewPager(viewPager);
+        tabsStrip.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 0) {
+                    binding.fab.setVisibility(View.VISIBLE);
+                    binding.fab.setTag(false);
+                } else {
+                    binding.fab.setVisibility(View.GONE);
+                    binding.fab.setTag(true);
+
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
     }
 
     private void setupListeners() {

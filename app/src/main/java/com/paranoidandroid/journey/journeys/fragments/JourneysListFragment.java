@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.paranoidandroid.journey.databinding.FragmentJourneysBinding;
-import com.paranoidandroid.journey.journeys.adapters.JourneyAdapter;
+import com.paranoidandroid.journey.journeys.adapters.JourneysAdapter;
 import com.paranoidandroid.journey.models.Journey;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -22,17 +22,17 @@ import java.util.List;
 /**
  * Base class for loading and displaying Journey lists
  */
-public abstract class JourneysListFragment extends Fragment implements JourneyAdapter.OnItemSelectedListener{
+public abstract class JourneysListFragment extends Fragment implements JourneysAdapter.OnItemSelectedListener{
 
     protected static final String TAG = "JourneysListFragment";
 
     protected FragmentJourneysBinding binding;
-    protected JourneyAdapter adapter;
+    protected JourneysAdapter adapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new JourneyAdapter(new ArrayList<Journey>());
+        adapter = new JourneysAdapter(new ArrayList<Journey>());
         adapter.setOnJourneySelectedListener(this);
     }
 
@@ -79,16 +79,7 @@ public abstract class JourneysListFragment extends Fragment implements JourneyAd
         }
     }
 
-    // todo: should this be abstract?
-    protected void showEmptyView(boolean isEmpty) {
-        if (isEmpty) {
-            binding.rlEmptyView.setVisibility(View.VISIBLE);
-            binding.rvJourneys.setVisibility(View.GONE);
-        } else {
-            binding.rlEmptyView.setVisibility(View.GONE);
-            binding.rvJourneys.setVisibility(View.VISIBLE);
-        }
-    }
+    protected abstract void showEmptyView(boolean isEmpty);
 
     protected void fetchJourneys() {
         ParseQuery<Journey> query = generateQueryForJourneys();
