@@ -4,7 +4,7 @@
     <string name="facebook_app_id">373105216361988</string>
     <string name="google_maps_api_key">AIzaSyB-beM4wqDZs2pf645psQrVmOFsrIf06tQ</string>
     <string name="parse_app_id">com.github.paranoidandroid3.journey</string>
-    <string name="title_journeys">Journey</string>
+    <string name="title_my_journeys">My Journeys</string>
     <string name="confirm_logout">Are you sure you want to log out?</string>
     <string name="confirm_delete">Are you sure you want to delete %1$s?</string>
     <string name="catch_phrase_intro">Define Your Own</string>
