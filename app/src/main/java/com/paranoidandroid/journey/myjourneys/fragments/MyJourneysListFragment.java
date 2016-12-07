@@ -202,7 +202,8 @@ public class MyJourneysListFragment extends Fragment implements
 
                 if (e == null) {
                     // Show the new journeys if the list was changed.
-                    if (hasChanges(adapter.getAll(), objects)) {
+                    if (objects.size() == 0
+                            || hasChanges(adapter.getAll(), objects)) {
                         showJourneys(objects);
                     }
                 } else {

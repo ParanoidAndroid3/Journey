@@ -71,7 +71,7 @@ public class Journey extends ParseObject {
     }
 
     public List<String> getTripTags() {
-        return (List<String>) get(KEY_TRIP_TAGS);
+        return getList(KEY_TRIP_TAGS);
     }
 
     public void addLeg(Leg leg) {
