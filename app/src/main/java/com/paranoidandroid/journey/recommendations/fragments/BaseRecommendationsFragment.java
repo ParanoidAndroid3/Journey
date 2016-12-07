@@ -155,6 +155,9 @@ public abstract class BaseRecommendationsFragment extends Fragment implements
 
     @Override
     public void onAddBookmarkClicked(Recommendation r, final int position) {
+        // Set immediately. Will be undone if save fails.
+        r.setBookmarked(true);
+
         listener.onBookmarkRecommendation(r, category, new RecommendationActivityListener.OnRecommendationSaveListener() {
             @Override
             public void onSaved() {
@@ -175,6 +178,9 @@ public abstract class BaseRecommendationsFragment extends Fragment implements
 
     @Override
     public void onRemoveBookmarkClicked(Recommendation r, final int position) {
+        // Set immediately. Will be undone if save fails.
+        r.setBookmarked(false);
+
         listener.onUnBookmarkRecommendation(r, category, new RecommendationActivityListener.OnRecommendationSaveListener() {
             @Override
             public void onSaved() {

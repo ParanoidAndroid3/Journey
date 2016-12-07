@@ -144,12 +144,10 @@ public class RecommendationsListAdapter extends RecyclerView.Adapter<RecyclerVie
         if (this.listener != null) {
             Recommendation rec = items.get(position);
             if (rec.isBookmarked()) {
-                this.listener.onRemoveBookmarkClicked(items.get(position), position);
+                this.listener.onRemoveBookmarkClicked(rec, position);
             } else {
-                this.listener.onAddBookmarkClicked(items.get(position), position);
+                this.listener.onAddBookmarkClicked(rec, position);
             }
-            // Set immediately. Will be undone if save fails.
-            rec.setBookmarked(!rec.isBookmarked());
         }
     }
 }
