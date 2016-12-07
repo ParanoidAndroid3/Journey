@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,7 @@ import butterknife.Unbinder;
 
 public abstract class BaseRecommendationsFragment extends Fragment implements
         RecommendationsListAdapterClickListener {
+    private static final String TAG = "BaseRecommendationsFrag";
 
     @BindView(R.id.rvRecommendations) RecyclerView rvRecommendations;
     @BindView(R.id.pbLoading) ProgressBar progressBar;
@@ -90,6 +92,7 @@ public abstract class BaseRecommendationsFragment extends Fragment implements
         layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         rvRecommendations.setLayoutManager(layoutManager);
         rvRecommendations.addOnScrollListener(getScrollListener());
+        rvRecommendations.getItemAnimator().setChangeDuration(0); // Don't flicker when bookmark updates
         ItemClickSupport.addTo(rvRecommendations).setOnItemClickListener(
                 new ItemClickSupport.OnItemClickListener() {
                     @Override
@@ -152,32 +155,46 @@ public abstract class BaseRecommendationsFragment extends Fragment implements
 
     @Override
     public void onAddBookmarkClicked(Recommendation r, final int position) {
+        // Set immediately. Will be undone if save fails.
+        r.setBookmarked(true);
+
         listener.onBookmarkRecommendation(r, category, new RecommendationActivityListener.OnRecommendationSaveListener() {
             @Override
             public void onSaved() {
-                items.get(position).setBookmarked(true);
-                adapter.notifyItemChanged(position);
+                Recommendation rec = items.get(position);
+                Log.i(TAG, "Saved bookmark for " + rec.getName());
             }
 
             @Override
             public void onError() {
                 Snackbar.make(rvRecommendations, "Error adding bookmark!", Snackbar.LENGTH_SHORT).show();
+
+                // Remove bookmark for data consistency.
+                items.get(position).setBookmarked(false);
+                adapter.notifyItemChanged(position);
             }
         });
     }
 
     @Override
     public void onRemoveBookmarkClicked(Recommendation r, final int position) {
+        // Set immediately. Will be undone if save fails.
+        r.setBookmarked(false);
+
         listener.onUnBookmarkRecommendation(r, category, new RecommendationActivityListener.OnRecommendationSaveListener() {
             @Override
             public void onSaved() {
-                items.get(position).setBookmarked(false);
-                adapter.notifyItemChanged(position);
+                Recommendation rec = items.get(position);
+                Log.i(TAG, "Removed bookmark for " + rec.getName());
             }
 
             @Override
             public void onError() {
                 Snackbar.make(rvRecommendations, "Error removing bookmark!", Snackbar.LENGTH_SHORT).show();
+
+                // Add back bookmark for data consistency.
+                items.get(position).setBookmarked(true);
+                adapter.notifyItemChanged(position);
             }
         });
     }
