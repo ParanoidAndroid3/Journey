@@ -10,7 +10,6 @@
     <dimen name="card_corner_radius">3dp</dimen>
     <dimen name="card_item_vertical_padding">10dp</dimen>
     <dimen name="wizard_prompt_horizontal_margin">18dp</dimen>
-    <dimen name="wizard_prompt_vertical_margin">64dp</dimen>
     <dimen name="tag_button_margin">2dp</dimen>
     <dimen name="text_icon_size">18dp</dimen>
 

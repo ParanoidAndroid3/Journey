@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
@@ -28,6 +29,7 @@ public class WizardActivity extends BaseWizardActivity implements View.OnClickLi
 
     private WizardPagerAdapter pagerAdapter;
     private ViewPager viewpager;
+    private TextView tvPrompt;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -38,10 +40,13 @@ public class WizardActivity extends BaseWizardActivity implements View.OnClickLi
         fab.setImageResource(R.drawable.ic_arrow_forward);
         enableFab(false);
         fab.setOnClickListener(this);
-
+        tvPrompt = (TextView) findViewById(R.id.tvPrompt);
         pagerAdapter = new WizardPagerAdapter(getSupportFragmentManager());
         viewpager = (ViewPager) findViewById(R.id.viewpager);
         viewpager.setAdapter(pagerAdapter);
+
+        tvPrompt.setText(getResources().getStringArray(R.array.wizard_prompts)[0]);
+        animatePrompt(tvPrompt);
     }
 
     /**
@@ -57,6 +62,8 @@ public class WizardActivity extends BaseWizardActivity implements View.OnClickLi
             }
             pagerAdapter.notifyDataSetChanged();
             viewpager.setCurrentItem(1, true);
+            tvPrompt.setText(getResources().getStringArray(R.array.wizard_prompts)[1]);
+            animatePrompt(tvPrompt);
         } else if (currentFragment == 1) {
             if (numFragments == 2) {
                 pagerAdapter.incrementCount();
@@ -64,6 +71,8 @@ public class WizardActivity extends BaseWizardActivity implements View.OnClickLi
             pagerAdapter.notifyDataSetChanged();
             viewpager.setCurrentItem(2, true);
             fab.setImageResource(R.drawable.ic_check);
+            tvPrompt.setText(getResources().getStringArray(R.array.wizard_prompts)[2]);
+            animatePrompt(tvPrompt);
         } else {
             Log.e(TAG, "Cannot go to next fragment");
         }

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="wizard_prompts">
+        <item>What do you want to name your Journey?</item>
+        <item>Where are you going?</item>
+        <item>How will you travel?</item>
+    </string-array>
+</resources>

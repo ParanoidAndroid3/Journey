@@ -63,11 +63,11 @@ public class LegsFragment extends WizardFragment {
             if (journeyId != null) {
                 loadJourneyLegs(journeyId);
             } else {
-                listener.enableFab(false);
+                updateListener.enableFab(false);
             }
         } else {
-            adapter = new LegsArrayAdapter(getContext(), new ArrayList<Leg>(), listener, false);
-            listener.enableFab(false);
+            adapter = new LegsArrayAdapter(getContext(), new ArrayList<Leg>(), updateListener, false);
+            updateListener.enableFab(false);
             rvLegs.setAdapter(adapter);
             rvLegs.setLayoutManager(new LinearLayoutManager(getContext()));
         }
@@ -122,6 +122,7 @@ public class LegsFragment extends WizardFragment {
     }
 
     private void loadJourneyLegs(String journeyId) {
+        loadingListener.showLoading();
         ParseQuery<Journey> query = ParseQuery.getQuery(Journey.class);
         query.include("legs");
         query.include("legs.destination");
@@ -129,11 +130,12 @@ public class LegsFragment extends WizardFragment {
         query.getInBackground(journeyId, new GetCallback<Journey>() {
             public void done(final Journey journey, ParseException e) {
                 if (e == null) {
-                    listener.setJourney(journey);
-                    adapter = new LegsArrayAdapter(getContext(), journey.getLegs(), listener, true);
-                    listener.enableFab(true);
+                    updateListener.setJourney(journey);
+                    adapter = new LegsArrayAdapter(getContext(), journey.getLegs(), updateListener, true);
+                    updateListener.enableFab(true);
                     rvLegs.setAdapter(adapter);
                     rvLegs.setLayoutManager(new LinearLayoutManager(getContext()));
+                    loadingListener.hideLoading();
                 } else {
                     e.printStackTrace();
                 }

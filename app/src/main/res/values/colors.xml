@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="colorPrimaryLight">#a17869</color>
-    <color name="colorPrimary">#795548</color>
-    <color name="colorPrimaryDark">#5D4037</color>
+    <color name="colorPrimaryLight">#ffe1cb</color>
+    <color name="colorPrimary">#df8a5a</color>
+    <color name="colorPrimaryDark">#b65d2b</color>
 
-    <color name="colorAccent">#03A9F4</color>
-    <color name="colorAccentLight">#8ec0d7</color>
+    <color name="colorAccentDark">#036db3</color>
+    <color name="colorAccent">#44aff5</color>
+    <color name="colorAccentLight">#a6def9</color>
 
     <color name="colorTextIcons">#FFFF</color>
     <color name="colorDivider">#BDBDBD</color>
@@ -20,13 +21,15 @@
     <!-- fab disabled/enabled -->
     <color name="colorFabEnabled">@color/colorAccent</color>
     <color name="colorFabDisabled">@color/colorAccentLight</color>
-    <color name="colorFabProgress">#2a4350</color>
+    <color name="colorFabProgress">@color/colorAccentDark</color>
 
-    <color name="colorWizardPrompt">@color/colorTextIcons</color>
-    <color name="colorWizardName">@color/colorPrimaryText</color>
+    <color name="colorWizardPrompt">@color/colorPrimaryText</color>
+    <color name="colorWizardName">@color/colorSecondaryText</color>
 
     <color name="colorTagNotPressed">@color/colorAccentLight</color>
-    <color name="colorTagPressed">@color/colorAccent</color>
+    <color name="colorTagPressed">@color/colorAccentDark</color>
+
+    <color name="colorLegCardColor">@color/colorPrimaryLight</color>
 
     <color name="listBackgroundColor">#EFEFEF</color>
     <color name="darkTranslucent">#BB000000</color>
