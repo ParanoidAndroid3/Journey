@@ -1,6 +1,7 @@
 package com.paranoidandroid.journey.wizard.fragments;
 
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,8 +52,6 @@ public class TagsFragment extends WizardFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_wizard_tags, parent, false);
-
-        animatePrompt(v.findViewById(R.id.tvTagsPrompt));
 
         sizeButtons = new ArrayList<>();
         tagButtons = new ArrayList<>();
@@ -232,11 +231,13 @@ public class TagsFragment extends WizardFragment {
     private void turnOff(Map<String, Boolean> source, Button button) {
        source.put(button.getText().toString(), false);
        button.setBackgroundResource(R.drawable.rounded_button);
+        button.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryText));
     }
 
     private void turnOn(Map<String, Boolean> source, Button button) {
         source.put(button.getText().toString(), true);
         button.setBackgroundResource(R.drawable.rounded_button_pressed);
+        button.setTextColor(ContextCompat.getColor(getContext(), android.R.color.white));
     }
 
     /**

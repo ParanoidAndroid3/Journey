@@ -4,8 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
-    android:fitsSystemWindows="true">
+    android:layout_height="200dp">
 
     <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -20,6 +19,7 @@
             android:adjustViewBounds="true" />
 
         <ImageView
+            android:layout_alignParentBottom="true"
             android:src="@drawable/scrim"
             android:layout_width="match_parent"
             android:layout_height="100dp" />

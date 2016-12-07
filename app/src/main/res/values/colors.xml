@@ -22,10 +22,10 @@
     <color name="colorFabProgress">@color/colorAccentDark</color>
 
     <color name="colorWizardPrompt">@color/colorPrimaryText</color>
-    <color name="colorWizardName">@color/colorPrimaryText</color>
+    <color name="colorWizardName">@color/colorSecondaryText</color>
 
-    <color name="colorTagNotPressed">@color/colorPrimaryLight</color>
-    <color name="colorTagPressed">@color/colorPrimary</color>
+    <color name="colorTagNotPressed">@color/colorAccentLight</color>
+    <color name="colorTagPressed">@color/colorAccentDark</color>
 
     <color name="colorLegCardColor">@color/colorPrimaryLight</color>
 

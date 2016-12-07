@@ -221,12 +221,12 @@ public class DayPlannerFragment extends Fragment implements
         }
         Leg leg = mDays.get(dayOrder).getLeg();
         try {
-            // Need to call this synchronously to avoid 'Object not found' error
-            Activity.fetchAllIfNeeded(leg.getActivities());
             if (leg.getActivities() == null) {
                 return result;
             }
 
+            // Need to call this synchronously to avoid 'Object not found' error
+            Activity.fetchAllIfNeeded(leg.getActivities());
             for (Activity activity : leg.getActivities()) {
                 Date activityDate = activity.getDate("date");
                 if (activityDate != null && datesOnSameDay(activityDate, mDays.get(dayOrder).getDate()))

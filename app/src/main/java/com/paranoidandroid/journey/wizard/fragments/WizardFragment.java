@@ -39,12 +39,6 @@ public abstract class WizardFragment extends Fragment {
         updateListener = null;
     }
 
-    void animatePrompt(View view) {
-        YoYo.with(Techniques.BounceInDown)
-                .duration(700)
-                .playOn(view);
-    }
-
     /**
      * This interface allows WizardFragments to
      * communicate with parent activities.

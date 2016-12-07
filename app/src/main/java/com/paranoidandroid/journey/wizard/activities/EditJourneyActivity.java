@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
@@ -39,14 +40,12 @@ public class EditJourneyActivity extends BaseWizardActivity implements View.OnCl
     private String journeyId;
     private int editMode;
     private boolean changed;
-    private ContentLoadingProgressBar progressBar;
+    private TextView tvPrompt;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_journey);
-
-        progressBar = (ContentLoadingProgressBar) findViewById(R.id.pbEditJourney);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setImageResource(R.drawable.ic_check);
@@ -58,18 +57,39 @@ public class EditJourneyActivity extends BaseWizardActivity implements View.OnCl
 
         editMode = extras.getInt(EXTRA_EDIT_MODE, -1);
         journeyId = extras.getString(EXTRA_JOURNEY_ID, null);
+        tvPrompt = (TextView) findViewById(R.id.tvPrompt);
 
         if (journeyId != null && editMode != -1) {
             addFragment();
         } else {
             Log.e(TAG, "Could not find journey id for editing");
         }
+
     }
 
     @Override
     public void updateJourneyData(Map<String, Object> data) {
         changed = true;
         super.updateJourneyData(data);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        switch (editMode) {
+            case EDIT_MODE_TITLE:
+                tvPrompt.setText(getResources().getStringArray(R.array.wizard_prompts)[0]);
+                animatePrompt(tvPrompt);
+                break;
+            case EDIT_MODE_LEGS:
+                tvPrompt.setText(getResources().getStringArray(R.array.wizard_prompts)[1]);
+                animatePrompt(tvPrompt);
+                break;
+            case EDIT_MODE_TAGS:
+                tvPrompt.setText(getResources().getStringArray(R.array.wizard_prompts)[2]);
+                animatePrompt(tvPrompt);
+                break;
+        }
     }
 
     private void addFragment() {
@@ -147,13 +167,13 @@ public class EditJourneyActivity extends BaseWizardActivity implements View.OnCl
 
     @Override
     public void hideLoading() {
-        progressBar.hide();
-        findViewById(R.id.rlProgress).setVisibility(View.GONE);
+        //progressBar.hide();
+        //findViewById(R.id.rlProgress).setVisibility(View.GONE);
     }
 
     @Override
     public void showLoading() {
-        findViewById(R.id.rlProgress).setVisibility(View.VISIBLE);
-        progressBar.show();
+        //findViewById(R.id.rlProgress).setVisibility(View.VISIBLE);
+        //progressBar.show();
     }
 }

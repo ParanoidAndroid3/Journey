@@ -21,32 +21,23 @@
     <style name="WizardPrompt">
         <item name="android:textSize">28sp</item>
         <item name="android:textColor">@android:color/white</item>
-        <item name="android:layout_gravity">center_horizontal</item>
-        <item name="android:layout_centerHorizontal">true</item>
         <item name="android:gravity">center</item>
-        <item name="android:layout_marginLeft">@dimen/wizard_prompt_horizontal_margin</item>
-        <item name="android:layout_marginStart">@dimen/wizard_prompt_horizontal_margin</item>
-        <item name="android:layout_marginRight">@dimen/wizard_prompt_horizontal_margin</item>
-        <item name="android:layout_marginEnd">@dimen/wizard_prompt_horizontal_margin</item>
     </style>
 
     <style name="LegCalendar">
-        <item name="android:layout_width">34dp</item>
-        <item name="android:layout_height">34dp</item>
-        <item name="android:textSize">@dimen/wizard_legs_date_size</item>
-        <item name="android:layout_gravity">center</item>
-        <item name="android:gravity">center_vertical</item>
-        <item name="android:layout_marginTop">1dp</item>
+        <item name="android:layout_width">44dp</item>
+        <item name="android:layout_height">44dp</item>
+        <item name="android:textColor">#fff</item>
         <item name="android:background">@android:color/transparent</item>
     </style>
 
     <style name="TagButton">
         <item name="android:layout_height">30dp</item>
         <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_margin">3dp</item>
         <item name="android:textSize">14sp</item>
         <item name="android:clickable">true</item>
         <item name="android:background">@drawable/rounded_button</item>
-        <item name="android:radius">4dp</item>
     </style>
 
     <style name="SelectedDayText" parent="@android:style/TextAppearance.Medium">
@@ -74,7 +65,7 @@
 
     <style name="MenuLabelsStyle">
         <item name="android:background">@drawable/fab_label_background</item>
-        <item name="android:textColor">#000000</item>
+        <item name="android:textColor">#fff</item>
         <item name="android:textSize">14sp</item>
         <item name="android:maxLines">2</item>
         <item name="android:ellipsize">end</item>
@@ -100,6 +91,11 @@
     </style>
 
     <style name="Theme.DesignDemo" parent="Base.Theme.DesignDemo">
+
+    </style>
+
+    <style name="Theme.Wizard" parent="Base.Theme.DesignDemo">
+        <item name="colorPrimaryDark">#44aff5</item>
     </style>
 
     <style name="Base.Theme.DesignDemo" parent="Theme.AppCompat.DayNight.NoActionBar">

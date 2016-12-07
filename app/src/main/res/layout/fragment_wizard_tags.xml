@@ -5,45 +5,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tvTagsPrompt"
-        style="@style/WizardPrompt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="200dp"
-        android:text="@string/tags_prompt"/>
 
     <LinearLayout
         android:id="@+id/llSizeButtons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_below="@id/tvTagsPrompt"
-        android:layout_marginTop="60dp"
+        android:paddingTop="40dp"
         android:gravity="center_horizontal">
 
         <Button
             android:id="@+id/btnSolo"
             style="@style/TagButton"
+            android:layout_weight="1"
             android:text="@string/size_solo"/>
 
         <Button
             android:id="@+id/btnCouple"
             style="@style/TagButton"
             android:text="@string/size_couple"
-            android:layout_marginStart="@dimen/tag_button_margin"/>
+            android:layout_weight="1"/>
 
         <Button
             android:id="@+id/btnGroup"
             style="@style/TagButton"
             android:text="@string/size_group"
-            android:layout_marginStart="@dimen/tag_button_margin"/>
+            android:layout_weight="1"/>
 
         <Button
             android:id="@+id/btnFamily"
             style="@style/TagButton"
             android:text="@string/size_family"
-            android:layout_marginStart="@dimen/tag_button_margin"/>
+            android:layout_weight="1"/>
 
     </LinearLayout>
 
@@ -67,14 +60,12 @@
         <Button
             android:id="@+id/btnCulture"
             style="@style/TagButton"
-            android:text="@string/tag_culture"
-            android:layout_marginEnd="@dimen/tag_button_margin"/>
+            android:text="@string/tag_culture"/>
 
         <Button
             android:id="@+id/btnFoodie"
             style="@style/TagButton"
-            android:text="@string/tag_foodie"
-            android:layout_marginStart="@dimen/tag_button_margin"/>
+            android:text="@string/tag_foodie"/>
 
     </LinearLayout>
 

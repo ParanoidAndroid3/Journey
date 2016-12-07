@@ -58,8 +58,6 @@ public class LegsFragment extends WizardFragment {
         View v = inflater.inflate(R.layout.fragment_wizard_legs, parent, false);
         rvLegs = (RecyclerView) v.findViewById(R.id.rvLegs);
 
-        animatePrompt(v.findViewById(R.id.tvLegsPrompt));
-
         if (getArguments() != null) {
             String journeyId = getArguments().getString("journey_id");
             if (journeyId != null) {
