@@ -45,6 +45,24 @@ public class WizardActivity extends BaseWizardActivity implements View.OnClickLi
         viewpager = (ViewPager) findViewById(R.id.viewpager);
         viewpager.setAdapter(pagerAdapter);
 
+        viewpager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                tvPrompt.setText(getResources().getStringArray(R.array.wizard_prompts)[position]);
+                animatePrompt(tvPrompt);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
         tvPrompt.setText(getResources().getStringArray(R.array.wizard_prompts)[0]);
         animatePrompt(tvPrompt);
     }
@@ -62,8 +80,6 @@ public class WizardActivity extends BaseWizardActivity implements View.OnClickLi
             }
             pagerAdapter.notifyDataSetChanged();
             viewpager.setCurrentItem(1, true);
-            tvPrompt.setText(getResources().getStringArray(R.array.wizard_prompts)[1]);
-            animatePrompt(tvPrompt);
         } else if (currentFragment == 1) {
             if (numFragments == 2) {
                 pagerAdapter.incrementCount();
@@ -71,8 +87,6 @@ public class WizardActivity extends BaseWizardActivity implements View.OnClickLi
             pagerAdapter.notifyDataSetChanged();
             viewpager.setCurrentItem(2, true);
             fab.setImageResource(R.drawable.ic_check);
-            tvPrompt.setText(getResources().getStringArray(R.array.wizard_prompts)[2]);
-            animatePrompt(tvPrompt);
         } else {
             Log.e(TAG, "Cannot go to next fragment");
         }
