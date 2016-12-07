@@ -60,6 +60,8 @@ public abstract class JourneysListFragment extends Fragment implements JourneysA
 
     protected abstract ParseQuery<Journey> generateQueryForJourneys();
 
+    protected abstract void showEmptyView(boolean isEmpty);
+
     protected void showProgressBar() {
         binding.pbInitialLoad.show();
         binding.rvJourneys.setVisibility(View.GONE);
@@ -79,9 +81,7 @@ public abstract class JourneysListFragment extends Fragment implements JourneysA
         }
     }
 
-    protected abstract void showEmptyView(boolean isEmpty);
-
-    protected void fetchJourneys() {
+    public void fetchJourneys() {
         ParseQuery<Journey> query = generateQueryForJourneys();
 
         // Only show progress bar if the user has nothing to look at.
@@ -96,7 +96,7 @@ public abstract class JourneysListFragment extends Fragment implements JourneysA
 
                 if (e == null) {
                     // Show the new journeys if the list was changed.
-                    if (hasChanges(adapter.getAll(), objects)) {
+                    if (true && hasChanges(adapter.getAll(), objects)) {
                         showJourneys(objects);
                     }
                 } else {

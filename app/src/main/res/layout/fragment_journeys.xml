@@ -48,8 +48,8 @@
             android:visibility="gone">
 
             <ImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="120dp"
+                android:layout_height="1200dp"
                 app:srcCompat="@drawable/ic_journey"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="@dimen/empty_journeys_title_margin"/>

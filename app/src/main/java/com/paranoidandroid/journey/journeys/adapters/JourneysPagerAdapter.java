@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.astuetz.PagerSlidingTabStrip;
 import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.journeys.fragments.AllJourneysListFragment;
+import com.paranoidandroid.journey.journeys.fragments.JourneysListFragment;
 import com.paranoidandroid.journey.journeys.fragments.MyJourneysListFragment;
 
 /**
@@ -14,6 +15,8 @@ import com.paranoidandroid.journey.journeys.fragments.MyJourneysListFragment;
  */
 
 public class JourneysPagerAdapter extends FragmentPagerAdapter implements PagerSlidingTabStrip.IconTabProvider {
+
+    private JourneysListFragment currentFragment = null;
 
     private int[] tabIcons = {R.drawable.ic_my_journeys, R.drawable.ic_all_journeys};
 
@@ -24,12 +27,13 @@ public class JourneysPagerAdapter extends FragmentPagerAdapter implements PagerS
     @Override
     public Fragment getItem(int position) {
         if (position == 0) {
-            return MyJourneysListFragment.newInstance();
+            currentFragment = MyJourneysListFragment.newInstance();
         } else if (position == 1) {
-            return AllJourneysListFragment.newInstance();
+            currentFragment = AllJourneysListFragment.newInstance();
         } else {
-            return null;
+            currentFragment = null;
         }
+        return currentFragment;
     }
 
     @Override
@@ -40,6 +44,10 @@ public class JourneysPagerAdapter extends FragmentPagerAdapter implements PagerS
     @Override
     public int getPageIconResId(int position) {
         return tabIcons[position];
+    }
+
+    public JourneysListFragment getCurrentFragment() {
+        return currentFragment;
     }
 
 }

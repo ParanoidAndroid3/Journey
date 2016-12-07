@@ -3,7 +3,6 @@ package com.paranoidandroid.journey.journeys.activities;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -28,9 +27,8 @@ public class JourneysActivity extends AppCompatActivity implements
         LogoutConfirmationDialogFragment.OnLogoutListener,
         MyJourneysListFragment.OnJourneyActionListener {
 
-    public final static int ALWAYS_HIDE_KEY = 20;
-
     private ActivityJourneysBinding binding;
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,13 +36,6 @@ public class JourneysActivity extends AppCompatActivity implements
         setupViews();
         setupTabs();
         setupListeners();
-
-        // todo: add view pager and change out fragments programmatically
-        if (savedInstanceState == null) {
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.content, MyJourneysListFragment.newInstance());
-            transaction.commit();
-        }
     }
 
     private void setupViews() {
@@ -53,7 +44,7 @@ public class JourneysActivity extends AppCompatActivity implements
     }
 
     private void setupTabs() {
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(new JourneysPagerAdapter(getSupportFragmentManager()));
 
         PagerSlidingTabStrip tabsStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
@@ -63,7 +54,6 @@ public class JourneysActivity extends AppCompatActivity implements
 
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
             }
 
             @Override
@@ -74,7 +64,6 @@ public class JourneysActivity extends AppCompatActivity implements
                 } else {
                     binding.fab.setVisibility(View.GONE);
                     binding.fab.setTag(true);
-
                 }
             }
 
@@ -138,7 +127,9 @@ public class JourneysActivity extends AppCompatActivity implements
     public void onJourneyDeleted(Journey journey) {
         // Hack to ensure that FAB is visible if it has been hidden but there aren't enough items
         // remaining in the list to allow scrolling (which would show the FAB again).
-        binding.fab.show();
+        if (viewPager.getCurrentItem() == 0) {
+            binding.fab.show();
+        }
     }
 
     @Override
