@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="@color/colorPrimary"
     tools:context="com.paranoidandroid.journey.login.LoginActivity">
 
     <LinearLayout
@@ -21,17 +22,17 @@
             android:layout_height="wrap_content"
             android:text="@string/catch_phrase_intro"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:textColor="?android:attr/textColorSecondary"/>
+            android:textColor="@color/colorPrimaryDark"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:gravity="end"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:text="@string/app_name"
             android:textAppearance="@style/TextAppearance.AppCompat.Display3"
             android:fontFamily="cursive"
-            android:textColor="?android:attr/textColorPrimary"/>
+            android:textColor="@color/colorPrimaryText"/>
     </LinearLayout>
 
     <ImageView
