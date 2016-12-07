@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.paranoidandroid.journey">
+          package="com.paranoidandroid.journey">
 
-    <permission android:name="android.permission.ACCESS_FINE_LOCATION" android:protectionLevel="dangerous"/>
-    <permission android:name="android.permission.ACCESS_COARSE_LOCATION" android:protectionLevel="dangerous"/>
+    <permission
+        android:name="android.permission.ACCESS_FINE_LOCATION"
+        android:protectionLevel="dangerous"/>
+    <permission
+        android:name="android.permission.ACCESS_COARSE_LOCATION"
+        android:protectionLevel="dangerous"/>
 
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:name=".JourneyApplication"
@@ -22,40 +26,33 @@
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-
         <activity
             android:name=".legplanner.activities.PlannerActivity"
             android:theme="@style/Theme.DesignDemo">
         </activity>
-
         <activity
             android:name=".recommendations.activities.RecommendationsActivity"
             android:theme="@style/Theme.DesignDemo">
         </activity>
-
         <activity
             android:name=".recommendations.activities.RecommendationDetailActivity"
             android:theme="@style/Theme.DesignDemo">
         </activity>
-
         <activity
             android:name=".myjourneys.activities.MyJourneysActivity"
             android:label="@string/title_my_journeys"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-
         <activity
             android:name=".wizard.activities.WizardActivity"
             android:noHistory="true"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-
         <activity
             android:name=".wizard.activities.EditJourneyActivity"
             android:noHistory="true"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-
         <activity
             android:name=".splash.SplashActivity"
             android:theme="@style/SplashTheme">
@@ -65,33 +62,39 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activityviewer.activities.ActivityDetailsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
 
         <!-- Facebook config -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id" />
+            android:value="@string/facebook_app_id"/>
         <meta-data
             android:name="com.facebook.sdk.PERMISSIONS"
-            android:value="email" />
+            android:value="email"/>
 
         <!-- Fabric config -->
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="398e3704c1b1a2a286421b27c5a40cc0dd883a93" />
+            android:value="398e3704c1b1a2a286421b27c5a40cc0dd883a93"/>
 
         <!-- Parse config -->
         <meta-data
             android:name="com.parse.APPLICATION_ID"
-            android:value="@string/parse_app_id" />
-
-        <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
-
-        <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_api_key" />
+            android:value="@string/parse_app_id"/>
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version"/>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_api_key"/>
 
         <!-- Glide configuration -->
-        <meta-data android:name="com.paranoidandroid.journey.glide.GlideConfiguration"
-                   android:value="GlideModule" />
+        <meta-data
+            android:name="com.paranoidandroid.journey.glide.GlideConfiguration"
+            android:value="GlideModule"/>
     </application>
 
 </manifest>

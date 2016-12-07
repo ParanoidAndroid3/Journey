@@ -1,6 +1,7 @@
 package com.paranoidandroid.journey.legplanner.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -12,9 +13,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.paranoidandroid.journey.R;
+import com.paranoidandroid.journey.activityviewer.activities.ActivityDetailsActivity;
 import com.paranoidandroid.journey.models.Activity;
-import com.paranoidandroid.journey.models.ui.Day;
 import com.paranoidandroid.journey.models.Leg;
+import com.paranoidandroid.journey.models.ui.Day;
 import com.paranoidandroid.journey.support.ui.SmartFragmentStatePagerAdapter;
 import com.parse.ParseException;
 import com.parse.SaveCallback;
@@ -212,7 +214,8 @@ public class DayPlannerFragment extends Fragment implements
 
     @Override
     public void onActivitySelected(Activity activity) {
-        // TODO: Show detail view
+        Intent intent = ActivityDetailsActivity.createIntent(getContext(), activity.getObjectId());
+        startActivity(intent);
     }
 
     @Override
