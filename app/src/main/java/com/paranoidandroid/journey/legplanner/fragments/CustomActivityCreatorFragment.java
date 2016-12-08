@@ -8,6 +8,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,6 +61,7 @@ public class CustomActivityCreatorFragment extends DialogFragment implements
     private String city;
     private Unbinder unbinder;
     private PlaceAutocompleteFragment autocompleteFragment;
+    Context mContext;
 
     public interface OnAddCustomActivityListener {
         void onAddCustomActivity(String title, Date date, GooglePlace place);
@@ -90,6 +92,7 @@ public class CustomActivityCreatorFragment extends DialogFragment implements
         if (context instanceof OnAddCustomActivityListener){
             this.listener = (OnAddCustomActivityListener) context;
         }
+        mContext = context;
     }
 
     @Override
@@ -156,8 +159,6 @@ public class CustomActivityCreatorFragment extends DialogFragment implements
             return;
         Glide.with(this)
                 .load(googlePlace.getImageUrl())
-                .placeholder(R.drawable.ic_map_marker_placeholder)
-                .error(R.drawable.ic_map_marker_placeholder)
                 .into(ivPhoto);
     }
 

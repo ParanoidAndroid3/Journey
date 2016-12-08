@@ -43,7 +43,6 @@ public class GoogleRecommendationsFragment extends BaseRecommendationsFragment i
         GooglePlaceSearchClient.search(coordinates.latitude, coordinates.longitude, category.id, token, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                System.out.println(response);
                 List<GooglePlace> places = GooglePlace.parseJSON(response);
                 nextToken = GooglePlace.parseNextToken(response);
                 hasMore = nextToken != null;

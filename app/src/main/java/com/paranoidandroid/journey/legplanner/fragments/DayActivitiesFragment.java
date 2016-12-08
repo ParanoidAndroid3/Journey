@@ -46,20 +46,6 @@ public class DayActivitiesFragment extends Fragment {
     private int dayOrder;
     private OnActivitySelectedListener listener;
 
-    //@Override
-    //public void onDeleteActivityAtAdapterIndex(int position) {
-    //    if (this.listener != null) {
-    //        this.listener.onDeleteActivityRequested(items.get(position), position);
-    //    }
-    //}
-
-    //@Override
-    //public void onSelectActivityAtAdapterIndex(int position) {
-        //if (this.listener != null) {
-        //    this.listener.onActivitySelected(items.get(position));
-        //}
-    //}
-
     public interface OnActivitySelectedListener {
         void onDeleteActivityRequested(Activity activity, int adapterIndex);
         List<Activity> getActivitiesListForDay(int dayOrder);
@@ -87,7 +73,6 @@ public class DayActivitiesFragment extends Fragment {
         items = new ArrayList<>();
         dayOrder = getArguments().getInt("day");
         adapter = new ActivitiesListAdapter(getContext(), items);
-        //adapter.setActivityAdapterClickListener(this);
     }
 
     @Override
@@ -138,6 +123,7 @@ public class DayActivitiesFragment extends Fragment {
         } else if (activity.getFoursquareId() != null) {
             intent.putExtra(DetailActivity.EXTRA_FOURSQUARE_ID, activity.getFoursquareId());
         }
+        intent.putExtra(DetailActivity.EXTRA_IMAGE_URL, activity.getImageUrl());
         ImageView photoView = (ImageView) v.findViewById(R.id.ivPhoto);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Pair<View, String> p1 = Pair.create((View) photoView, items.get(position).getImageUrl());

@@ -112,7 +112,7 @@ public abstract class BaseRecommendationsFragment extends Fragment implements
         intent.putExtra(DetailActivity.EXTRA_REC, Parcels.wrap(items.get(position)));
         ImageView photoView = (ImageView) v.findViewById(R.id.ivPhoto);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Pair<View, String> p1 = Pair.create((View) photoView, "P"+items.get(position).getId());
+            Pair<View, String> p1 = Pair.create((View) photoView, items.get(position).getImageUrl());
             ActivityOptionsCompat options = ActivityOptionsCompat.
                     makeSceneTransitionAnimation(getActivity(), p1);
             startActivity(intent, options.toBundle());

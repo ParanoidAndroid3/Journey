@@ -20,7 +20,7 @@ public class FoursquareVenue extends Recommendation{
                 + image_url_suffix;
     }
 
-    private static FoursquareVenue parseVenue(JSONObject jsonPlace) throws JSONException {
+    public static FoursquareVenue parseVenue(JSONObject jsonPlace) throws JSONException {
         FoursquareVenue fv = new FoursquareVenue();
         JSONObject venue = jsonPlace.getJSONObject("venue");
         fv.id = venue.getString("id");
@@ -37,8 +37,39 @@ public class FoursquareVenue extends Recommendation{
         JSONObject item = items.getJSONObject(0); // assume we have at least one item
         fv.imageUrl = makeImageUrl(item.getString("prefix"), item.getString("suffix"));
         // Extract tips
-        if (!jsonPlace.isNull("tips")) fv.tips = Tip.parseJSON(jsonPlace.getJSONArray("tips"));
+        if (!jsonPlace.isNull("tips")) {
+            fv.tips = Tip.parseJSONFoursquare(jsonPlace.getJSONArray("tips"));
+        }
         return fv;
+    }
+
+    public static List<Tip> parseVenueTips(JSONObject jsonPlace) {
+        List<Tip> res = new ArrayList<>();
+        JSONObject result = null;
+        try {
+            result = jsonPlace.getJSONObject("response");
+            JSONObject tips = result.getJSONObject("tips");
+
+            if (!tips.isNull("items")) {
+                JSONArray items = tips.getJSONArray("items");
+                // Extract tips
+                res = Tip.parseJSONFoursquare(items);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return res;
+    }
+
+    public static FoursquareVenue parseVenueDetails(JSONObject jsonPlace) {
+        try {
+            JSONObject result = jsonPlace.getJSONObject("response");
+            return parseVenue(result);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static List<FoursquareVenue> parseJSON(JSONObject response) {
