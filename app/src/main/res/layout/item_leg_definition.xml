@@ -10,7 +10,7 @@
     android:layout_marginBottom="10dp">
 
         <LinearLayout
-            android:background="@color/colorAccent"
+            android:background="@color/colorLegCardBackground"
             android:layout_alignParentStart="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -25,14 +25,13 @@
 
             <TextView
                 android:id="@+id/tvDestination"
-                android:textColor="#fff"
+                android:textColor="@color/colorLegCardContent"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="match_parent"
                 android:layout_marginStart="18dp"
                 android:gravity="center_vertical"
                 android:maxLines="1"
-                android:textStyle="bold"
                 android:textSize="@dimen/wizard_legs_text_size"
                 tools:text="Paris, France"/>
 
