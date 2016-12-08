@@ -34,7 +34,7 @@
         </activity>
 
         <activity
-            android:name=".recommendations.activities.RecommendationDetailActivity"
+            android:name=".detail.activities.DetailActivity"
             android:theme="@style/Theme.DesignDemo">
         </activity>
 

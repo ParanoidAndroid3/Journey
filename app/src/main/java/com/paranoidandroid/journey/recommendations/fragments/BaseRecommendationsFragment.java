@@ -20,7 +20,7 @@ import android.widget.ProgressBar;
 import com.google.android.gms.maps.model.LatLng;
 import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.models.ui.Recommendation;
-import com.paranoidandroid.journey.recommendations.activities.RecommendationDetailActivity;
+import com.paranoidandroid.journey.detail.activities.DetailActivity;
 import com.paranoidandroid.journey.recommendations.adapters.RecommendationsListAdapter;
 import com.paranoidandroid.journey.recommendations.interfaces.RecommendationActivityListener;
 import com.paranoidandroid.journey.recommendations.interfaces.RecommendationsListAdapterClickListener;
@@ -108,11 +108,11 @@ public abstract class BaseRecommendationsFragment extends Fragment implements
     // Create a shared transition of the recommendation image and open the details activity
 
     protected void showRecommendationDetailForItem(View v, int position) {
-        Intent intent = new Intent(getActivity(), RecommendationDetailActivity.class);
-        intent.putExtra(RecommendationDetailActivity.EXTRA_REC, Parcels.wrap(items.get(position)));
+        Intent intent = new Intent(getActivity(), DetailActivity.class);
+        intent.putExtra(DetailActivity.EXTRA_REC, Parcels.wrap(items.get(position)));
         ImageView photoView = (ImageView) v.findViewById(R.id.ivPhoto);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Pair<View, String> p1 = Pair.create((View) photoView, "P"+items.get(position).getId());
+            Pair<View, String> p1 = Pair.create((View) photoView, items.get(position).getImageUrl());
             ActivityOptionsCompat options = ActivityOptionsCompat.
                     makeSceneTransitionAnimation(getActivity(), p1);
             startActivity(intent, options.toBundle());

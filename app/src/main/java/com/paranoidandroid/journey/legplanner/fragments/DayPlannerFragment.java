@@ -58,7 +58,7 @@ public class DayPlannerFragment extends Fragment implements
         // search for the first day of this leg
         for (Day day : mDays) {
             if (day.getLegOrder() == position) {
-                mSelectedDayIndex = day.getSeries();
+                mSelectedDayIndex = day.getSeries() - 1;
                 viewpager.setCurrentItem(day.getSeries() - 1);
                 return;
             }
@@ -208,11 +208,6 @@ public class DayPlannerFragment extends Fragment implements
         if (savedInstanceState != null) {
             mSelectedDayIndex = savedInstanceState.getInt("selected");
         }
-    }
-
-    @Override
-    public void onActivitySelected(Activity activity) {
-        // TODO: Show detail view
     }
 
     @Override

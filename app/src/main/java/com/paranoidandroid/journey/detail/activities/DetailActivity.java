@@ -1,4 +1,4 @@
-package com.paranoidandroid.journey.recommendations.activities;
+package com.paranoidandroid.journey.detail.activities;
 
 import android.animation.ObjectAnimator;
 import android.graphics.Bitmap;
@@ -31,11 +31,17 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.elmargomez.typer.Font;
 import com.elmargomez.typer.Typer;
 import com.iarcuschin.simpleratingbar.SimpleRatingBar;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.paranoidandroid.journey.R;
+import com.paranoidandroid.journey.models.ui.FoursquareVenue;
+import com.paranoidandroid.journey.models.ui.GooglePlace;
 import com.paranoidandroid.journey.models.ui.Recommendation;
 import com.paranoidandroid.journey.models.ui.Tip;
-import com.paranoidandroid.journey.recommendations.adapters.TipsListAdapter;
+import com.paranoidandroid.journey.network.FoursquareVenueSearchClient;
+import com.paranoidandroid.journey.network.GooglePlaceSearchClient;
+import com.paranoidandroid.journey.detail.adapters.TipsListAdapter;
 
+import org.json.JSONObject;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
@@ -44,14 +50,19 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cz.msebera.android.httpclient.Header;
 
 import static com.paranoidandroid.journey.support.ui.ColorUtils.getColorWithAplha;
 
-public class RecommendationDetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_REC = "rec";
+    public static final String EXTRA_GOOGLE_ID = "gid";
+    public static final String EXTRA_FOURSQUARE_ID = "fid";
+    public static final String EXTRA_IMAGE_URL = "url";
     private int screenHeight;
     private boolean isBookmarked;
+    private boolean canBoomark;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.ivBackdrop) ImageView ivBackdrop;
@@ -65,17 +76,90 @@ public class RecommendationDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-        setContentView(R.layout.activity_recommendation_detail);
+        setContentView(R.layout.activity_detail);
         ButterKnife.bind(this);
 
-        Recommendation recommendation = Parcels.unwrap(getIntent().getParcelableExtra(EXTRA_REC));
-        isBookmarked = recommendation.isBookmarked();
+        if (getIntent().hasExtra(EXTRA_REC)) {
+            Recommendation recommendation = Parcels.unwrap(getIntent().getParcelableExtra(EXTRA_REC));
+            canBoomark = true;
+            setupBackdrop(recommendation.getImageUrl());
+            setupWithRecommendation(recommendation);
+        } else if (getIntent().hasExtra(EXTRA_GOOGLE_ID)) {
+            fabBookmark.setVisibility(View.GONE);
+            String url = getIntent().getStringExtra(EXTRA_IMAGE_URL);
+            setupBackdrop(url);
+            String id = getIntent().getStringExtra(EXTRA_GOOGLE_ID);
+            canBoomark = false;
+            fetchGoogleDetails(id);
+        } else if (getIntent().hasExtra(EXTRA_FOURSQUARE_ID)) {
+            fabBookmark.setVisibility(View.GONE);
+            String url = getIntent().getStringExtra(EXTRA_IMAGE_URL);
+            setupBackdrop(url);
+            String id = getIntent().getStringExtra(EXTRA_FOURSQUARE_ID);
+            canBoomark = false;
+            fetchFoursquareDetails(id);
+        } else {
+            // no information is passed...
+            finish();
+        }
+    }
 
+    private void setupWithRecommendation(Recommendation recommendation) {
         setupRating(recommendation.getRating());
         setupFab();
         setupTipsRecyclerView(recommendation.getTips());
-        setupBackdrop(recommendation.getImageUrl(), recommendation.getId());
         setupToolbar(recommendation.getName());
+        if (canBoomark)
+            fabBookmark.setVisibility(View.VISIBLE);
+        else
+            fabBookmark.setVisibility(View.GONE);
+
+        // TODO implement bookmark fab
+        isBookmarked = recommendation.isBookmarked();
+    }
+
+    private void setupWithTips(List<Tip> tips) {
+        setupTipsRecyclerView(tips);
+    }
+
+    private void fetchGoogleDetails(String id) {
+        GooglePlaceSearchClient.getPlaceDetails(id, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                GooglePlace googlePlace;
+                if (((googlePlace = GooglePlace.parsePlaceDetails(response)) != null)) {
+                    setupWithRecommendation(googlePlace);
+                    slideInRecyclerView();
+                }
+            }
+        });
+    }
+
+    private void fetchFoursquareDetails(final String id) {
+        FoursquareVenueSearchClient.findDetails(id, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                FoursquareVenue fv;
+                if (((fv = FoursquareVenue.parseVenueDetails(response)) != null)) {
+                    setupWithRecommendation(fv);
+                    fetchFoursquareTips(id);
+                }
+            }
+        });
+    }
+
+    private void fetchFoursquareTips(String id) {
+        FoursquareVenueSearchClient.findTips(id, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                List<Tip> list;
+                if (((list = FoursquareVenue.parseVenueTips(response)) != null)) {
+                    setupWithTips(list);
+                    slideInRecyclerView();
+                }
+            }
+        });
+
     }
 
     // Run the animation when the activity is shown on screen
@@ -83,7 +167,10 @@ public class RecommendationDetailActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        slideInRecyclerView();
+        if (getIntent().hasExtra(EXTRA_REC)) {
+            slideInRecyclerView();
+        }
+
     }
 
     private void slideInRecyclerView() {
@@ -126,7 +213,7 @@ public class RecommendationDetailActivity extends AppCompatActivity {
         if (rating == -1) {
             rbRating.setVisibility(View.GONE);
         } else {
-            rbRating.setRating((float) rating/2);
+            rbRating.setRating((float) rating / 2);
         }
     }
 
@@ -135,7 +222,7 @@ public class RecommendationDetailActivity extends AppCompatActivity {
     private SimpleTarget target = new SimpleTarget<Bitmap>() {
         @Override
         public void onResourceReady(Bitmap bitmap, GlideAnimation glideAnimation) {
-            ivBackdrop.setImageBitmap( bitmap );
+            ivBackdrop.setImageBitmap(bitmap);
             Palette.from(bitmap).maximumColorCount(16).generate(new Palette.PaletteAsyncListener() {
                 @Override
                 public void onGenerated(Palette palette) {
@@ -149,7 +236,7 @@ public class RecommendationDetailActivity extends AppCompatActivity {
         }
     };
 
-    private void setupBackdrop(String imageUrl, String id) {
+    private void setupBackdrop(String imageUrl) {
         ivBackdrop.setTag(target);
         Glide.with(this)
                 .load(imageUrl)
@@ -160,8 +247,8 @@ public class RecommendationDetailActivity extends AppCompatActivity {
                 .priority(Priority.IMMEDIATE)
                 .into(target);
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            ViewCompat.setTransitionName(ivBackdrop, "P"+id);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ViewCompat.setTransitionName(ivBackdrop, imageUrl);
             supportPostponeEnterTransition();
             ivBackdrop.getViewTreeObserver().addOnPreDrawListener(
                     new ViewTreeObserver.OnPreDrawListener() {
@@ -208,5 +295,4 @@ public class RecommendationDetailActivity extends AppCompatActivity {
         isBookmarked = !isBookmarked;
         setupFab();
     }
-
 }

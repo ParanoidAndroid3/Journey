@@ -111,7 +111,7 @@ public class RecommendationsListAdapter extends RecyclerView.Adapter<RecyclerVie
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 ViewCompat.setTransitionName(vh.name, "T"+place.getId());
-                ViewCompat.setTransitionName(vh.photo, "P"+place.getId());
+                ViewCompat.setTransitionName(vh.photo, place.getImageUrl());
             }
         }
     }
@@ -134,7 +134,7 @@ public class RecommendationsListAdapter extends RecyclerView.Adapter<RecyclerVie
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 ViewCompat.setTransitionName(vh.name, "T"+place.getId());
-                ViewCompat.setTransitionName(vh.photo, "P"+place.getId());
+                ViewCompat.setTransitionName(vh.photo, place.getImageUrl());
             }
         }
     }

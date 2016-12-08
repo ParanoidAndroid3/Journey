@@ -16,7 +16,7 @@ public class GooglePlace extends Recommendation {
     public static GooglePlace parsePlace(JSONObject jsonPlace) throws JSONException {
         GooglePlace gp = new GooglePlace();
         JSONObject location = jsonPlace.getJSONObject("geometry").getJSONObject("location");
-        gp.id = jsonPlace.getString("id");
+        gp.id = jsonPlace.getString("place_id");
         gp.name = jsonPlace.getString("name");
         gp.lat = location.getDouble("lat");
         gp.lng = location.getDouble("lng");
@@ -27,6 +27,10 @@ public class GooglePlace extends Recommendation {
             String photoReference = jsonPlace.getJSONArray("photos").getJSONObject(0).getString("photo_reference");
             gp.imageUrl = GooglePlaceInfo.makeImageUrl(photoReference);
         }
+        if (!jsonPlace.isNull("reviews")) {
+            gp.tips = Tip.parseJSONGooglePlace(jsonPlace.getJSONArray("reviews"));
+        }
+
         return gp;
     }
 

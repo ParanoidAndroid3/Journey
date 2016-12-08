@@ -1,4 +1,4 @@
-package com.paranoidandroid.journey.recommendations.adapters;
+package com.paranoidandroid.journey.detail.adapters;
 
 import android.content.Context;
 import android.os.Build;
