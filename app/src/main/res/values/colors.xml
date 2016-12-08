@@ -15,7 +15,7 @@
     <color name="colorPrimaryText">#212121</color>
     <color name="colorSecondaryText">#757575</color>
 
-    <color name="sparkPrimary">#FFE1CB</color>
+    <color name="sparkPrimary">@color/colorPrimaryLight</color>
     <color name="sparkSecondary">#03A9F4</color>
 
     <!-- fab disabled/enabled -->
@@ -29,7 +29,8 @@
     <color name="colorTagNotPressed">@color/colorPrimaryLight</color>
     <color name="colorTagPressed">@color/colorPrimary</color>
 
-    <color name="colorLegCardColor">@color/colorPrimaryLight</color>
+    <color name="colorLegCardBackground">@color/colorPrimaryLight</color>
+    <color name="colorLegCardContent">@color/colorPrimaryText</color>
 
     <color name="listBackgroundColor">#EFEFEF</color>
     <color name="darkTranslucent">#BB000000</color>
