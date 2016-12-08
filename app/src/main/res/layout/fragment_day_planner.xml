@@ -17,7 +17,7 @@
             app:tabMinWidth="150dp"
             android:minHeight="60dp"
             app:tabGravity="fill"
-            android:background="#D7CCC8"
+            android:background="@color/colorPrimaryLight"
             app:tabMode="scrollable" />
         <android.support.v4.view.ViewPager
             android:id="@+id/viewpager"

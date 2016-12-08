@@ -28,26 +28,22 @@ public class LogoutConfirmationDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getContext());
-        alertBuilder.setMessage(R.string.confirm_logout);
-
-        final AlertDialog dialog = alertBuilder.create();
-        dialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+        AlertDialog dialog = new AlertDialog.Builder(getContext())
+                .setTitle("Logout")
+                .setMessage(R.string.confirm_logout)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
                         if (listener != null) {
                             listener.onLogout();
                         }
                     }
-                });
-        dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialog.dismiss();
-                    }
-                });
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) { }
+                })
+                .setIcon(R.drawable.ic_journey)
+                .create();
+
         return dialog;
     }
 

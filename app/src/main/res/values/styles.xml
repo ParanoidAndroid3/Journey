@@ -20,33 +20,24 @@
 
     <style name="WizardPrompt">
         <item name="android:textSize">28sp</item>
-        <item name="android:textColor">@color/colorWizardPrompt</item>
-        <item name="android:layout_gravity">center_horizontal</item>
-        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:textColor">@android:color/white</item>
         <item name="android:gravity">center</item>
-        <item name="android:layout_marginLeft">@dimen/wizard_prompt_horizontal_margin</item>
-        <item name="android:layout_marginStart">@dimen/wizard_prompt_horizontal_margin</item>
-        <item name="android:layout_marginRight">@dimen/wizard_prompt_horizontal_margin</item>
-        <item name="android:layout_marginEnd">@dimen/wizard_prompt_horizontal_margin</item>
-        <item name="android:layout_marginTop">@dimen/wizard_prompt_vertical_margin</item>
     </style>
 
     <style name="LegCalendar">
-        <item name="android:layout_width">34dp</item>
-        <item name="android:layout_height">34dp</item>
-        <item name="android:textSize">@dimen/wizard_legs_date_size</item>
-        <item name="android:layout_gravity">center</item>
-        <item name="android:gravity">center_vertical</item>
-        <item name="android:layout_marginTop">1dp</item>
+        <item name="android:layout_width">44dp</item>
+        <item name="android:layout_height">44dp</item>
+        <item name="android:textColor">@color/colorLegCardContent</item>
         <item name="android:background">@android:color/transparent</item>
     </style>
 
     <style name="TagButton">
         <item name="android:layout_height">30dp</item>
         <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_margin">3dp</item>
         <item name="android:textSize">14sp</item>
         <item name="android:clickable">true</item>
-        <item name="android:background">@color/colorTagNotPressed</item>
+        <item name="android:background">@drawable/rounded_button</item>
     </style>
 
     <style name="SelectedDayText" parent="@android:style/TextAppearance.Medium">
@@ -69,11 +60,12 @@
     <!-- Drawer styles -->
     <style name="DrawerUserName" parent="TextAppearance.AppCompat.Inverse">
         <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
     <style name="MenuLabelsStyle">
         <item name="android:background">@drawable/fab_label_background</item>
-        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textColor">#fff</item>
         <item name="android:textSize">14sp</item>
         <item name="android:maxLines">2</item>
         <item name="android:ellipsize">end</item>
@@ -93,28 +85,30 @@
         <item name="fab_showAnimation">@anim/jump_from_down</item>
         <item name="fab_hideAnimation">@anim/jump_to_down</item>
         <item name="fab_shadowColor">#bbb</item>
-        <item name="fab_colorNormal">#03A9F4</item>
+        <item name="fab_colorNormal">@color/colorAccent</item>
         <item name="fab_colorPressed">#03A9F4</item>
         <item name="fab_colorRipple">#0099ee</item>
     </style>
 
     <style name="Theme.DesignDemo" parent="Base.Theme.DesignDemo">
+
     </style>
 
     <style name="Base.Theme.DesignDemo" parent="Theme.AppCompat.DayNight.NoActionBar">
-        <item name="colorPrimary">#795548</item>
-        <item name="colorPrimaryDark">#5D4037</item>
-        <item name="colorAccent">#03A9F4</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
 
     <style name="RecommendationsTabLayout" parent="Widget.Design.TabLayout">
         <item name="tabTextAppearance">@style/RecommendationsTabTextAppearance</item>
-        <item name="tabSelectedTextColor">#5D4037</item>
-        <item name="android:background">#D7CCC8</item>
+        <item name="tabSelectedTextColor">@color/colorPrimaryDark</item>
+        <item name="android:background">@color/colorPrimaryLight</item>
     </style>
 
     <style name="RecommendationsTabTextAppearance" parent="TextAppearance.Design.Tab">
-        <item name="android:textColor">#5D4037</item>
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="android:textStyle">normal|bold</item>
         <item name="textAllCaps">true</item>
     </style>
 

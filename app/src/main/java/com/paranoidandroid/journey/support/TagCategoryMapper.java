@@ -26,7 +26,7 @@ public class TagCategoryMapper {
                 new RecommendationCategory(RecommendationCategory.Source.FOURSQUARE, "Nightlife", "4d4b7105d754a06376d81259"),
                 new RecommendationCategory(RecommendationCategory.Source.FOURSQUARE, "Recreation", "4d4b7105d754a06377d81259"),
                 new RecommendationCategory(RecommendationCategory.Source.FOURSQUARE, "Shopping", "4d4b7105d754a06378d81259"),
-                new RecommendationCategory(RecommendationCategory.Source.FOURSQUARE, "Accommodations", "4bf58dd8d48988d1fa931735"),
+                new RecommendationCategory(RecommendationCategory.Source.FOURSQUARE, "Landmarks", "4bf58dd8d48988d12d941735"),
                 new RecommendationCategory(RecommendationCategory.Source.FOURSQUARE, "Movie Theaters", "4bf58dd8d48988d17f941735")
         );
 

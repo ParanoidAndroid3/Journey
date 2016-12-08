@@ -96,7 +96,8 @@ public abstract class JourneysListFragment extends Fragment implements JourneysA
 
                 if (e == null) {
                     // Show the new journeys if the list was changed.
-                    if (true && hasChanges(adapter.getAll(), objects)) {
+                    if (objects.size() == 0
+                            || hasChanges(adapter.getAll(), objects)) {
                         showJourneys(objects);
                     }
                 } else {

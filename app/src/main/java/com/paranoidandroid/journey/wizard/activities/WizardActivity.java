@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
@@ -28,6 +29,7 @@ public class WizardActivity extends BaseWizardActivity implements View.OnClickLi
 
     private WizardPagerAdapter pagerAdapter;
     private ViewPager viewpager;
+    private TextView tvPrompt;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -38,10 +40,31 @@ public class WizardActivity extends BaseWizardActivity implements View.OnClickLi
         fab.setImageResource(R.drawable.ic_arrow_forward);
         enableFab(false);
         fab.setOnClickListener(this);
-
+        tvPrompt = (TextView) findViewById(R.id.tvPrompt);
         pagerAdapter = new WizardPagerAdapter(getSupportFragmentManager());
         viewpager = (ViewPager) findViewById(R.id.viewpager);
         viewpager.setAdapter(pagerAdapter);
+
+        viewpager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                tvPrompt.setText(getResources().getStringArray(R.array.wizard_prompts)[position]);
+                animatePrompt(tvPrompt);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        tvPrompt.setText(getResources().getStringArray(R.array.wizard_prompts)[0]);
+        animatePrompt(tvPrompt);
     }
 
     /**

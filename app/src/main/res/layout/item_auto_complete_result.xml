@@ -13,6 +13,7 @@
         android:layout_height="24dp"
         android:textSize="@dimen/wizard_legs_text_size"
         android:textColor="@color/colorWizardName"
+        android:background="@android:color/white"
         android:layout_gravity="center_vertical"
         android:maxLines="1"
         tools:text="Athens, Greece"/>

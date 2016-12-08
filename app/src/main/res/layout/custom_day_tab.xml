@@ -8,7 +8,7 @@
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="#757575"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="14sp" />
     <TextView
         android:id="@+id/tvCity"
@@ -17,6 +17,6 @@
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:textStyle="normal|bold"
-        android:textColor="?attr/colorPrimary" />
+        android:textColor="@color/colorPrimaryDark" />
 
 </LinearLayout>
