@@ -2,6 +2,8 @@ package com.paranoidandroid.journey.support;
 
 import android.util.Log;
 
+import com.paranoidandroid.journey.network.GooglePlaceSearchClient;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -85,6 +87,6 @@ public class GooglePlaceInfo {
         }
         return String.format(Locale.US,
                 "https://maps.googleapis.com/maps/api/place/photo?maxwidth=%d&photoreference=%s&key=%s",
-                maxWidth, photoReference, "AIzaSyDoES56ptzOPbwy62kw9JMT4zBgloJQD7Y");
+                maxWidth, photoReference, GooglePlaceSearchClient.GOOGLE_PLACES_API_KEY);
     }
 }
