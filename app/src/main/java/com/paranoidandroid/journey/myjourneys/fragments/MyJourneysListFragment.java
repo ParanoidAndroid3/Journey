@@ -129,13 +129,13 @@ public class MyJourneysListFragment extends Fragment implements
             Journey journey = adapter.remove(position);
             showEmptyView(adapter.getItemCount() == 0);
             listener.onJourneyDeleted(journey);
-            showUndo(journey);
+            showUndo(journey, position);
         } else {
             Log.e(TAG, "Tried to delete non-existent Journey(" + journeyId + ")");
         }
     }
 
-    private void showUndo(final Journey journey) {
+    private void showUndo(final Journey journey, final int position) {
         String name = journey.getName();
         String title = getString(R.string.deleted_title, name);
         Snackbar.make(binding.rvJourneys, title, Snackbar.LENGTH_LONG)
@@ -151,8 +151,9 @@ public class MyJourneysListFragment extends Fragment implements
                 .setAction(R.string.undo, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        adapter.add(0, journey);
-                        binding.rvJourneys.scrollToPosition(0);
+                        showEmptyView(false);
+                        adapter.add(position, journey);
+                        binding.rvJourneys.scrollToPosition(position);
                     }
                 })
                 .show();
@@ -202,7 +203,8 @@ public class MyJourneysListFragment extends Fragment implements
 
                 if (e == null) {
                     // Show the new journeys if the list was changed.
-                    if (hasChanges(adapter.getAll(), objects)) {
+                    if (objects.size() == 0
+                            || hasChanges(adapter.getAll(), objects)) {
                         showJourneys(objects);
                     }
                 } else {
