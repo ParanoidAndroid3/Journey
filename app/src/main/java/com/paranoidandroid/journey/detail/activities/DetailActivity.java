@@ -1,4 +1,4 @@
-package com.paranoidandroid.journey.recommendations.activities;
+package com.paranoidandroid.journey.detail.activities;
 
 import android.animation.ObjectAnimator;
 import android.graphics.Bitmap;
@@ -30,12 +30,17 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.elmargomez.typer.Font;
 import com.elmargomez.typer.Typer;
+import com.google.android.gms.location.places.Place;
 import com.iarcuschin.simpleratingbar.SimpleRatingBar;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.models.ui.Recommendation;
 import com.paranoidandroid.journey.models.ui.Tip;
-import com.paranoidandroid.journey.recommendations.adapters.TipsListAdapter;
+import com.paranoidandroid.journey.network.GooglePlaceSearchClient;
+import com.paranoidandroid.journey.detail.adapters.TipsListAdapter;
+import com.paranoidandroid.journey.support.RecommendationCategory;
 
+import org.json.JSONObject;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
@@ -44,12 +49,15 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cz.msebera.android.httpclient.Header;
 
 import static com.paranoidandroid.journey.support.ui.ColorUtils.getColorWithAplha;
 
-public class RecommendationDetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_REC = "rec";
+    public static final String EXTRA_GOOGLE_ID = "gid";
+    public static final String EXTRA_FOURSQUARE_ID = "fid";
     private int screenHeight;
     private boolean isBookmarked;
 
@@ -65,17 +73,45 @@ public class RecommendationDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-        setContentView(R.layout.activity_recommendation_detail);
+        setContentView(R.layout.activity_detail);
         ButterKnife.bind(this);
 
-        Recommendation recommendation = Parcels.unwrap(getIntent().getParcelableExtra(EXTRA_REC));
-        isBookmarked = recommendation.isBookmarked();
+        if (getIntent().hasExtra(EXTRA_REC)) {
+            Recommendation recommendation = Parcels.unwrap(getIntent().getParcelableExtra(EXTRA_REC));
+            fabBookmark.setVisibility(View.VISIBLE);
+            isBookmarked = recommendation.isBookmarked();
 
-        setupRating(recommendation.getRating());
-        setupFab();
-        setupTipsRecyclerView(recommendation.getTips());
-        setupBackdrop(recommendation.getImageUrl(), recommendation.getId());
-        setupToolbar(recommendation.getName());
+            setupRating(recommendation.getRating());
+            setupFab();
+            setupTipsRecyclerView(recommendation.getTips());
+            setupBackdrop(recommendation.getImageUrl(), recommendation.getId());
+            setupToolbar(recommendation.getName());
+        } else if (getIntent().hasExtra(EXTRA_GOOGLE_ID)) {
+            fabBookmark.setVisibility(View.GONE);
+            String id = getIntent().getStringExtra(EXTRA_GOOGLE_ID);
+            fetchGoogleDetails(id);
+        } else if (getIntent().hasExtra(EXTRA_FOURSQUARE_ID)) {
+            fabBookmark.setVisibility(View.GONE);
+            String id = getIntent().getStringExtra(EXTRA_FOURSQUARE_ID);
+            fetchFoursquareDetails(id);
+        } else {
+            // no information is passed
+            finish();
+        }
+    }
+
+    private void fetchGoogleDetails(String id) {
+        GooglePlaceSearchClient.findDetails(id, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                //googlePlace = GooglePlace.parsePlaceDetails(response);
+                //loadPlacePhoto();
+            }
+        });
+    }
+
+    private void fetchFoursquareDetails(String id) {
+        
     }
 
     // Run the animation when the activity is shown on screen

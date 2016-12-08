@@ -2,7 +2,9 @@ package com.paranoidandroid.journey.legplanner.adapters;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -25,21 +27,20 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ActivitiesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements
-        ActivityViewHolderClickListener {
+public class ActivitiesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<Activity> mActivities;
     private Context mContext;
-    private ActivityAdapterClickListener listener;
+    //private ActivityAdapterClickListener listener;
 
-    public interface ActivityAdapterClickListener {
-        void onDeleteActivityAtAdapterIndex(int position);
-        void onSelectActivityAtAdapterIndex(int position);
-    }
+    //public interface ActivityAdapterClickListener {
+    //    void onDeleteActivityAtAdapterIndex(int position);
+    //    void onSelectActivityAtAdapterIndex(int position);
+    //}
 
-    public void setActivityAdapterClickListener(ActivityAdapterClickListener listener) {
-        this.listener = listener;
-    }
+    //public void setActivityAdapterClickListener(ActivityAdapterClickListener listener) {
+    //    this.listener = listener;
+    //}
 
     public ActivitiesListAdapter(Context context, List<Activity> items) {
         mActivities = items;
@@ -50,7 +51,7 @@ public class ActivitiesListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View v1 = inflater.inflate(R.layout.item_activity, parent, false);
-        RecyclerView.ViewHolder viewHolder = new ActivityViewHolder(v1, this);
+        RecyclerView.ViewHolder viewHolder = new ActivityViewHolder(v1);
         return viewHolder;
     }
 
@@ -66,6 +67,10 @@ public class ActivitiesListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     .placeholder(ContextCompat.getDrawable(mContext, R.drawable.ic_map_marker_placeholder))
                     .error(ContextCompat.getDrawable(mContext, R.drawable.ic_map_marker_placeholder))
                     .into(vh.ivPhoto);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                ViewCompat.setTransitionName(vh.ivPhoto, activity.getImageUrl());
+            }
         }
     }
 
@@ -76,37 +81,37 @@ public class ActivitiesListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     // ActivityViewHolderClickListener implementation
 
-    @Override
-    public void onDeletePressedAtIndex(int position) {
-        if (listener != null) {
-            listener.onDeleteActivityAtAdapterIndex(position);
-        }
-    }
+    //@Override
+    //public void onDeletePressedAtIndex(int position) {
+    //    if (listener != null) {
+    //        listener.onDeleteActivityAtAdapterIndex(position);
+    //    }
+    //}
 
-    @Override
-    public void onActivitySelectedAtIndex(int position) {
-        if (listener != null) {
-            listener.onSelectActivityAtAdapterIndex(position);
-        }
-    }
+    //@Override
+    //public void onActivitySelectedAtIndex(int position) {
+    //    if (listener != null) {
+    //        listener.onSelectActivityAtAdapterIndex(position);
+    //    }
+    //}
 
-    static class ActivityViewHolder extends RecyclerView.ViewHolder implements
-            View.OnLongClickListener, View.OnClickListener {
+    static class ActivityViewHolder extends RecyclerView.ViewHolder{
 
         @BindView(R.id.tvType) TextView tvType;
         @BindView(R.id.tvName) TextView tvName;
         @BindView(R.id.ivPhoto) ImageView ivPhoto;
 
-        ActivityViewHolderClickListener mListener;
+        //ActivityViewHolderClickListener mListener;
 
-        public ActivityViewHolder(View v, ActivityViewHolderClickListener listener) {
+        public ActivityViewHolder(View v) {
             super(v);
             ButterKnife.bind(this, v);
-            v.setOnLongClickListener(this);
-            v.setOnClickListener(this);
-            mListener = listener;
+            //v.setOnLongClickListener(this);
+            //v.setOnClickListener(this);
+            //mListener = listener;
         }
 
+        /*
         @Override
         public boolean onLongClick(View view) {
             new AlertDialog.Builder(tvName.getContext())
@@ -138,6 +143,6 @@ public class ActivitiesListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     mListener.onActivitySelectedAtIndex(position);
                 }
             }
-        }
+        }*/
     }
 }

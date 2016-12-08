@@ -211,11 +211,6 @@ public class DayPlannerFragment extends Fragment implements
     }
 
     @Override
-    public void onActivitySelected(Activity activity) {
-        // TODO: Show detail view
-    }
-
-    @Override
     public List<Activity> getActivitiesListForDay(int dayOrder) {
         final List<Activity> result = new ArrayList<>();
         // Days may not be set when DayActivitiesFragment requests this on resume

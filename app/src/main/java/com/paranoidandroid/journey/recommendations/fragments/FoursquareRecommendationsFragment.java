@@ -1,16 +1,11 @@
 package com.paranoidandroid.journey.recommendations.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.util.Pair;
-import android.view.View;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.paranoidandroid.journey.models.ui.FoursquareVenue;
 import com.paranoidandroid.journey.network.FoursquareVenueSearchClient;
-import com.paranoidandroid.journey.recommendations.activities.RecommendationDetailActivity;
 import com.paranoidandroid.journey.recommendations.interfaces.RecommendationsListAdapterClickListener;
 import com.paranoidandroid.journey.support.RecommendationCategory;
 import com.paranoidandroid.journey.support.ui.EndlessRecyclerViewScrollListener;

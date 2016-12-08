@@ -105,6 +105,7 @@ public class Activity extends ParseObject {
         customActivity.setTitle(title);
         customActivity.setDate(date);
         customActivity.setEventType(place.getName());
+        customActivity.setGoogleId(place.getId());
         customActivity.setGeoPoint(place.getLatitude(), place.getLongitude());
         return customActivity;
     }
@@ -115,6 +116,10 @@ public class Activity extends ParseObject {
             Activity activity = new Activity();
             if (b.getImageUrl() != null)
                 activity.setImageUrl(b.getImageUrl());
+            if (b.getGoogleId() != null)
+                activity.setGoogleId(b.getGoogleId());
+            if (b.getFoursquareId() != null)
+                activity.setFoursquareId(b.getFoursquareId());
             activity.setTitle(b.getTitle());
             activity.setDate(date);
             activity.setEventType(b.getEventType());
