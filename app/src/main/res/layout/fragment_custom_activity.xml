@@ -117,17 +117,30 @@
             android:layout_height="wrap_content"/>
 
         <LinearLayout android:layout_height="wrap_content" android:layout_width="match_parent" android:orientation="horizontal">
-
+            <RelativeLayout
+                android:layout_width="70dp"
+                android:layout_height="70dp">
             <ImageView
                 android:id="@+id/place_photo"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
                 android:layout_width="70dp"
                 android:layout_height="70dp" />
+            <ProgressBar
+                android:id="@+id/pbLoading"
+                style="@style/ProgressBar"
+                android:visibility="gone"
+                android:layout_gravity="end"
+                android:layout_margin="12dp"
+                android:layout_width="36dp"
+                android:layout_height="36dp"/>
+            </RelativeLayout>
+
             <TextView
                 android:id="@+id/tvAddress"
-                android:paddingLeft="3dp"
+                android:paddingLeft="16dp"
                 android:layout_width="wrap_content"
+                android:maxWidth="150dp"
                 android:layout_height="wrap_content"/>
 
         </LinearLayout>

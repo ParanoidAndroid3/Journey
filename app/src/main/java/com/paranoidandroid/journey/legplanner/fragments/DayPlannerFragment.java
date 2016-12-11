@@ -11,8 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.models.Activity;
+import com.paranoidandroid.journey.models.Destination;
 import com.paranoidandroid.journey.models.ui.Day;
 import com.paranoidandroid.journey.models.Leg;
 import com.paranoidandroid.journey.support.ui.SmartFragmentStatePagerAdapter;
@@ -50,6 +52,7 @@ public class DayPlannerFragment extends Fragment implements
         void onActivityRemovedAtIndex(int activityIndex);
         void onActivityRemoveStarted();
         void onActivityRemoveEnded();
+        void onShowCustomActivity(Activity activity);
     }
 
     // Called from Planner Activity when a leg marker is pressed
@@ -140,13 +143,17 @@ public class DayPlannerFragment extends Fragment implements
                     if (listener != null) {
                         listener.onActivityRemovedAtIndex(activityIndex);
                     }
-                    // TODO: Inform the activity to remove marker if zoomed in
                 } else {
                     e.printStackTrace();
                 }
                 listener.onActivityRemoveEnded();
             }
         });
+    }
+
+    @Override
+    public void onShowCustomActivityCreatorRequested(Activity activity) {
+        if (listener != null) listener.onShowCustomActivity(activity);
     }
 
     // Helpers

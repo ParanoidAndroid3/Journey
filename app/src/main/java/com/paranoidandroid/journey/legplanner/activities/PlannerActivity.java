@@ -204,6 +204,20 @@ public class PlannerActivity extends AppCompatActivity implements
         pbLoading.setVisibility(View.GONE);
     }
 
+    @Override
+    public void onShowCustomActivity(Activity activity) {
+        Day day = getDayPlannerFragment().getSelectedDay();
+        Destination dest = day.getLeg().getDestination();
+        FragmentManager fragmentManager = getFragmentManager();
+        CustomActivityCreatorFragment newFragment
+                = CustomActivityCreatorFragment.newInstance(
+                activity.getTitle(),
+                activity.getEventType(),
+                activity.getImageUrl(),
+                new LatLng(dest.getLatitude(), dest.getLongitude()), day.getDate(), day.getCity());
+        newFragment.show(fragmentManager, newFragment.getTag());
+        floatingMenu.close(false);
+    }
 
     // MapViewFragment's MapEventListener implementation
 
@@ -266,6 +280,11 @@ public class PlannerActivity extends AppCompatActivity implements
                 }
             }
         });
+    }
+
+    @Override
+    public void onUpdateCustomActivity(String title, String eventType, LatLng coordinates, Date date, String city) {
+        // TODO
     }
 
     // BookmarksPickerFragment's OnBookmarksSelectedListener implementation

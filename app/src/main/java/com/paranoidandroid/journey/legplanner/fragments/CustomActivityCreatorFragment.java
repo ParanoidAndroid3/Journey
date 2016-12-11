@@ -18,9 +18,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
@@ -30,6 +34,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.models.ui.GooglePlace;
 import com.paranoidandroid.journey.network.GooglePlaceSearchClient;
+import com.paranoidandroid.journey.support.MapUtils;
 
 import org.json.JSONObject;
 
@@ -53,23 +58,38 @@ public class CustomActivityCreatorFragment extends DialogFragment implements
     @BindView(R.id.place_photo) ImageView ivPhoto;
     @BindView(R.id.dismiss_button) ImageButton btDismiss;
     @BindView(R.id.save_button) Button btSave;
+    @BindView(R.id.pbLoading) ProgressBar pbLoading;
 
     private LatLng coordinates;
     private OnAddCustomActivityListener listener;
     private GooglePlace googlePlace;
     private Date date;
-    private String city;
+    private String city, imageUrl, eventType, title;
     private Unbinder unbinder;
     private PlaceAutocompleteFragment autocompleteFragment;
     Context mContext;
 
     public interface OnAddCustomActivityListener {
         void onAddCustomActivity(String title, Date date, GooglePlace place);
+        void onUpdateCustomActivity(String title, String eventType, LatLng coordinates, Date date, String city);
     }
 
     public static CustomActivityCreatorFragment newInstance(LatLng coordinates, Date date, String city) {
         CustomActivityCreatorFragment frag = new CustomActivityCreatorFragment();
         Bundle args = new Bundle();
+        args.putParcelable("coordinates", coordinates);
+        args.putLong("date", date.getTime());
+        args.putString("city", city);
+        frag.setArguments(args);
+        return frag;
+    }
+
+    public static CustomActivityCreatorFragment newInstance(String title, String eventType, String imageUrl, LatLng coordinates, Date date, String city) {
+        CustomActivityCreatorFragment frag = new CustomActivityCreatorFragment();
+        Bundle args = new Bundle();
+        args.putString("title", title);
+        args.putString("eventType", eventType);
+        args.putString("imageUrl", imageUrl);
         args.putParcelable("coordinates", coordinates);
         args.putLong("date", date.getTime());
         args.putString("city", city);
@@ -102,6 +122,9 @@ public class CustomActivityCreatorFragment extends DialogFragment implements
         coordinates = getArguments().getParcelable("coordinates");
         date = new Date(getArguments().getLong("date"));
         city = getArguments().getString("city");
+        eventType = getArguments().getString("eventType");
+        imageUrl = getArguments().getString("imageUrl");
+        title = getArguments().getString("title");
     }
 
     @Override
@@ -116,8 +139,19 @@ public class CustomActivityCreatorFragment extends DialogFragment implements
         autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_fragment);
         autocompleteFragment.setOnPlaceSelectedListener(this);
-        autocompleteFragment.setHint("Search a Location");
+        autocompleteFragment.setHint(eventType == null ? "Search a Location" : eventType);
         autocompleteFragment.setBoundsBias(toBounds(coordinates, 10000));
+
+        if (title != null) {
+            etName.setText(title);
+            //TODO tvAddress.setText(MapUtils.haversine(coordinates.latitude, coordinates.longitude, ));
+        }
+
+        if (imageUrl != null) {
+            Glide.with(this)
+                    .load(imageUrl)
+                    .into(ivPhoto);
+        }
 
         return rootView;
     }
@@ -130,9 +164,18 @@ public class CustomActivityCreatorFragment extends DialogFragment implements
         } else if (etName.getText().toString().isEmpty()) {
             Snackbar.make(etName, "Please enter a name for your activity", Snackbar.LENGTH_SHORT).show();
         } else if (googlePlace == null) {
-            Snackbar.make(etName, "Please enter a location", Snackbar.LENGTH_SHORT).show();
+            if (title != null) {
+                this.listener.onUpdateCustomActivity(etName.getText().toString(), tvAddress.getText().toString(), coordinates, date, city);
+                dismiss();
+            }
+            else
+                Snackbar.make(etName, "Please enter a location", Snackbar.LENGTH_SHORT).show();
         } else {
-            this.listener.onAddCustomActivity(etName.getText().toString(), date, googlePlace);
+            if (title != null)
+                this.listener.onUpdateCustomActivity(etName.getText().toString(), tvAddress.getText().toString(), coordinates, date, city);
+            else
+                this.listener.onAddCustomActivity(etName.getText().toString(), date, googlePlace);
+
             dismiss();
         }
     }
@@ -145,6 +188,7 @@ public class CustomActivityCreatorFragment extends DialogFragment implements
     @Override
     public void onPlaceSelected(Place place) {
         tvAddress.setText(place.getAddress());
+        pbLoading.setVisibility(View.VISIBLE);
         GooglePlaceSearchClient.findDetails(place.getId(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -155,10 +199,26 @@ public class CustomActivityCreatorFragment extends DialogFragment implements
     }
 
     private void loadPlacePhoto() {
-        if (googlePlace == null)
+        if (googlePlace == null) {
+            pbLoading.setVisibility(View.GONE);
             return;
+        }
+
         Glide.with(this)
                 .load(googlePlace.getImageUrl())
+                .listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                        pbLoading.setVisibility(View.GONE);
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        pbLoading.setVisibility(View.GONE);
+                        return false;
+                    }
+                })
                 .into(ivPhoto);
     }
 
