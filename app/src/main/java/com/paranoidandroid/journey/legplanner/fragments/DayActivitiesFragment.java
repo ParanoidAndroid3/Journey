@@ -1,5 +1,6 @@
 package com.paranoidandroid.journey.legplanner.fragments;
 
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,10 +18,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.legplanner.adapters.ActivitiesListAdapter;
 import com.paranoidandroid.journey.models.Activity;
 import com.paranoidandroid.journey.detail.activities.DetailActivity;
+import com.paranoidandroid.journey.models.Destination;
+import com.paranoidandroid.journey.models.ui.Day;
 import com.paranoidandroid.journey.support.ui.ItemClickSupport;
 import com.paranoidandroid.journey.support.ui.SimpleDividerItemDecoration;
 
@@ -48,6 +52,7 @@ public class DayActivitiesFragment extends Fragment {
 
     public interface OnActivitySelectedListener {
         void onDeleteActivityRequested(Activity activity, int adapterIndex);
+        void onShowCustomActivityCreatorRequested(Activity activity);
         List<Activity> getActivitiesListForDay(int dayOrder);
     }
 
@@ -87,7 +92,11 @@ public class DayActivitiesFragment extends Fragment {
                 .setOnItemClickListener( new ItemClickSupport.OnItemClickListener() {
                         @Override
                         public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                            showActivityDetailForItem(v, position);
+                            if (items.get(position).getGoogleId() != null) { // TODO only Google Places for now, make dynamic
+                                if (listener != null)
+                                    listener.onShowCustomActivityCreatorRequested(items.get(position));
+                            } else
+                                showActivityDetailForItem(v, position);
                         }
                     }
                 )
