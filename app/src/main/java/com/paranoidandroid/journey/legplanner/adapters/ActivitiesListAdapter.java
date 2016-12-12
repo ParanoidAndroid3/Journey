@@ -68,7 +68,7 @@ public class ActivitiesListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         @BindView(R.id.tvType) TextView tvType;
         @BindView(R.id.ivCustom) ImageView ivCustom;
-        @BindView(R.id.ivFroBookmarks) ImageView ivFromBookmarks;
+        @BindView(R.id.ivFromBookmarks) ImageView ivFromBookmarks;
         @BindView(R.id.tvName) TextView tvName;
         @BindView(R.id.ivPhoto) ImageView ivPhoto;
 
