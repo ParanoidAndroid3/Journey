@@ -1,6 +1,5 @@
 package com.paranoidandroid.journey.legplanner.fragments;
 
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,17 +17,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.legplanner.adapters.ActivitiesListAdapter;
 import com.paranoidandroid.journey.models.Activity;
 import com.paranoidandroid.journey.detail.activities.DetailActivity;
-import com.paranoidandroid.journey.models.Destination;
-import com.paranoidandroid.journey.models.ui.Day;
 import com.paranoidandroid.journey.support.ui.ItemClickSupport;
 import com.paranoidandroid.journey.support.ui.SimpleDividerItemDecoration;
-
-import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +31,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
+
+import static com.paranoidandroid.journey.legplanner.activities.PlannerActivity.SHOW_DETAIL_REQUEST;
 
 public class DayActivitiesFragment extends Fragment {
 
@@ -138,9 +134,9 @@ public class DayActivitiesFragment extends Fragment {
             Pair<View, String> p1 = Pair.create((View) photoView, items.get(position).getImageUrl());
             ActivityOptionsCompat options = ActivityOptionsCompat.
                     makeSceneTransitionAnimation(getActivity(), p1);
-            startActivity(intent, options.toBundle());
+            getActivity().startActivityForResult(intent, SHOW_DETAIL_REQUEST, options.toBundle());
         } else {
-            startActivity(intent);
+            getActivity().startActivityForResult(intent, SHOW_DETAIL_REQUEST);
         }
     }
 

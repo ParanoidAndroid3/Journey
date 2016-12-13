@@ -1,20 +1,28 @@
 package com.paranoidandroid.journey.legplanner.fragments;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
@@ -24,10 +32,14 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.ui.IconGenerator;
 import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.models.Activity;
+import com.paranoidandroid.journey.models.Destination;
 import com.paranoidandroid.journey.models.Leg;
+import com.paranoidandroid.journey.support.GooglePlaceInfo;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.paranoidandroid.journey.support.MapUtils.getBoundsZoomLevel;
 
 public class MapViewFragment extends Fragment implements
         OnMapReadyCallback,
@@ -39,9 +51,11 @@ public class MapViewFragment extends Fragment implements
     MapView mMapView;
     GoogleMap mGoogleMap;
     MapEventListener listener;
-    List<MarkerInfo> markerInfos;
-    List<Marker> markers;
+    List<MarkerInfo> markerInfos = new ArrayList<>();
+    List<Marker> markers = new ArrayList<>();
+    private float density;
     Marker selectedMarker;
+    LatLngBounds.Builder builder;
     int selectedPosition = 0;
     boolean zoomed = false;
     //private Bundle mBundle;
@@ -60,6 +74,7 @@ public class MapViewFragment extends Fragment implements
         View view = inflater.inflate(R.layout.fragment_map_view, container, false);
         MapsInitializer.initialize(getActivity());
 
+        density = getContext().getResources().getDisplayMetrics().density;
         mMapView = (MapView) view.findViewById(R.id.map_view);
         mMapView.onCreate(savedInstanceState);
         mMapView.getMapAsync(this);
@@ -82,106 +97,72 @@ public class MapViewFragment extends Fragment implements
     }
 
     // Called from parent activity on the zoom out (legs view) case
-    // Basic login to avoid overlapping markers TODO improve
+    // TODO improve marker orientation to avoid overlaps
 
     public void addMarkersFromLegs(List<Leg> legs, int highlightPosition) {
-        markerInfos = new ArrayList<>();
+        markerInfos.clear();
         selectedPosition = highlightPosition;
 
-        LatLng prev = null;
-        int index = 0;
         for (Leg leg : legs) {
-            LatLng latLng = new LatLng(leg.getDestination().getLatitude(), leg.getDestination().getLongitude());
-            if (index == selectedPosition) {
-                markerInfos.add(new MarkerInfo(90, -90, IconGenerator.STYLE_BLUE, leg.getDestination().getCityName(), latLng));
-            } else if (prev != null && prev.longitude < latLng.longitude) {
-                markerInfos.add(new MarkerInfo(90, -90, IconGenerator.STYLE_DEFAULT, leg.getDestination().getCityName(), latLng));
-            } else {
-                markerInfos.add(new MarkerInfo(-90, 90, IconGenerator.STYLE_DEFAULT, leg.getDestination().getCityName(), latLng));
-            }
-            prev = latLng;
-            index++;
+            Destination destination = leg.getDestination();
+            LatLng latLng = new LatLng(destination.getLatitude(), destination.getLongitude());
+            String imageReference = destination.getGoogleImageReference();
+            String image = new GooglePlaceInfo(imageReference, latLng).getImageUrl(200);  // hardcode a small size for now
+            markerInfos.add(new MarkerInfo(destination.getCityName(), latLng, image));
         }
+
         placeMarkersOnMap();
     }
 
     // Called from parent activity on the zoom in (activities view) case
-    // Basic login to avoid overlapping markers TODO improve
+    // TODO improve marker orientation to avoid overlaps
 
     public void addMarkersFromActivities(List<Activity> activities, Leg leg) {
-        markerInfos = new ArrayList<>();
+        markerInfos.clear();
         selectedPosition = 0; // On resume, ignore selectedPosition
 
         // No activities for selected leg, just zoom to city center (level 10)
         if (activities.size() == 0) {
-            LatLng latLng = new LatLng(leg.getDestination().getLatitude(), leg.getDestination().getLongitude());
-            markerInfos.add(new MarkerInfo(90, -90, IconGenerator.STYLE_BLUE, leg.getDestination().getCityName(), latLng));
-            placeMarkersOnMap();
-            return;
+            Destination destination = leg.getDestination();
+            LatLng latLng = new LatLng(destination.getLatitude(), destination.getLongitude());
+            String imageReference = destination.getGoogleImageReference();
+            String image = new GooglePlaceInfo(imageReference, latLng).getImageUrl(200); // TODO: hardcode a small size for now
+            markerInfos.add(new MarkerInfo(destination.getCityName(), latLng, image));
+        } else {
+            for (Activity activity : activities) {
+                LatLng latLng = new LatLng(activity.getLatitude(), activity.getLongitude());
+                String title = activity.getTitle();
+                String image = activity.getImageUrl();
+                markerInfos.add(new MarkerInfo(title, latLng, image));
+            }
         }
 
-        LatLng prev = null;
-        int index = 0;
-        for (Activity activity : activities) {
-            LatLng latLng = new LatLng(activity.getLatitude(), activity.getLongitude());
-            String title = activity.getTitle().length() > 10 ? activity.getTitle().substring(0,10) + "..." : activity.getTitle();
-            if (index == selectedPosition) {
-                markerInfos.add(new MarkerInfo(90, -90, IconGenerator.STYLE_BLUE, title, latLng));
-            } else if (prev != null && prev.longitude < latLng.longitude) {
-                markerInfos.add(new MarkerInfo(90, -90, IconGenerator.STYLE_DEFAULT, title, latLng));
-            } else {
-                markerInfos.add(new MarkerInfo(-90, 90, IconGenerator.STYLE_DEFAULT, title, latLng));
-            }
-            prev = latLng;
-            index++;
-        }
         placeMarkersOnMap();
     }
 
     // Places the markers on map given an array of MarkerInfo's
 
     private void placeMarkersOnMap() {
+        // Create a new array of markers, initialize all to null
+        markers.clear();
+        for (int i = 0; i < markerInfos.size(); i++)
+            markers.add(null);
+        // Clear all the map
         mGoogleMap.clear();
-        markers = new ArrayList<>();
 
-        LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        LatLng prev = null;
+        builder = new LatLngBounds.Builder();
+        LatLng prev = null; int index = 0;
         for (MarkerInfo m : markerInfos) {
             IconGenerator iconFactory = new IconGenerator(getContext());
-            iconFactory.setRotation(m.rotation);
-            iconFactory.setStyle(m.style);
-            iconFactory.setContentRotation(m.contentRotation);
-            addIcon(iconFactory, m.city, m.coordinates);
-            builder.include(m.coordinates);
+            addIcon(iconFactory, m.city, m.coordinates, m.imageUrl, index);
             if (prev != null) {
                 mGoogleMap.addPolyline(new PolylineOptions()
                         .add(prev, m.coordinates)
-                        .width(4)
-                        .color(Color.BLACK)
+                        .width(6)
+                        .color(ContextCompat.getColor(getContext(), R.color.colorAccent))
                         .geodesic(false));
             }
-            prev = m.coordinates;
-        }
-
-        final LatLngBounds bounds = builder.build();
-        selectMarker(selectedPosition);
-
-        // HACK!! The map may not be loaded when we request to animate
-        // If we get an exception, try again after when we get the OnMapLoaded event
-        try {
-            mGoogleMap.animateCamera(markers.size() == 1 ?
-                    CameraUpdateFactory.newLatLngZoom(bounds.getCenter(), 10) : // city zoom level
-                    CameraUpdateFactory.newLatLngBounds(bounds, 300));          // custom padding TODO improve
-        } catch (IllegalStateException ise) {
-            mGoogleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
-
-                @Override
-                public void onMapLoaded() {
-                    mGoogleMap.animateCamera(markers.size() == 1 ?
-                            CameraUpdateFactory.newLatLngZoom(bounds.getCenter(), 10) : // city zoom level
-                            CameraUpdateFactory.newLatLngBounds(bounds, 300));          // custom padding TODO improve
-                }
-            });
+            prev = m.coordinates; index++;
         }
     }
 
@@ -193,19 +174,14 @@ public class MapViewFragment extends Fragment implements
         if (markerPosition == selectedPosition)
             return true;
 
-        // recreate previously selected marker
-        recreateMarker(selectedMarker, selectedPosition, false);
-
-        // recreate newly selected marker
-        recreateMarker(marker, markerPosition, true);
+        selectedMarker.setAlpha((float)0.7);
+        selectMarker(markerPosition);
 
         // notify listener
         if (listener != null) {
             if (isZoomed()) listener.onActivityMarkerPressedAtIndex(markerPosition);
             else listener.onLegMarkerPressedAtIndex(markerPosition);
         }
-
-        selectMarker(markerPosition);
 
         // Event was handled by our code do not launch default behaviour.
         return true;
@@ -217,12 +193,7 @@ public class MapViewFragment extends Fragment implements
         if (markerPosition == selectedPosition)
             return;
 
-        // recreate previously selected marker
-        recreateMarker(selectedMarker, selectedPosition, false);
-
-        // recreate newly selected marker
-        recreateMarker(markers.get(markerPosition), markerPosition, true);
-
+        selectedMarker.setAlpha((float)0.7);
         selectMarker(markerPosition);
     }
 
@@ -232,42 +203,91 @@ public class MapViewFragment extends Fragment implements
         return selectedMarker.getPosition();
     }
 
-    // Remove and recreate marker taking into account selection
-
-    private void recreateMarker(Marker marker, int markerPosition, boolean selected) {
-        markers.remove(markerPosition);
-        marker.remove();
-        IconGenerator iconFactory = new IconGenerator(getContext());
-        iconFactory.setRotation(markerInfos.get(markerPosition).rotation);
-        iconFactory.setContentRotation(markerInfos.get(markerPosition).contentRotation);
-        if (selected)
-            iconFactory.setStyle(IconGenerator.STYLE_BLUE);
-        MarkerOptions markerOptions = new MarkerOptions().
-                icon(BitmapDescriptorFactory.fromBitmap(iconFactory.makeIcon(markerInfos.get(markerPosition).city))).
-                position(markerInfos.get(markerPosition).coordinates).
-                anchor(iconFactory.getAnchorU(), iconFactory.getAnchorV());
-        markers.add(markerPosition, mGoogleMap.addMarker(markerOptions));
-    }
-
     private void selectMarker(int markerPosition) {
         selectedPosition = markerPosition;
-        selectedMarker = markers.get(selectedPosition);
-        selectedMarker.setZIndex(1); // bring to front in case of overlap
+        if (markers.get(selectedPosition) != null) {
+            selectedMarker = markers.get(selectedPosition);
+            selectedMarker.setAlpha(1);
+            selectedMarker.setZIndex(1); // bring to front in case of overlap
+        }
     }
 
-    private void addIcon(IconGenerator iconFactory, CharSequence text, LatLng position) {
-        MarkerOptions markerOptions = new MarkerOptions().
-                icon(BitmapDescriptorFactory.fromBitmap(iconFactory.makeIcon(text))).
-                position(position).
-                anchor(iconFactory.getAnchorU(), iconFactory.getAnchorV());
-        markers.add(mGoogleMap.addMarker(markerOptions));
+    private void addIcon(final IconGenerator iconFactory, final CharSequence text, final LatLng position, String imageUrl, final int index) {
+
+        LayoutInflater myInflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View activityView = myInflater.inflate(R.layout.custom_map_marker, null, false);
+        final ImageView imageView = (ImageView) activityView.findViewById(R.id.ivPhoto);
+        iconFactory.setContentView(activityView);
+
+        Glide.with(getContext())
+                .load(imageUrl)
+                .into((new SimpleTarget<GlideDrawable>() {
+                    @Override
+                    public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                        imageView.setImageDrawable(resource);
+                        addMarker(getOptions(), position, index);
+                    }
+
+                    @Override
+                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                        imageView.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_journey));
+                        addMarker(getOptions(), position, index);
+                    }
+
+                    private MarkerOptions getOptions() {
+                        return new MarkerOptions().
+                                icon(BitmapDescriptorFactory.fromBitmap(iconFactory.makeIcon(text))).
+                                alpha((float)0.7).
+                                position(position).
+                                anchor(iconFactory.getAnchorU(), iconFactory.getAnchorV());
+                    }
+                }));
     }
 
-    // When the camera has settled, notify listener to hide progress bar
+    private boolean hasAllPinsPlaced() {
+        return !markers.contains(null);
+    }
+
+    private synchronized void addMarker(MarkerOptions options, LatLng position, int index) {
+        markers.set(index, mGoogleMap.addMarker(options));
+        builder.include(position);
+        if (hasAllPinsPlaced()) {
+            // HACK!! The map may not be loaded when we request to animate
+            // If we get an exception, try again after when we get the OnMapLoaded event
+            try {
+                animateCamera();
+                selectMarker(selectedPosition);
+            } catch (IllegalStateException ise) {
+                mGoogleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+
+                    @Override
+                    public void onMapLoaded() {
+                        animateCamera();
+                        selectMarker(selectedPosition);
+                    }
+                });
+            }
+        }
+    }
+
+    private void animateCamera() {
+        final LatLngBounds bounds = builder.build();
+
+        CameraPosition cp = new CameraPosition.Builder()
+                .tilt(45)
+                .target(bounds.getCenter())
+                .zoom(getBoundsZoomLevel(bounds, getView().findViewById(R.id.map).getMeasuredWidth(), getView().findViewById(R.id.map).getMeasuredHeight(), density))
+                .build();
+        CameraUpdate cu = CameraUpdateFactory.newCameraPosition(cp);
+        mGoogleMap.animateCamera(cu);
+
+    }
+
+    // When the camera has settled and all pins are placed, notify listener to hide progress bar
 
     @Override
     public void onCameraIdle() {
-        if (this.listener != null) {
+        if (hasAllPinsPlaced() && this.listener != null) {
             this.listener.onCameraHasSettled();
         }
     }
@@ -357,18 +377,14 @@ public class MapViewFragment extends Fragment implements
     // Marker information holder class
 
     private class MarkerInfo {
-        public int rotation;
-        public int contentRotation;
-        public int style = IconGenerator.STYLE_DEFAULT;
         public String city;
         public LatLng coordinates;
+        public String imageUrl;
 
-        public MarkerInfo(int rotation, int contentRotation, int style, String city, LatLng coordinates) {
-            this.rotation = rotation;
-            this.contentRotation = contentRotation;
-            this.style = style;
+        public MarkerInfo(String city, LatLng coordinates, String imageUrl) {
             this.city = city;
             this.coordinates = coordinates;
+            this.imageUrl = imageUrl;
         }
     }
 }

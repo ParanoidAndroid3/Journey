@@ -17,7 +17,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -25,7 +24,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatDrawableManager;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -80,6 +78,7 @@ public class PlannerActivity extends AppCompatActivity implements
         MapEventListener {
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 1979;
+    public static final int SHOW_DETAIL_REQUEST = 1999;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.appbar) AppBarLayout appBar;
@@ -102,6 +101,7 @@ public class PlannerActivity extends AppCompatActivity implements
     private String journeyId;
     private Journey mJourney;
     private int screenHeight;
+    private boolean needsRefresh = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,13 +116,22 @@ public class PlannerActivity extends AppCompatActivity implements
         setupDrawer();
         setupFabs();
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == SHOW_DETAIL_REQUEST) {
+            needsRefresh = false;
+        }
+    }
     
     @Override
     protected void onResume() {
         super.onResume();
-        if (checkPlayServices()) {
+
+        if (needsRefresh && checkPlayServices()) {
             fetchJourney();
         }
+        needsRefresh = true;
     }
 
     private void fetchJourney() {

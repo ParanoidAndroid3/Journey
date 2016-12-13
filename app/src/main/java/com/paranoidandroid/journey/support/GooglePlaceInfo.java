@@ -2,6 +2,7 @@ package com.paranoidandroid.journey.support;
 
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.paranoidandroid.journey.network.GooglePlaceSearchClient;
 
 import org.json.JSONArray;
@@ -24,6 +25,12 @@ public class GooglePlaceInfo {
         this.photoReference = photoReference;
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+
+    public GooglePlaceInfo(String photoReference, LatLng coordinates) {
+        this.photoReference = photoReference;
+        this.latitude = (coordinates != null) ? coordinates.latitude : 0;
+        this.longitude = (coordinates != null) ? coordinates.longitude : 0;
     }
 
     public String getPhotoReference() {

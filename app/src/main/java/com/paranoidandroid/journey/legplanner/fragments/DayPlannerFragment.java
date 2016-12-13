@@ -11,10 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.paranoidandroid.journey.R;
 import com.paranoidandroid.journey.models.Activity;
-import com.paranoidandroid.journey.models.Destination;
 import com.paranoidandroid.journey.models.ui.Day;
 import com.paranoidandroid.journey.models.Leg;
 import com.paranoidandroid.journey.support.ui.SmartFragmentStatePagerAdapter;
