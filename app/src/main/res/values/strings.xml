@@ -43,4 +43,5 @@
     </string>
     <string name="deleted_title">%1$s journey deleted</string>
     <string name="undo">Undo</string>
+    <string name="no_activities">No activities for this day</string>
 </resources>

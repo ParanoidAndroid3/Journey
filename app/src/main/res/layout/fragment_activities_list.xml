@@ -12,9 +12,10 @@
 
     <TextView
         android:id="@+id/tvNoActivities"
-        android:text="No activities for this day"
+        android:text="@string/no_activities"
         android:visibility="gone"
-        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"/>
 </RelativeLayout>

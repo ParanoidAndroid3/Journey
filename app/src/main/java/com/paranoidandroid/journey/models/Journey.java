@@ -105,6 +105,19 @@ public class Journey extends ParseObject {
         return null;
     }
 
+    public void deleteAll() {
+        for (Leg leg : getLegs()) {
+            List<Bookmark> bookmarks = leg.getBookmarks();
+            if (bookmarks != null) {
+                for (Bookmark bookmark : bookmarks) {
+                    bookmark.deleteEventually();
+                }
+            }
+            leg.deleteEventually();
+        }
+        deleteEventually();
+    }
+
     public static ParseQuery<Journey> createQuery(ParseUser creator) {
         ParseQuery<Journey> query = ParseQuery.getQuery(Journey.class);
         query.include("legs");

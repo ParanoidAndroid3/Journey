@@ -9,6 +9,7 @@ import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -17,7 +18,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -25,7 +25,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatDrawableManager;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -80,6 +79,7 @@ public class PlannerActivity extends AppCompatActivity implements
         MapEventListener {
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 1979;
+    public static final int APP_BAR_OFFSET = -325;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.appbar) AppBarLayout appBar;
@@ -102,6 +102,7 @@ public class PlannerActivity extends AppCompatActivity implements
     private String journeyId;
     private Journey mJourney;
     private int screenHeight;
+    private Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -436,6 +437,28 @@ public class PlannerActivity extends AppCompatActivity implements
                 }
             }
         });
+
+        peekAppBar();
+    }
+
+    private void peekAppBar() {
+        // Partially expand the AppBar.
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                CoordinatorLayout.LayoutParams params =
+                        (CoordinatorLayout.LayoutParams) appBar.getLayoutParams();
+                AppBarLayout.Behavior behavior = (AppBarLayout.Behavior) params.getBehavior();
+                if (behavior != null) {
+                    // Don't move the app bar if the day planner is already shown.
+                    if (!isAppBarCollapsed) {
+                        behavior.setTopAndBottomOffset(APP_BAR_OFFSET);
+                    }
+                } else {
+                    peekAppBar();
+                }
+            }
+        }, 100);
     }
 
     // FAB click handlers
