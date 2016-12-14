@@ -56,7 +56,7 @@ public class MapViewFragment extends Fragment implements
     private float density;
     Marker selectedMarker;
     LatLngBounds.Builder builder;
-    int selectedPosition = 0;
+    int selectedPosition = -1;
     boolean zoomed = false;
     //private Bundle mBundle;
     public void setZoomed(boolean zoomed) { this.zoomed = zoomed; }
@@ -171,16 +171,21 @@ public class MapViewFragment extends Fragment implements
     @Override
     public boolean onMarkerClick(Marker marker) {
         int markerPosition = markers.indexOf(marker);
-        if (markerPosition == selectedPosition)
-            return true;
 
-        selectedMarker.setAlpha((float)0.7);
+        if (markerPosition < 0) {
+            Log.e(TAG, "Couldn't find marker " + marker);
+            return true;
+        }
+
         selectMarker(markerPosition);
 
         // notify listener
         if (listener != null) {
-            if (isZoomed()) listener.onActivityMarkerPressedAtIndex(markerPosition);
-            else listener.onLegMarkerPressedAtIndex(markerPosition);
+            if (isZoomed()) {
+                listener.onActivityMarkerPressedAtIndex(markerPosition);
+            } else {
+                listener.onLegMarkerPressedAtIndex(markerPosition);
+            }
         }
 
         // Event was handled by our code do not launch default behaviour.
@@ -193,7 +198,6 @@ public class MapViewFragment extends Fragment implements
         if (markerPosition == selectedPosition)
             return;
 
-        selectedMarker.setAlpha((float)0.7);
         selectMarker(markerPosition);
     }
 
@@ -207,7 +211,6 @@ public class MapViewFragment extends Fragment implements
         selectedPosition = markerPosition;
         if (markers.get(selectedPosition) != null) {
             selectedMarker = markers.get(selectedPosition);
-            selectedMarker.setAlpha(1);
             selectedMarker.setZIndex(1); // bring to front in case of overlap
         }
     }
@@ -237,7 +240,7 @@ public class MapViewFragment extends Fragment implements
                     private MarkerOptions getOptions() {
                         return new MarkerOptions().
                                 icon(BitmapDescriptorFactory.fromBitmap(iconFactory.makeIcon(text))).
-                                alpha((float)0.7).
+                                //alpha((float)0.7).
                                 position(position).
                                 anchor(iconFactory.getAnchorU(), iconFactory.getAnchorV());
                     }
