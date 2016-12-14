@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
@@ -9,6 +9,8 @@
         android:id="@+id/tvPlace"
         android:layout_marginTop="2dp"
         android:layout_marginBottom="2dp"
+        android:paddingStart="2dp"
+        android:paddingEnd="2dp"
         android:layout_width="match_parent"
         android:layout_height="24dp"
         android:textSize="@dimen/wizard_legs_text_size"
@@ -18,4 +20,4 @@
         android:maxLines="1"
         tools:text="Athens, Greece"/>
 
-</LinearLayout>
+</FrameLayout>

@@ -129,6 +129,14 @@ public abstract class BaseRecommendationsFragment extends Fragment implements
         search();
     }
 
+    private void hideProgressBar() {
+        // Remove any pending show callbacks.
+        if (progressBar != null) {
+            progressBar.removeCallbacks(delayedShow);
+            progressBar.setVisibility(View.GONE);
+        }
+    }
+
     // Called from descendants when new Recommendations are received
 
     protected void appendItems(List<? extends Recommendation> places, boolean clearExisting) {
@@ -146,9 +154,7 @@ public abstract class BaseRecommendationsFragment extends Fragment implements
             adapter.notifyItemRangeInserted(currentItemCount, places.size());
         }
 
-        // Remove any pending show callbacks.
-        progressBar.removeCallbacks(delayedShow);
-        progressBar.setVisibility(View.GONE);
+        hideProgressBar();
     }
 
     // RecommendationsListAdapterClickListener implementation
