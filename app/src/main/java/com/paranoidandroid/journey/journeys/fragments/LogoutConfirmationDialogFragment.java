@@ -1,4 +1,4 @@
-package com.paranoidandroid.journey.myjourneys.fragments;
+package com.paranoidandroid.journey.journeys.fragments;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.RecyclerView;
 
 import com.paranoidandroid.journey.R;
 

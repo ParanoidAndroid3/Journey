@@ -1,4 +1,4 @@
-package com.paranoidandroid.journey.myjourneys.adapters;
+package com.paranoidandroid.journey.journeys.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -26,8 +26,8 @@ import com.paranoidandroid.journey.support.GooglePlaceInfo;
 import java.util.Collection;
 import java.util.List;
 
-public class JourneyAdapter extends RecyclerView.Adapter<JourneyAdapter.ViewHolder> {
-    private static final String TAG = "JourneyAdapter";
+public class JourneysAdapter extends RecyclerView.Adapter<JourneysAdapter.ViewHolder> {
+    private static final String TAG = "JourneysAdapter";
     private static final int DEFAULT_SCREEN_WIDTH = 1080;
 
     public interface OnItemSelectedListener {
@@ -56,7 +56,7 @@ public class JourneyAdapter extends RecyclerView.Adapter<JourneyAdapter.ViewHold
     private OnItemSelectedListener listener;
     private int screenWidth;
 
-    public JourneyAdapter(List<Journey> items) {
+    public JourneysAdapter(List<Journey> items) {
         this.items = items;
         this.screenWidth = DEFAULT_SCREEN_WIDTH;
     }

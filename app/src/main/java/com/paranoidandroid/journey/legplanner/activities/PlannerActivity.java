@@ -48,7 +48,7 @@ import com.paranoidandroid.journey.models.Destination;
 import com.paranoidandroid.journey.models.Journey;
 import com.paranoidandroid.journey.models.ui.Day;
 import com.paranoidandroid.journey.models.ui.GooglePlace;
-import com.paranoidandroid.journey.myjourneys.activities.MyJourneysActivity;
+import com.paranoidandroid.journey.journeys.activities.JourneysActivity;
 import com.paranoidandroid.journey.recommendations.activities.RecommendationsActivity;
 import com.paranoidandroid.journey.support.SharedPreferenceUtils;
 import com.paranoidandroid.journey.wizard.activities.EditJourneyActivity;
@@ -410,7 +410,8 @@ public class PlannerActivity extends AppCompatActivity implements
     }
 
     private void launchMyJourneys() {
-        Intent intent = new Intent(PlannerActivity.this, MyJourneysActivity.class);
+        // todo: make sure that correct tab is showing
+        Intent intent = new Intent(PlannerActivity.this, JourneysActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
