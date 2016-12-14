@@ -144,7 +144,7 @@ public class MyJourneysListFragment extends Fragment implements
                     public void onDismissed(Snackbar snackbar, int event) {
                         super.onDismissed(snackbar, event);
                         if (event != DISMISS_EVENT_ACTION) {
-                            journey.deleteEventually();
+                            journey.deleteAll();
                         }
                     }
                 })
@@ -224,6 +224,9 @@ public class MyJourneysListFragment extends Fragment implements
             Journey ai = a.get(i);
             Journey bi = a.get(i);
             if (!ai.getObjectId().equals(bi.getObjectId())) {
+                return true;
+            }
+            if (!ai.getLegs().equals(bi.getLegs())) {
                 return true;
             }
         }
