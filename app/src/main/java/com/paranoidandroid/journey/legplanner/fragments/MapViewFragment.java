@@ -149,6 +149,8 @@ public class MapViewFragment extends Fragment implements
             markers.add(null);
         // Clear all the map
         mGoogleMap.clear();
+        // Nullify selected marker to release its reference
+        selectedMarker = null;
 
         builder = new LatLngBounds.Builder();
         LatLng prev = null; int index = 0;
