@@ -172,13 +172,18 @@ public class MapViewFragment extends Fragment implements
     public boolean onMarkerClick(Marker marker) {
         int markerPosition = markers.indexOf(marker);
 
+        if (markerPosition < 0) {
+            Log.e(TAG, "Couldn't find marker " + marker);
+            return true;
+        }
+
         selectMarker(markerPosition);
 
         // notify listener
         if (listener != null) {
             if (isZoomed()) {
                 listener.onActivityMarkerPressedAtIndex(markerPosition);
-            }  else {
+            } else {
                 listener.onLegMarkerPressedAtIndex(markerPosition);
             }
         }
