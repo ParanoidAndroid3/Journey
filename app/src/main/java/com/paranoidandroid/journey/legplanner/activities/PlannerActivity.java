@@ -79,6 +79,7 @@ public class PlannerActivity extends AppCompatActivity implements
         MapEventListener {
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 1979;
+    public static final int SHOW_DETAIL_REQUEST = 1999;
 
     // TODO: Make this density independent.
     public static final int APP_BAR_OFFSET = -325;
@@ -105,6 +106,7 @@ public class PlannerActivity extends AppCompatActivity implements
     private Journey mJourney;
     private int screenHeight;
     private Handler handler = new Handler();
+    private boolean needsRefresh = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,13 +121,22 @@ public class PlannerActivity extends AppCompatActivity implements
         setupDrawer();
         setupFabs();
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == SHOW_DETAIL_REQUEST) {
+            needsRefresh = false;
+        }
+    }
     
     @Override
     protected void onResume() {
         super.onResume();
-        if (checkPlayServices()) {
+
+        if (needsRefresh && checkPlayServices()) {
             fetchJourney();
         }
+        needsRefresh = true;
     }
 
     private void fetchJourney() {
