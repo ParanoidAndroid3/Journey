@@ -37,7 +37,9 @@ import com.paranoidandroid.journey.models.Leg;
 import com.paranoidandroid.journey.support.GooglePlaceInfo;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static com.paranoidandroid.journey.support.MapUtils.getBoundsZoomLevel;
 
@@ -53,6 +55,8 @@ public class MapViewFragment extends Fragment implements
     MapEventListener listener;
     List<MarkerInfo> markerInfos = new ArrayList<>();
     List<Marker> markers = new ArrayList<>();
+    // Keep track of marker lat/lngs that are in the process of setting up.
+    Set<LatLng> pendingMarkers = new HashSet<>();
     private float density;
     Marker selectedMarker;
     LatLngBounds.Builder builder;
@@ -151,6 +155,7 @@ public class MapViewFragment extends Fragment implements
         mGoogleMap.clear();
         // Nullify selected marker to release its reference
         selectedMarker = null;
+        pendingMarkers.clear();
 
         builder = new LatLngBounds.Builder();
         LatLng prev = null; int index = 0;
@@ -224,19 +229,27 @@ public class MapViewFragment extends Fragment implements
         final ImageView imageView = (ImageView) activityView.findViewById(R.id.ivPhoto);
         iconFactory.setContentView(activityView);
 
+        pendingMarkers.add(position);
+
         Glide.with(getContext())
                 .load(imageUrl)
                 .into((new SimpleTarget<GlideDrawable>() {
                     @Override
                     public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                        imageView.setImageDrawable(resource);
-                        addMarker(getOptions(), position, index);
+                        if (pendingMarkers.contains(position)) {
+                            imageView.setImageDrawable(resource);
+                            addMarker(getOptions(), position, index);
+                            pendingMarkers.remove(position);
+                        }
                     }
 
                     @Override
                     public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                        imageView.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_journey));
-                        addMarker(getOptions(), position, index);
+                        if (pendingMarkers.contains(position)) {
+                            imageView.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_journey));
+                            addMarker(getOptions(), position, index);
+                            pendingMarkers.remove(position);
+                        }
                     }
 
                     private MarkerOptions getOptions() {
