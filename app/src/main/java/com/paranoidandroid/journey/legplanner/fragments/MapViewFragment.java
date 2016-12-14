@@ -171,8 +171,6 @@ public class MapViewFragment extends Fragment implements
     @Override
     public boolean onMarkerClick(Marker marker) {
         int markerPosition = markers.indexOf(marker);
-        if (markerPosition == selectedPosition)
-            return true;
 
         selectMarker(markerPosition);
 

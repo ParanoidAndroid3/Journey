@@ -24,6 +24,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatDrawableManager;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -246,14 +247,15 @@ public class PlannerActivity extends AppCompatActivity implements
     public void onActivityMarkerPressedAtIndex(int position) {
         getDayPlannerFragment().scrollToActivityAtIndex(position);
         Activity activity = getDayPlannerFragment().getActivitiesForSelectedDay().get(position);
-        Intent intent = new Intent(this, DetailActivity.class);
+
         if (activity.getGoogleId() != null) {
-            intent.putExtra(DetailActivity.EXTRA_GOOGLE_ID, activity.getGoogleId());
+            onShowCustomActivity(activity);
         } else if (activity.getFoursquareId() != null) {
+            Intent intent = new Intent(this, DetailActivity.class);
             intent.putExtra(DetailActivity.EXTRA_FOURSQUARE_ID, activity.getFoursquareId());
+            intent.putExtra(DetailActivity.EXTRA_IMAGE_URL, activity.getImageUrl());
+            startActivityForResult(intent, SHOW_DETAIL_REQUEST);
         }
-        intent.putExtra(DetailActivity.EXTRA_IMAGE_URL, activity.getImageUrl());
-        startActivityForResult(intent, SHOW_DETAIL_REQUEST);
         //animateAppBarToMiddleOfScreen();
     }
 
