@@ -24,7 +24,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatDrawableManager;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -584,7 +583,10 @@ public class PlannerActivity extends AppCompatActivity implements
     }
 
     private void addMarkersToMap(Journey journey) {
-        getMapViewFragment().addMarkersFromLegs(journey.getLegs(), 0);
+        MapViewFragment mapViewFragment = getMapViewFragment();
+        mapViewFragment.setZoomed(false);
+        mapViewFragment.addMarkersFromLegs(journey.getLegs(), 0);
+        fabZoom.setImageResource(R.drawable.ic_zoom_in);
     }
 
     private void addDaysToPlanner(Journey journey) {

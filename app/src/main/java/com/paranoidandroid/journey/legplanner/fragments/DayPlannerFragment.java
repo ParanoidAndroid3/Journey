@@ -157,15 +157,17 @@ public class DayPlannerFragment extends Fragment implements
     // Helpers
 
     public Leg getSelectedLeg() {
-        return mDays.get(mSelectedDayIndex).getLeg();
+        return getSelectedDay().getLeg();
     }
 
     public int getSelectedLegOrder() {
-        return mDays.get(mSelectedDayIndex).getLegOrder();
+        return getSelectedDay().getLegOrder();
     }
 
     public Day getSelectedDay() {
-        return mDays.get(mSelectedDayIndex);
+        // It's possible that one day was removed, mSelectedDayIndex is out of date.
+        int index = Math.min(mSelectedDayIndex, mDays.size() - 1);
+        return mDays.get(index);
     }
 
     private List<Day> extractDaysFromLeg(Leg leg, AtomicInteger dayOrder, int legOrder) {
@@ -252,7 +254,7 @@ public class DayPlannerFragment extends Fragment implements
         // Inform the activity to change the selected leg
         if (listener != null) {
             // Leg has changed
-            if (mDays.get(position).getLegOrder() != mDays.get(mSelectedDayIndex).getLegOrder()) {
+            if (mDays.get(position).getLegOrder() != getSelectedLegOrder()) {
                 listener.onLegIndexChanged(mDays.get(position).getLegOrder());
                 mSelectedDayIndex = position;
             }

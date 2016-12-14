@@ -252,6 +252,11 @@ public class MapViewFragment extends Fragment implements
     }
 
     private synchronized void addMarker(MarkerOptions options, LatLng position, int index) {
+        if (index >= markers.size()) {
+            // We must be trying to update the markers for an index that has since been removed.
+            return;
+        }
+
         markers.set(index, mGoogleMap.addMarker(options));
         builder.include(position);
         if (hasAllPinsPlaced()) {
