@@ -79,6 +79,8 @@ public class PlannerActivity extends AppCompatActivity implements
         MapEventListener {
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 1979;
+
+    // TODO: Make this density independent.
     public static final int APP_BAR_OFFSET = -325;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
