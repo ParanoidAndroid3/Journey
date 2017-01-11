@@ -12,6 +12,7 @@ import com.paranoidandroid.journey.models.Journey;
 import com.paranoidandroid.journey.models.Leg;
 import com.paranoidandroid.journey.models.User;
 import com.parse.Parse;
+import com.parse.ParseACL;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
 import com.parse.interceptors.ParseLogInterceptor;
@@ -53,6 +54,11 @@ public class JourneyApplication extends Application {
                 .addNetworkInterceptor(new ParseLogInterceptor())
                 .addNetworkInterceptor(new ParseStethoInterceptor())
                 .server(PARSE_URL).build());
+
+        // Read/write access for newly created Journey objects.
+        ParseACL defaultAcl = new ParseACL();
+        defaultAcl.setPublicReadAccess(true);
+        ParseACL.setDefaultACL(defaultAcl, true);
 
         // Facebook SDK (via Parse)
         ParseFacebookUtils.initialize(this);
